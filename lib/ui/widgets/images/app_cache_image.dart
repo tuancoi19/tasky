@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_base/common/app_colors.dart';
-import 'package:flutter_base/common/app_images.dart';
+import 'package:tasky/common/app_colors.dart';
+import 'package:tasky/common/app_images.dart';
 
 class AppCacheImage extends StatelessWidget {
   final String url;
@@ -43,7 +43,8 @@ class AppCacheImage extends StatelessWidget {
                         value: downloadProgress.progress,
                         backgroundColor: Colors.white,
                         valueColor: const AlwaysStoppedAnimation<Color>(
-                            AppColors.secondary),
+                          AppColors.secondary,
+                        ),
                       ),
                     ),
                   );

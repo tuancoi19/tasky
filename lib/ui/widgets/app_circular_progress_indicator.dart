@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_base/common/app_colors.dart';
+import 'package:tasky/common/app_colors.dart';
 
 class AppCircularProgressIndicator extends StatelessWidget {
   final Color color;
@@ -18,7 +18,9 @@ class AppCircularProgressIndicator extends StatelessWidget {
         height: 24,
         child: CircularProgressIndicator(
           backgroundColor: color,
-          valueColor: const AlwaysStoppedAnimation<Color>(AppColors.secondary),
+          valueColor: const AlwaysStoppedAnimation<Color>(
+            AppColors.secondary,
+          ),
         ),
       ),
     );

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_base/models/enums/load_status.dart';
+import 'package:tasky/models/enums/load_status.dart';
 
 class SplashState extends Equatable {
   final LoadStatus fetchProfileStatus;

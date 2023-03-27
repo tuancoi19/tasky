@@ -1,10 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_base/models/response/array_response.dart';
 import 'package:retrofit/retrofit.dart';
-
-import '../models/entities/movie_entity.dart';
-import '../models/entities/notification/notification_entity.dart';
-import '../models/entities/token_entity.dart';
+import 'package:tasky/models/entities/notification/notification_entity.dart';
+import 'package:tasky/models/entities/token_entity.dart';
+import 'package:tasky/models/response/array_response.dart';
 
 part 'api_client.g.dart';
 
@@ -26,10 +24,4 @@ abstract class ApiClient {
     @Query('pageSize') int pageSize,
   );
 
-  /// Movie
-  @GET("/3/discover/movie")
-  Future<ArrayResponse<MovieEntity>> getMovies(
-    @Query('api_key') String apiKey,
-    @Query('page') int page,
-  );
 }

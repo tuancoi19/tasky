@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_base/common/app_colors.dart';
-import 'package:flutter_base/common/app_images.dart';
-import 'package:flutter_base/common/app_text_styles.dart';
+import 'package:tasky/common/app_colors.dart';
+import 'package:tasky/common/app_images.dart';
+import 'package:tasky/common/app_text_styles.dart';
 
 class ObscureTextController extends ValueNotifier<bool> {
   ObscureTextController({bool obscureText = true}) : super(obscureText);

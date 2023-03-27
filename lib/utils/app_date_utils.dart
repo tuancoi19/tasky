@@ -1,5 +1,5 @@
-import 'package:flutter_base/configs/app_configs.dart';
 import 'package:intl/intl.dart';
+import 'package:tasky/configs/app_configs.dart';
 
 import 'logger.dart';
 

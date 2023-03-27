@@ -1,10 +1,9 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_base/database/secure_storage_helper.dart';
-import 'package:flutter_base/ui/pages/sign_in/sign_in_page.dart';
-import 'package:flutter_base/utils/logger.dart';
 import 'package:get/get.dart' hide Response;
+import 'package:tasky/database/secure_storage_helper.dart';
+import 'package:tasky/utils/logger.dart';
 
 class ApiInterceptors extends InterceptorsWrapper {
   @override
@@ -44,7 +43,7 @@ class ApiInterceptors extends InterceptorsWrapper {
     //Handle section expired
     if (response.statusCode == 401) {
       SecureStorageHelper.instance.removeToken();
-      Get.off(const SignInPage());
+      // Get.off(const SignInPage());
     }
     super.onResponse(response, handler);
   }

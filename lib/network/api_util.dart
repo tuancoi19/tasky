@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_base/configs/app_configs.dart';
 
 import 'api_client.dart';
 import 'api_interceptors.dart';
@@ -17,7 +16,7 @@ class ApiUtil {
   }
 
   static ApiClient get apiClient {
-    final apiClient = ApiClient(getDio(), baseUrl: AppConfigs.baseUrl);
+    final apiClient = ApiClient(getDio());
     return apiClient;
   }
 }

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_base/common/app_images.dart';
-import 'package:flutter_base/repositories/auth_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../repositories/user_repository.dart';
+import 'package:tasky/common/app_text_styles.dart';
+import 'package:tasky/configs/app_configs.dart';
 import 'splash_cubit.dart';
 
 class SplashPage extends StatelessWidget {
@@ -14,9 +12,9 @@ class SplashPage extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         return SplashCubit(
-          authRepo: RepositoryProvider.of<AuthRepository>(context),
-          userRepo: RepositoryProvider.of<UserRepository>(context),
-        );
+            // authRepo: RepositoryProvider.of<AuthRepository>(context),
+            // userRepo: RepositoryProvider.of<UserRepository>(context),
+            );
       },
       child: const SplashChildPage(),
     );
@@ -43,10 +41,9 @@ class _SplashChildPageState extends State<SplashChildPage> {
       body: Stack(
         children: [
           Center(
-            child: SizedBox(
-              height: 200,
-              width: 200,
-              child: Image.asset(AppImages.icLogoTransparent),
+            child: Text(
+              AppConfigs.appName,
+              style: AppTextStyle.primaryS26Bold,
             ),
           ),
         ],

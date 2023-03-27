@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_base/common/app_images.dart';
+import 'package:tasky/common/app_images.dart';
 
 class AppCircleAvatar extends StatelessWidget {
   final String url;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_base/common/app_colors.dart';
-import 'package:flutter_base/common/app_text_styles.dart';
-import 'package:flutter_base/ui/commons/app_dialog.dart';
-import 'package:flutter_base/utils/app_date_utils.dart';
+import 'package:tasky/common/app_colors.dart';
+import 'package:tasky/common/app_text_styles.dart';
+import 'package:tasky/ui/commons/app_dialog.dart';
+import 'package:tasky/utils/app_date_utils.dart';
 
 class DatePickerController extends ValueNotifier<DateTime?> {
   DatePickerController({DateTime? dateTime}) : super(dateTime);

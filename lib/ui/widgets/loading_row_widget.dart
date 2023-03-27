@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_base/common/app_shadows.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:tasky/common/app_shadows.dart';
 
 class LoadingRowWidget extends StatelessWidget {
   final EdgeInsets? padding;

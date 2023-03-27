@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_base/common/app_text_styles.dart';
+import 'package:tasky/common/app_text_styles.dart';
 
 class ErrorListWidget extends StatelessWidget {
   final String text;
@@ -23,7 +23,7 @@ class ErrorListWidget extends StatelessWidget {
             child: Center(
               child: Text(
                 text,
-                style: AppTextStyle.greyS18W800,
+                style: AppTextStyle.greyS18ExtraBold,
               ),
             ),
           );

@@ -1,6 +1,5 @@
-import 'package:flutter_base/network/api_client.dart';
-
-import '../models/entities/user/user_entity.dart';
+import 'package:tasky/models/entities/user/user_entity.dart';
+import 'package:tasky/network/api_client.dart';
 
 abstract class UserRepository {
   Future<UserEntity> getProfile();

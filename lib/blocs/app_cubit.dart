@@ -1,11 +1,10 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_base/models/entities/user/user_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../models/enums/load_status.dart';
-import '../repositories/auth_repository.dart';
-import '../repositories/user_repository.dart';
-import '../utils/logger.dart';
+import 'package:tasky/models/entities/user/user_entity.dart';
+import 'package:tasky/models/enums/load_status.dart';
+import 'package:tasky/repositories/auth_repository.dart';
+import 'package:tasky/repositories/user_repository.dart';
+import 'package:tasky/utils/logger.dart';
 
 part 'app_state.dart';
 

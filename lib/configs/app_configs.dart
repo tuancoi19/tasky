@@ -1,18 +1,9 @@
 import 'dart:ui';
 
-import 'app_env_config.dart';
-
 class AppConfigs {
   AppConfigs._();
 
-  static const String appName = "Newwave Solution JSC";
-
-  static Environment env = Environment.prod;
-
-  ///API Env
-  static String get baseUrl => env.baseUrl;
-
-  static String get envName => env.envName;
+  static const String appName = "Tasky.";
 
   ///Paging
   static const pageSize = 40;
@@ -20,7 +11,7 @@ class AppConfigs {
 
   ///Local
   static const appLocal = 'vi_VN';
-  static const appLanguage = 'vi';
+  static const appLanguage = 'en';
   static const defaultLocal = Locale.fromSubtags(languageCode: appLanguage);
 
   ///DateFormat
@@ -39,7 +30,7 @@ class AppConfigs {
   static final birthMaxDate = DateTime.now();
 
   ///Font
-  static const fontFamily = 'Roboto';
+  static const fontFamily = 'Poppins';
 
   ///Max file
   static const maxAttachFile = 5;
@@ -52,12 +43,4 @@ class FirebaseConfig {
 class DatabaseConfig {
   //Todo
   static const int version = 1;
-}
-
-class MovieAPIConfig {
-  static const String apiKey = '26763d7bf2e94098192e629eb975dab0';
-}
-
-class UpGraderAPIConfig {
-  static const String apiKey = '';
 }

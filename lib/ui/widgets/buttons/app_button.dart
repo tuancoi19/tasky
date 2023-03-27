@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_base/common/app_dimens.dart';
-
-import '../app_circular_progress_indicator.dart';
+import 'package:tasky/common/app_dimens.dart';
+import 'package:tasky/ui/widgets/app_circular_progress_indicator.dart';
 
 class AppButton extends StatelessWidget {
   final String? title;
@@ -47,13 +46,14 @@ class AppButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
-                cornerRadius ?? AppDimens.buttonCornerRadius),
+              cornerRadius ?? AppDimens.buttonCornerRadius,
+            ),
           ),
           side: BorderSide(
             color: borderColor ?? Colors.transparent,
             width: borderWidth ?? 0,
           ),
-          primary: backgroundColor,
+          backgroundColor: backgroundColor,
           padding: const EdgeInsets.all(0),
         ),
         onPressed: onPressed,

@@ -1,4 +1,4 @@
-package vn.tuandq.flutter_app
+package vn.tuandq.tasky
 
 import io.flutter.embedding.android.FlutterActivity
 

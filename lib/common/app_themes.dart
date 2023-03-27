@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_base/common/app_colors.dart';
+import 'package:tasky/common/app_colors.dart';
 
 class AppThemes {
   static const _font = 'app.dart';

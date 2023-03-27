@@ -1,5 +1,5 @@
-import 'package:flutter_base/utils/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tasky/utils/logger.dart';
 
 class SharedPreferencesHelper {
   static const _introKey = '_introKey';

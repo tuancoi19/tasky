@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_base/configs/app_configs.dart';
-import 'package:flutter_base/ui/pages/splash/splash_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:tasky/configs/app_configs.dart';
+import 'package:tasky/generated/l10n.dart';
 
 import 'blocs/app_cubit.dart';
 import 'blocs/setting/app_setting_cubit.dart';
 import 'common/app_themes.dart';
-import 'generated/l10n.dart';
 import 'network/api_client.dart';
 import 'network/api_util.dart';
 import 'repositories/auth_repository.dart';
-import 'repositories/movie_repository.dart';
 import 'repositories/user_repository.dart';
 import 'router/route_config.dart';
 
@@ -50,9 +48,6 @@ class _MyAppState extends State<MyApp> {
       providers: [
         RepositoryProvider<AuthRepository>(create: (context) {
           return AuthRepositoryImpl(apiClient: _apiClient);
-        }),
-        RepositoryProvider<MovieRepository>(create: (context) {
-          return MovieRepositoryImpl(apiClient: _apiClient);
         }),
         RepositoryProvider<UserRepository>(create: (context) {
           return UserRepositoryImpl(apiClient: _apiClient);
@@ -99,6 +94,7 @@ class _MyAppState extends State<MyApp> {
                 ],
                 locale: state.locale,
                 supportedLocales: S.delegate.supportedLocales,
+                debugShowCheckedModeBanner: false,
               ),
             );
           },

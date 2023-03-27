@@ -1,7 +1,6 @@
-import 'package:flutter_base/database/secure_storage_helper.dart';
-import 'package:flutter_base/network/api_client.dart';
-
-import '../models/entities/token_entity.dart';
+import 'package:tasky/database/secure_storage_helper.dart';
+import 'package:tasky/models/entities/token_entity.dart';
+import 'package:tasky/network/api_client.dart';
 
 abstract class AuthRepository {
   Future<TokenEntity?> getToken();
