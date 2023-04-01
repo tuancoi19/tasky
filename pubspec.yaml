@@ -54,9 +54,11 @@ dependencies:
   #Custom UI
   flutter_datetime_picker: ^1.5.1
   shimmer: ^2.0.0
+  smooth_page_indicator: ^1.0.1
 
   #Dialog, etc
   cached_network_image: ^3.2.3
+  flutter_svg: ^2.0.4
 
 dev_dependencies:
   flutter_test:
@@ -94,6 +96,7 @@ flutter:
   assets:
     - assets/images/
     - assets/fonts/
+    - assets/vectors/
 
   fonts:
     - family: Poppins

@@ -4,7 +4,7 @@ import 'app_colors.dart';
 
 class AppTextStyle {
   ///Black
-  static const black = TextStyle(color: Colors.black);
+  static const black = TextStyle(color: AppColors.textBlack);
 
   //s12
   static final blackS12 = black.copyWith(fontSize: 12);
@@ -25,10 +25,54 @@ class AppTextStyle {
       blackS16.copyWith(fontWeight: FontWeight.w800);
 
   //s18
-  static final blackS18 = black.copyWith(fontSize: 14);
+  static final blackS18 = black.copyWith(fontSize: 18);
   static final blackS18Bold = blackS18.copyWith(fontWeight: FontWeight.bold);
   static final blackS18ExtraBold =
       blackS18.copyWith(fontWeight: FontWeight.w800);
+
+  static final blackS25 = black.copyWith(fontSize: 25);
+  static final blackS25Bold = blackS25.copyWith(fontWeight: FontWeight.bold);
+
+  ///Black 80%
+  static final blackO80 = TextStyle(
+    color: AppColors.textBlack.withOpacity(0.8),
+  );
+
+  //s25
+  static final blackO80S25 = blackO80.copyWith(fontSize: 25);
+  static final blackO80S25Bold =
+      blackO80S25.copyWith(fontWeight: FontWeight.bold);
+
+  //s22
+  static final blackO80S22 = blackO80.copyWith(fontSize: 22);
+  static final blackO80S22Bold =
+      blackO80S22.copyWith(fontWeight: FontWeight.bold);
+
+  ///Black 60%
+  static final blackO60 = TextStyle(
+    color: AppColors.textBlack.withOpacity(0.6),
+  );
+  static final blackO60S16 = blackO60.copyWith(fontSize: 16);
+  static final blackO60S16W400 =
+      blackO60S16.copyWith(fontWeight: FontWeight.w400);
+
+  ///Black 30%
+  static final blackO30 = TextStyle(
+    color: AppColors.textBlack.withOpacity(0.3),
+  );
+  static final blackO30S18 = blackO30.copyWith(fontSize: 18);
+  static final blackO30S18Bold =
+      blackO30S18.copyWith(fontWeight: FontWeight.bold);
+
+  ///Black 25%
+  static final blackO25 = TextStyle(
+    color: AppColors.textBlack.withOpacity(0.25),
+  );
+
+  //s14
+  static final blackO25S14 = blackO25.copyWith(fontSize: 14);
+  static final blackO25S14w500 =
+  blackO30S18.copyWith(fontWeight: FontWeight.w500);
 
   ///White
   static const white = TextStyle(color: Colors.white);
@@ -103,8 +147,15 @@ class AppTextStyle {
   static final tintS18Bold = tintS18.copyWith(fontWeight: FontWeight.bold);
   static final tintS18ExtraBold = tintS18.copyWith(fontWeight: FontWeight.w800);
 
+  ///Primary
   static const primary = TextStyle(color: AppColors.primary);
 
+  //s25
+  static final primaryS25 = primary.copyWith(fontSize: 25);
+  static final primaryS25Bold =
+      primaryS25.copyWith(fontWeight: FontWeight.bold);
+
+  //s26
   static final primaryS26 = primary.copyWith(fontSize: 26);
   static final primaryS26Bold =
       primaryS26.copyWith(fontWeight: FontWeight.bold);

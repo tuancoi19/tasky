@@ -22,7 +22,7 @@ class AppColors {
 
   ///Text
   static const Color textWhite = Color(0xFFFFFFFF);
-  static const Color textBlack = Color(0xFF000000);
+  static const Color textBlack = Color(0xFF303030);
   static const Color textBlue = Color(0xFF0000FF);
   static const Color textDisable = Color(0xFF89a3b1);
 
@@ -42,4 +42,9 @@ class AppColors {
 
   ///BottomNavigationBar
   static const Color bottomNavigationBar = Color(0xFF919191);
+
+  static final Color dotColor = const Color(0xFF212121).withOpacity(0.2);
+
+  static const Color boxShadowColor = Color(0xFFC5C5C5);
+
 }

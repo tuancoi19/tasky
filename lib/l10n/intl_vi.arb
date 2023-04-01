@@ -7,5 +7,15 @@
   "settings_languageVietnamese": "Tiếng việt",
   "settings_languageEnglish": "English",
   "settings_language": "Ngôn ngữ",
-  "button_signIn": "Đăng nhập"
+  "button_signIn": "Đăng nhập",
+  "welcomeTo": "Chào mừng đến với ",
+  "appIntroduce": "Một ứng dụng giup tổ chức lại công việc của bạn",
+  "letsGo": "Đi Thôi",
+  "notNow": "Bỏ Qua",
+  "manageYourActivity": "Quản lý hoạt động của bạn",
+  "manageYourActivityDescription": "Quản lý tiến độ hoàn thành của các tác vụ",
+  "next": "Tiếp",
+  "saveTheTime": "Tiết kiệm thời gian",
+  "getStarted": "Bắt Đầu",
+  "saveTheTimeDescription": "Theo dõi thời gian và phân tích các thố kê"
 }

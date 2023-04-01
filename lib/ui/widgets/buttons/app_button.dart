@@ -19,7 +19,7 @@ class AppButton extends StatelessWidget {
 
   final TextStyle? textStyle;
 
-  final VoidCallback? onPressed;
+  final GestureTapCallback? onPressed;
 
   const AppButton({
     Key? key,
@@ -39,24 +39,21 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: height ?? AppDimens.buttonHeight,
-      width: width ?? double.infinity,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-              cornerRadius ?? AppDimens.buttonCornerRadius,
-            ),
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        height: height ?? AppDimens.buttonHeight,
+        width: width ?? double.infinity,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(
+            cornerRadius ?? AppDimens.buttonCornerRadius,
           ),
-          side: BorderSide(
+          border: Border.all(
             color: borderColor ?? Colors.transparent,
             width: borderWidth ?? 0,
           ),
-          backgroundColor: backgroundColor,
-          padding: const EdgeInsets.all(0),
         ),
-        onPressed: onPressed,
         child: _buildChildWidget(),
       ),
     );
@@ -71,16 +68,20 @@ class AppButton extends StatelessWidget {
         children: [
           leadingIcon ?? Container(),
           title != null
-              ? Text(
-                  title!,
-                  style: textStyle ??
-                      const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.red),
-                )
-              : Container(),
-          trailingIcon ?? Container(),
+              ? Flexible(
+            child: Text(
+              title!,
+              overflow: TextOverflow.ellipsis,
+              style: textStyle ??
+                  const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.red,
+                  ),
+            ),
+          )
+              : const SizedBox(),
+          trailingIcon ?? const SizedBox(),
         ],
       );
     }

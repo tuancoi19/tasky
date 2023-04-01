@@ -71,4 +71,19 @@ class AppDialog {
       theme: const DatePickerTheme(),
     );
   }
+
+  static void showCustomBottomSheet(
+    BuildContext context, {
+    required Widget widget,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      isDismissible: false,
+
+      useSafeArea: true,
+      builder: (BuildContext context) {
+        return widget;
+      },
+    );
+  }
 }
