@@ -72,7 +72,7 @@ class AppTextStyle {
   //s14
   static final blackO25S14 = blackO25.copyWith(fontSize: 14);
   static final blackO25S14w500 =
-  blackO30S18.copyWith(fontWeight: FontWeight.w500);
+      blackO30S18.copyWith(fontWeight: FontWeight.w500);
 
   ///White
   static const white = TextStyle(color: Colors.white);

@@ -45,6 +45,7 @@ class AppColors {
 
   static final Color dotColor = const Color(0xFF212121).withOpacity(0.2);
 
-  static const Color boxShadowColor = Color(0xFFC5C5C5);
+  static const Color welcomeBackgroundColor = Color(0xFFC4C4C4);
 
+  static const Color boxShadowColor = Color(0xFFC5C5C5);
 }

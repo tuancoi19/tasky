@@ -79,7 +79,6 @@ class AppDialog {
     showModalBottomSheet(
       context: context,
       isDismissible: false,
-
       useSafeArea: true,
       builder: (BuildContext context) {
         return widget;

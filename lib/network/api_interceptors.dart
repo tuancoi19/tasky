@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:get/get.dart' hide Response;
 import 'package:tasky/database/secure_storage_helper.dart';
 import 'package:tasky/utils/logger.dart';
 

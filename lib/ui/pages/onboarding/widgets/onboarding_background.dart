@@ -1,44 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tasky/common/app_colors.dart';
-import 'package:tasky/common/app_vectors.dart';
 
 class OnboardingBackground extends StatelessWidget {
-  final PageController controller;
+  final String vector;
 
-  const OnboardingBackground({super.key, required this.controller});
+  const OnboardingBackground({
+    super.key,
+    required this.vector,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.boxShadowColor.withOpacity(0.27),
-      child: PageView(
-        controller: controller,
-        physics: const NeverScrollableScrollPhysics(),
-        children: listPage,
-      ),
-    );
-  }
-
-  Widget buildOnboardingBackground(
-    String vector,
-  ) {
-    return Align(
       alignment: Alignment.topCenter,
+      color: Colors.white,
       child: SvgPicture.asset(
         vector,
+        width: MediaQuery.of(context).size.width,
+        fit: BoxFit.fitWidth,
       ),
     );
-  }
-
-  List<Widget> get listPage {
-    return [
-      buildOnboardingBackground(
-        AppVectors.icManageYourActivity,
-      ),
-      buildOnboardingBackground(
-        AppVectors.icSaveTheTime,
-      ),
-    ];
   }
 }

@@ -23,7 +23,7 @@ class RouteConfig {
     ),
     GetPage(
       name: onboarding,
-      page: () => OnboardingPage(),
+      page: () => const OnboardingPage(),
     ),
   ];
 }

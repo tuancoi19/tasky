@@ -23,5 +23,4 @@ abstract class ApiClient {
     @Query('page') int page,
     @Query('pageSize') int pageSize,
   );
-
 }
