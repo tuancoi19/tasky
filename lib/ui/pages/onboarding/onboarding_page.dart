@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/pages/onboarding/onboarding_cubit.dart';
 import 'package:tasky/ui/pages/onboarding/widgets/onboarding_background.dart';
 import 'package:tasky/ui/pages/onboarding/widgets/onboarding_content.dart';
@@ -140,7 +142,9 @@ class _OnboardingChildPageState extends State<OnboardingChildPage> {
       ),
       buildOnboardingScreen(
         vector: AppVectors.icSaveTheTime,
-        onPressed: () {},
+        onPressed: () {
+          Get.offAllNamed(RouteConfig.authentication);
+        },
         title: S.current.saveTheTime,
         description: S.current.saveTheTimeDescription,
         buttonTitle: S.current.getStarted,

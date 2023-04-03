@@ -17,5 +17,11 @@
   "next": "Tiếp",
   "saveTheTime": "Tiết kiệm thời gian",
   "getStarted": "Bắt Đầu",
-  "saveTheTimeDescription": "Theo dõi thời gian và phân tích các thố kê"
+  "saveTheTimeDescription": "Theo dõi thời gian và phân tích các số liệu",
+  "logIn": "Đăng Nhập",
+  "signUp": "Đăng Ký",
+  "usernameOrEmail": "Tên đăng nhập hoặc E-mail",
+  "password": "Mật khẩu",
+  "enterYourUsernameOrEmail": "Nhập tên đăng nhập hoặc E-mail của bạn",
+  "enterYourPassword": "Nhập mật khẩu của bạn"
 }

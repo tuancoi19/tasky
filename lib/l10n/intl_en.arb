@@ -17,5 +17,11 @@
   "next": "Next",
   "saveTheTime": "Save the time",
   "getStarted": "Get Started",
-  "saveTheTimeDescription": "Track the time and analyze the stats"
+  "saveTheTimeDescription": "Track the time and analyze the stats",
+  "logIn": "Log In",
+  "signUp": "Sign Up",
+  "usernameOrEmail": "Username or E-mail",
+  "password": "Password",
+  "enterYourUsernameOrEmail": "Enter your username or E-mail",
+  "enterYourPassword": "Enter your password"
 }

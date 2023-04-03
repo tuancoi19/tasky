@@ -14,9 +14,14 @@ class AppTextStyle {
 
   //s14
   static final blackS14 = black.copyWith(fontSize: 14);
+  static final blackS14W400 = blackS14.copyWith(fontWeight: FontWeight.w400);
   static final blackS14Bold = blackS14.copyWith(fontWeight: FontWeight.bold);
   static final blackS14ExtraBold =
       blackS14.copyWith(fontWeight: FontWeight.w800);
+
+  //s15
+  static final blackS15 = black.copyWith(fontSize: 15);
+  static final blackS15W500 = blackS15.copyWith(fontWeight: FontWeight.w500);
 
   //s16
   static final blackS16 = black.copyWith(fontSize: 14);
@@ -29,6 +34,9 @@ class AppTextStyle {
   static final blackS18Bold = blackS18.copyWith(fontWeight: FontWeight.bold);
   static final blackS18ExtraBold =
       blackS18.copyWith(fontWeight: FontWeight.w800);
+
+  static final blackS20 = black.copyWith(fontSize: 20);
+  static final blackS20Bold = blackS20.copyWith(fontWeight: FontWeight.bold);
 
   static final blackS25 = black.copyWith(fontSize: 25);
   static final blackS25Bold = blackS25.copyWith(fontWeight: FontWeight.bold);
@@ -55,6 +63,22 @@ class AppTextStyle {
   static final blackO60S16 = blackO60.copyWith(fontSize: 16);
   static final blackO60S16W400 =
       blackO60S16.copyWith(fontWeight: FontWeight.w400);
+
+  ///Black 50%
+  static final blackO50 = TextStyle(
+    color: AppColors.textBlack.withOpacity(0.5),
+  );
+  static final blackO50S20 = blackO50.copyWith(fontSize: 20);
+  static final blackO50S20W600 =
+      blackO50S20.copyWith(fontWeight: FontWeight.w600);
+
+  ///Black 40%
+  static final blackO40 = TextStyle(
+    color: AppColors.textBlack.withOpacity(0.4),
+  );
+  static final blackO40S14 = blackO40.copyWith(fontSize: 14);
+  static final blackO40S14W400 =
+  blackO50S20.copyWith(fontWeight: FontWeight.w400);
 
   ///Black 30%
   static final blackO30 = TextStyle(

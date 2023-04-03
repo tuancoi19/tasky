@@ -48,4 +48,6 @@ class AppColors {
   static const Color welcomeBackgroundColor = Color(0xFFC4C4C4);
 
   static const Color boxShadowColor = Color(0xFFC5C5C5);
+  
+  static const Color authBackgroundColor = Color(0xFFFAFAFA);
 }

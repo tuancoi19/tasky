@@ -17,5 +17,6 @@ class AppBarWidget extends AppBar {
                   icon: const Icon(Icons.arrow_back_ios_rounded))
               : null,
           actions: rightActions,
+          backgroundColor: Colors.transparent,
         );
 }

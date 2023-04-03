@@ -83,13 +83,15 @@ class WelcomePage extends StatelessWidget {
             textStyle: AppTextStyle.whiteS18Bold,
             backgroundColor: AppColors.primary,
             onPressed: () {
-              Get.toNamed(RouteConfig.onboarding);
+              Get.offAllNamed(RouteConfig.onboarding);
             },
           ),
         ),
         const SizedBox(height: 28),
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Get.offAllNamed(RouteConfig.authentication);
+          },
           child: Text(
             S.current.notNow,
             style: AppTextStyle.blackO30S18Bold,
