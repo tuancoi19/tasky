@@ -7,7 +7,10 @@ part 'onboarding_state.dart';
 class OnboardingCubit extends Cubit<OnboardingState> {
   OnboardingCubit() : super(const OnboardingState());
 
-  void changingPage({required int page, required PageController controller}) {
+  void changingPage({
+    required int page,
+    required PageController controller,
+  }) {
     emit(state.copyWith(currentPage: page));
     controller.animateToPage(
       page,

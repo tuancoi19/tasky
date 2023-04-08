@@ -28,7 +28,7 @@ class AppColors {
 
   ///TextField
   static const Color textFieldEnabledBorder = Color(0xFF919191);
-  static const Color textFieldFocusedBorder = Color(0xFFd74315);
+  static const Color textFieldErrorBorder = Color(0xFFd74315);
   static const Color textFieldDisabledBorder = Color(0xFF919191);
   static const Color textFieldCursor = Color(0xFF919191);
 
@@ -48,6 +48,6 @@ class AppColors {
   static const Color welcomeBackgroundColor = Color(0xFFC4C4C4);
 
   static const Color boxShadowColor = Color(0xFFC5C5C5);
-  
+
   static const Color authBackgroundColor = Color(0xFFFAFAFA);
 }

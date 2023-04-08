@@ -1,15 +1,17 @@
-part of 'login_cubit.dart';
+part of 'signup_cubit.dart';
 
-class LoginState extends Equatable {
+class SignupState extends Equatable {
   final LoadStatus loadDataStatus;
   final AutovalidateMode autoValidateMode;
   final String? usernameOrEmail;
+  final String? email;
   final String? password;
 
-  const LoginState({
+  const SignupState({
     this.loadDataStatus = LoadStatus.initial,
     this.autoValidateMode = AutovalidateMode.disabled,
     this.usernameOrEmail,
+    this.email,
     this.password,
   });
 
@@ -18,19 +20,22 @@ class LoginState extends Equatable {
         loadDataStatus,
         autoValidateMode,
         usernameOrEmail,
+        email,
         password,
       ];
 
-  LoginState copyWith({
+  SignupState copyWith({
     LoadStatus? loadDataStatus,
     AutovalidateMode? autoValidateMode,
     String? usernameOrEmail,
+    String? email,
     String? password,
   }) {
-    return LoginState(
+    return SignupState(
       loadDataStatus: loadDataStatus ?? this.loadDataStatus,
       autoValidateMode: autoValidateMode ?? this.autoValidateMode,
       usernameOrEmail: usernameOrEmail ?? this.usernameOrEmail,
+      email: email ?? this.email,
       password: password ?? this.password,
     );
   }

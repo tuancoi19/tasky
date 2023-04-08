@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
@@ -27,7 +28,7 @@ class WelcomePage extends StatelessWidget {
         buildWelcomeText(),
         Positioned(
           left: 0,
-          bottom: 48,
+          bottom: 48.h,
           right: 0,
           child: buildNavigateButton(),
         )
@@ -45,7 +46,7 @@ class WelcomePage extends StatelessWidget {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: S.current.welcomeTo,
+                  text: S.current.welcome_to,
                   style: AppTextStyle.blackO80S25Bold,
                 ),
                 TextSpan(
@@ -55,11 +56,11 @@ class WelcomePage extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4.h),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 24).r,
             child: Text(
-              S.current.appIntroduce,
+              S.current.app_introduce,
               style: AppTextStyle.blackO60S16W400,
               textAlign: TextAlign.center,
             ),
@@ -75,11 +76,11 @@ class WelcomePage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 24).r,
           child: AppButton(
-            height: 56,
-            cornerRadius: 15,
-            title: S.current.letsGo,
+            height: 56.h,
+            cornerRadius: 15.r,
+            title: S.current.lets_go,
             textStyle: AppTextStyle.whiteS18Bold,
             backgroundColor: AppColors.primary,
             onPressed: () {
@@ -87,13 +88,13 @@ class WelcomePage extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(height: 28),
+        SizedBox(height: 28.h),
         TextButton(
           onPressed: () {
             Get.offAllNamed(RouteConfig.authentication);
           },
           child: Text(
-            S.current.notNow,
+            S.current.not_now,
             style: AppTextStyle.blackO30S18Bold,
           ),
         ),

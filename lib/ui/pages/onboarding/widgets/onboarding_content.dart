@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
@@ -20,15 +21,14 @@ class OnboardingContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.3,
-      padding: const EdgeInsets.only(left: 24, right: 24, top: 48),
-      decoration: const BoxDecoration(
+      padding: const EdgeInsets.only(left: 24, right: 24, top: 48).r,
+      decoration: BoxDecoration(
         borderRadius: BorderRadius.vertical(
-          top: Radius.circular(30),
+          top: const Radius.circular(30).r,
         ),
         boxShadow: [
           BoxShadow(
-            blurRadius: 50,
+            blurRadius: 50.r,
             color: AppColors.boxShadowColor,
             blurStyle: BlurStyle.outer,
           ),
@@ -40,16 +40,17 @@ class OnboardingContent extends StatelessWidget {
 
   Widget buildModalBottomSheet() {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: MainAxisSize.min,
       children: [
         buildTitleAndDescription(
           title: title,
           description: description,
         ),
+        SizedBox(height: 64.h),
         AppButton(
           backgroundColor: AppColors.primary,
-          height: 56,
-          cornerRadius: 15,
+          height: 56.h,
+          cornerRadius: 15.r,
           title: buttonTitle,
           textStyle: AppTextStyle.whiteS18Bold,
           onPressed: () {
@@ -72,7 +73,7 @@ class OnboardingContent extends StatelessWidget {
           title,
           style: AppTextStyle.blackO80S22Bold,
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: 20.h),
         Text(
           description,
           style: AppTextStyle.blackO25S14w500,

@@ -1,12 +1,12 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:tasky/models/enums/load_status.dart';
 
-part 'login_state.dart';
+part 'signup_state.dart';
 
-class LoginCubit extends Cubit<LoginState> {
-  LoginCubit() : super(const LoginState());
+class SignupCubit extends Cubit<SignupState> {
+  SignupCubit() : super(const SignupState());
 
   Future<void> loadInitialData() async {
     emit(state.copyWith(loadDataStatus: LoadStatus.initial));
@@ -23,6 +23,14 @@ class LoginCubit extends Cubit<LoginState> {
     emit(
       state.copyWith(
         usernameOrEmail: usernameOrEmail,
+      ),
+    );
+  }
+
+  void changeEmail({required String email}) {
+    emit(
+      state.copyWith(
+        email: email,
       ),
     );
   }

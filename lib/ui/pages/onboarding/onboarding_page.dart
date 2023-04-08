@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tasky/common/app_colors.dart';
@@ -73,29 +74,30 @@ class _OnboardingChildPageState extends State<OnboardingChildPage> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 36),
+          padding: const EdgeInsets.symmetric(vertical: 36).r,
           child: BlocBuilder<OnboardingCubit, OnboardingState>(
-              buildWhen: (previous, current) =>
-                  previous.currentPage != current.currentPage,
-              builder: (context, state) {
-                return AnimatedSmoothIndicator(
-                  activeIndex: state.currentPage,
-                  count: listPage.length,
-                  onDotClicked: (value) {
-                    _cubit.changingPage(
-                      controller: _controller,
-                      page: value,
-                    );
-                  },
-                  duration: const Duration(milliseconds: 100),
-                  effect: ExpandingDotsEffect(
-                    activeDotColor: AppColors.primary,
-                    dotColor: AppColors.dotColor,
-                    dotHeight: 8,
-                    dotWidth: 8,
-                  ),
-                );
-              }),
+            buildWhen: (previous, current) =>
+                previous.currentPage != current.currentPage,
+            builder: (context, state) {
+              return AnimatedSmoothIndicator(
+                activeIndex: state.currentPage,
+                count: listPage.length,
+                onDotClicked: (value) {
+                  _cubit.changingPage(
+                    controller: _controller,
+                    page: value,
+                  );
+                },
+                duration: const Duration(milliseconds: 100),
+                effect: ExpandingDotsEffect(
+                  activeDotColor: AppColors.primary,
+                  dotColor: AppColors.dotColor,
+                  dotHeight: 8.h,
+                  dotWidth: 8.w,
+                ),
+              );
+            },
+          ),
         ),
       ],
     );
@@ -136,8 +138,8 @@ class _OnboardingChildPageState extends State<OnboardingChildPage> {
             controller: _controller,
           );
         },
-        title: S.current.manageYourActivity,
-        description: S.current.manageYourActivityDescription,
+        title: S.current.manage_your_activity,
+        description: S.current.manage_your_activity_description,
         buttonTitle: S.current.next,
       ),
       buildOnboardingScreen(
@@ -145,9 +147,9 @@ class _OnboardingChildPageState extends State<OnboardingChildPage> {
         onPressed: () {
           Get.offAllNamed(RouteConfig.authentication);
         },
-        title: S.current.saveTheTime,
-        description: S.current.saveTheTimeDescription,
-        buttonTitle: S.current.getStarted,
+        title: S.current.save_the_time,
+        description: S.current.save_the_time_description,
+        buttonTitle: S.current.get_started,
       ),
     ];
   }

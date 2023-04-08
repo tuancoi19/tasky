@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:tasky/configs/app_configs.dart';
 import 'package:tasky/generated/l10n.dart';
@@ -44,62 +45,69 @@ class _MyAppState extends State<MyApp> {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
-    return MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider<AuthRepository>(create: (context) {
-          return AuthRepositoryImpl(apiClient: _apiClient);
-        }),
-        RepositoryProvider<UserRepository>(create: (context) {
-          return UserRepositoryImpl(apiClient: _apiClient);
-        }),
-      ],
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider<AppCubit>(create: (context) {
-            final userRepo = RepositoryProvider.of<UserRepository>(context);
-            final authRepo = RepositoryProvider.of<AuthRepository>(context);
-            return AppCubit(
-              userRepo: userRepo,
-              authRepo: authRepo,
-            );
-          }),
-          BlocProvider<AppSettingCubit>(create: (context) {
-            return AppSettingCubit();
-          }),
-        ],
-        child: BlocBuilder<AppSettingCubit, AppSettingState>(
-          builder: (context, state) {
-            return GestureDetector(
-              onTap: () {
-                _hideKeyboard(context);
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (BuildContext context, Widget? child) {
+        return MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider<AuthRepository>(create: (context) {
+              return AuthRepositoryImpl(apiClient: _apiClient);
+            }),
+            RepositoryProvider<UserRepository>(create: (context) {
+              return UserRepositoryImpl(apiClient: _apiClient);
+            }),
+          ],
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<AppCubit>(create: (context) {
+                final userRepo = RepositoryProvider.of<UserRepository>(context);
+                final authRepo = RepositoryProvider.of<AuthRepository>(context);
+                return AppCubit(
+                  userRepo: userRepo,
+                  authRepo: authRepo,
+                );
+              }),
+              BlocProvider<AppSettingCubit>(create: (context) {
+                return AppSettingCubit();
+              }),
+            ],
+            child: BlocBuilder<AppSettingCubit, AppSettingState>(
+              builder: (context, state) {
+                return GestureDetector(
+                  onTap: () {
+                    _hideKeyboard(context);
+                  },
+                  child: GetMaterialApp(
+                    title: AppConfigs.appName,
+                    theme: AppThemes(
+                      isDarkMode: false,
+                      primaryColor: state.primaryColor,
+                    ).theme,
+                    darkTheme: AppThemes(
+                      isDarkMode: true,
+                      primaryColor: state.primaryColor,
+                    ).theme,
+                    themeMode: state.themeMode,
+                    initialRoute: RouteConfig.splash,
+                    getPages: RouteConfig.getPages,
+                    localizationsDelegates: const [
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                      S.delegate,
+                    ],
+                    locale: state.locale,
+                    supportedLocales: S.delegate.supportedLocales,
+                    debugShowCheckedModeBanner: false,
+                  ),
+                );
               },
-              child: GetMaterialApp(
-                title: AppConfigs.appName,
-                theme: AppThemes(
-                  isDarkMode: false,
-                  primaryColor: state.primaryColor,
-                ).theme,
-                darkTheme: AppThemes(
-                  isDarkMode: true,
-                  primaryColor: state.primaryColor,
-                ).theme,
-                themeMode: state.themeMode,
-                initialRoute: RouteConfig.splash,
-                getPages: RouteConfig.getPages,
-                localizationsDelegates: const [
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-                  S.delegate,
-                ],
-                locale: state.locale,
-                supportedLocales: S.delegate.supportedLocales,
-                debugShowCheckedModeBanner: false,
-              ),
-            );
-          },
-        ),
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 

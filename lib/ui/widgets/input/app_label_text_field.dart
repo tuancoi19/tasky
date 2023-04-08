@@ -75,7 +75,7 @@ class AppLabelTextField extends StatelessWidget {
               borderSide: BorderSide(color: AppColors.textFieldEnabledBorder),
             ),
             focusedBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: AppColors.textFieldFocusedBorder),
+              borderSide: BorderSide(color: AppColors.textFieldErrorBorder),
             ),
             disabledBorder: const UnderlineInputBorder(
               borderSide: BorderSide(color: AppColors.textFieldDisabledBorder),

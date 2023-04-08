@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tasky/common/app_colors.dart';
-import 'package:tasky/common/app_images.dart';
 import 'package:tasky/common/app_text_styles.dart';
+import 'package:tasky/common/app_vectors.dart';
+import 'package:tasky/utils/utils.dart';
 
 class ObscureTextController extends ValueNotifier<bool> {
   ObscureTextController({bool obscureText = true}) : super(obscureText);
@@ -14,35 +17,55 @@ class ObscureTextController extends ValueNotifier<bool> {
 }
 
 class AppPasswordInput extends StatelessWidget {
-  final String labelText;
+  final String? labelText;
   final TextStyle? labelStyle;
-  final String highlightText;
+  final String? highlightText;
   final Widget? suffixIcon;
   final ObscureTextController? obscureTextController;
-  final TextEditingController? textEditingController;
+  final TextEditingController textEditingController;
   final TextStyle? textStyle;
   final String hintText;
+  final String? errorText;
   final TextStyle? hintStyle;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
+  final FormFieldValidator<String>? validator;
   final TextInputType textInputType;
   final FocusNode? passwordFocusNode;
+  final Color? textFieldEnabledBorder;
+  final Color? textFieldFocusedBorder;
+  final Color? textFieldDisabledBorder;
+  final Color? textFieldFocusedErrorBorder;
+  final bool? isHighlightText;
+  final AutovalidateMode? autoValidateMode;
+  final bool autoTrim;
+  final double borderRadius;
 
   const AppPasswordInput({
     Key? key,
-    this.labelText = "Mật khẩu",
+    this.labelText,
     this.labelStyle,
-    this.highlightText = "*",
+    this.highlightText,
     this.suffixIcon,
     this.obscureTextController,
-    this.textEditingController,
+    required this.textEditingController,
     this.textStyle,
     this.hintText = "",
+    this.errorText,
     this.hintStyle,
     this.onChanged,
     this.onSubmitted,
+    this.validator,
     this.textInputType = TextInputType.text,
     this.passwordFocusNode,
+    this.textFieldEnabledBorder,
+    this.textFieldDisabledBorder,
+    this.textFieldFocusedBorder,
+    this.textFieldFocusedErrorBorder,
+    this.isHighlightText = false,
+    this.autoValidateMode,
+    this.autoTrim = false,
+    this.borderRadius = 0,
   }) : super(key: key);
 
   @override
@@ -53,121 +76,143 @@ class AppPasswordInput extends StatelessWidget {
         RichText(
           text: TextSpan(children: [
             TextSpan(
-              text: labelText,
-              style: labelStyle ?? AppTextStyle.blackS12,
+              text: labelText ?? '',
+              style: labelStyle ?? AppTextStyle.blackS15W500,
             ),
             TextSpan(
-              text: highlightText,
-              style: AppTextStyle.blackS12.copyWith(color: Colors.red),
+              text: (isHighlightText ?? false) ? highlightText : "",
+              style: AppTextStyle.redTextS14,
             )
           ]),
         ),
+        SizedBox(height: 20.h),
         Stack(
           children: [
             ValueListenableBuilder(
               valueListenable: obscureTextController!,
-              child: Container(),
               builder: (context, bool obscureText, child) {
-                return TextField(
-                  onSubmitted: onSubmitted,
-                  onChanged: onChanged,
-                  controller: textEditingController,
-                  focusNode: passwordFocusNode,
-                  style: textStyle ?? AppTextStyle.blackS16,
-                  maxLines: 1,
-                  decoration: InputDecoration(
-                    enabledBorder: const UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: AppColors.textFieldEnabledBorder),
+                return Focus(
+                  onFocusChange: (hasFocus) {
+                    if (!hasFocus && autoTrim) {
+                      textEditingController.text =
+                          textEditingController.text.trim();
+                    }
+                  },
+                  child: TextFormField(
+                    onFieldSubmitted: onSubmitted,
+                    onChanged: onChanged,
+                    validator: validator ??
+                        (text) {
+                          if (Utils.isPassword(text ?? '')) {
+                            return null;
+                          }
+                          return errorText ?? 'Password invalid';
+                        },
+                    autovalidateMode: autoValidateMode,
+                    controller: textEditingController,
+                    focusNode: passwordFocusNode,
+                    style: textStyle ?? AppTextStyle.blackO40S14W400,
+                    maxLines: 1,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 16,
+                      ).r,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(borderRadius.r),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(borderRadius.r),
+                        borderSide: BorderSide(
+                          color: textFieldFocusedBorder ?? AppColors.primary,
+                        ),
+                      ),
+                      disabledBorder: InputBorder.none,
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(borderRadius.r),
+                        borderSide: BorderSide(
+                          color: textFieldFocusedErrorBorder ??
+                              AppColors.textFieldErrorBorder,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(borderRadius.r),
+                        borderSide: BorderSide(
+                          color: textFieldDisabledBorder ??
+                              AppColors.textFieldErrorBorder,
+                        ),
+                      ),
+                      fillColor: Colors.white,
+                      hintStyle: hintStyle ?? AppTextStyle.blackO40S14W400,
+                      hintText: hintText,
+                      isDense: true,
+                      filled: true,
+                      errorMaxLines: 5,
+                      suffixIcon: Padding(
+                        padding: const EdgeInsets.only(right: 20).r,
+                        child: ValueListenableBuilder(
+                          valueListenable: obscureTextController!,
+                          builder: (context, bool obscureText, child) {
+                            return _buildSuffixIcon(obscureText);
+                          },
+                        ),
+                      ),
                     ),
-                    focusedBorder: const UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: AppColors.textFieldFocusedBorder),
-                    ),
-                    disabledBorder: const UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: AppColors.textFieldDisabledBorder),
-                    ),
-                    fillColor: Colors.white,
-                    hintStyle: hintStyle ?? AppTextStyle.greyS16,
-                    hintText: hintText,
-                    isDense: true,
-                    contentPadding: const EdgeInsets.only(top: 8, bottom: 12),
-                    suffixIcon: Image.asset(
-                      AppImages.icEyeOpen,
-                      fit: BoxFit.fitWidth,
-                      color: Colors.transparent,
-                    ),
-                    suffixIconConstraints:
-                        const BoxConstraints(maxHeight: 32, maxWidth: 32),
+                    cursorColor: AppColors.primary,
+                    keyboardType: TextInputType.visiblePassword,
+                    obscureText: obscureText,
                   ),
-                  cursorColor: AppColors.textFieldCursor,
-                  keyboardType: TextInputType.visiblePassword,
-                  obscureText: obscureText,
                 );
               },
             ),
-            ValueListenableBuilder(
-              valueListenable: obscureTextController!,
-              child: Container(),
-              builder: (context, bool obscureText, child) {
-                return _buildSuffixIcon(obscureText);
-              },
-            )
+            // Positioned(
+            //   child: ValueListenableBuilder(
+            //     valueListenable: obscureTextController!,
+            //     child: Container(),
+            //     builder: (context, bool obscureText, child) {
+            //       return _buildSuffixIcon(obscureText);
+            //     },
+            //   ),
+            // )
           ],
         ),
-        textEditingController != null
-            ? ValueListenableBuilder(
-                valueListenable: textEditingController!,
-                builder: (context, TextEditingValue controller, child) {
-                  final isValid = _validatePassword(controller.text);
-                  return Column(
-                    children: [
-                      const SizedBox(height: 2),
-                      Text(
-                        isValid,
-                        style:
-                            AppTextStyle.blackS12.copyWith(color: Colors.red),
-                      ),
-                      const SizedBox(height: 8),
-                    ],
-                  );
-                },
-              )
-            : Container(),
+        ValueListenableBuilder(
+          valueListenable: textEditingController,
+          builder: (context, TextEditingValue controller, child) {
+            final isValid = _validatePassword(controller.text);
+            return Column(
+              children: [
+                SizedBox(height: 4.h),
+                Text(
+                  isValid,
+                  style: AppTextStyle.blackS12.copyWith(color: Colors.yellow),
+                ),
+                SizedBox(height: 8.h),
+              ],
+            );
+          },
+        )
       ],
     );
   }
 
   Widget _buildSuffixIcon(bool obscureText) {
-    return Align(
-      alignment: Alignment.topRight,
-      child: GestureDetector(
-        onTap: () {
-          Future.delayed(Duration.zero, () {
-            passwordFocusNode?.unfocus();
-          });
-          obscureTextController?.value = !obscureText;
-        },
-        child: Container(
-          height: 34,
-          width: 20,
-          color: Colors.transparent,
-          alignment: Alignment.centerRight,
-          child: obscureText
-              ? Image.asset(
-                  AppImages.icEyeClose,
-                  fit: BoxFit.fitWidth,
-                  width: 18,
-                  height: 24,
-                )
-              : Image.asset(
-                  AppImages.icEyeOpen,
-                  fit: BoxFit.fitWidth,
-                  width: 18,
-                  height: 24,
-                ),
+    return InkWell(
+      onTap: () {
+        Future.delayed(Duration.zero, () {
+          passwordFocusNode?.unfocus();
+        });
+        obscureTextController?.value = !obscureText;
+      },
+      child: SvgPicture.asset(
+        obscureText ? AppVectors.icHidePassword : AppVectors.icShowPassword,
+        colorFilter: ColorFilter.mode(
+          AppColors.textBlack.withOpacity(0.4),
+          BlendMode.srcIn,
         ),
+        width: 24.w,
+        height: 24.h,
       ),
     );
   }

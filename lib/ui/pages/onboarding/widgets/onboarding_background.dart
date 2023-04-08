@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class OnboardingBackground extends StatelessWidget {
@@ -16,8 +17,8 @@ class OnboardingBackground extends StatelessWidget {
       color: Colors.white,
       child: SvgPicture.asset(
         vector,
-        width: MediaQuery.of(context).size.width,
-        fit: BoxFit.fitWidth,
+        height: 480.h,
+        fit: BoxFit.fitHeight,
       ),
     );
   }
