@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tasky/common/app_dimens.dart';
 import 'package:tasky/ui/widgets/app_circular_progress_indicator.dart';
 
@@ -42,16 +43,16 @@ class AppButton extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Container(
-        height: height ?? AppDimens.buttonHeight,
-        width: width ?? double.infinity,
+        height: (height ?? AppDimens.buttonHeight).h,
+        width: (width ?? double.infinity).w,
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(
             cornerRadius ?? AppDimens.buttonCornerRadius,
-          ),
+          ).r,
           border: Border.all(
             color: borderColor ?? Colors.transparent,
-            width: borderWidth ?? 0,
+            width: (borderWidth ?? 0).w,
           ),
         ),
         child: _buildChildWidget(),
@@ -73,8 +74,8 @@ class AppButton extends StatelessWidget {
                     title!,
                     overflow: TextOverflow.ellipsis,
                     style: textStyle ??
-                        const TextStyle(
-                          fontSize: 16,
+                        TextStyle(
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w800,
                           color: Colors.red,
                         ),

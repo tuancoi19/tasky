@@ -190,9 +190,35 @@ class AppTextStyle {
   static final primaryS26Bold =
       primaryS26.copyWith(fontWeight: FontWeight.bold);
 
+  ///Primary 50%
+  static final primaryO50 = TextStyle(
+    color: AppColors.primary.withOpacity(0.5),
+  );
+
+  static final primaryO50S14 = primaryO50.copyWith(fontSize: 14.sp);
+  static final primaryO50S14W400 =
+      primaryO50S14.copyWith(fontWeight: FontWeight.w400);
+
   /// red
   static const redText = TextStyle(color: Colors.red);
 
   //S16
   static final redTextS14 = redText.copyWith(fontSize: 14.sp);
+
+  ///Secondary black 80%
+  static final secondaryBlackO80 = TextStyle(
+    color: AppColors.secondaryTextBlackColor.withOpacity(0.8),
+  );
+  static final secondaryBlackO80S21 = secondaryBlackO80.copyWith(fontSize: 21);
+  static final secondaryBlackO80S21W600 = secondaryBlackO80S21.copyWith(
+    fontWeight: FontWeight.w600,
+  );
+
+  ///Text Gray 40%
+  static final grayO40 = TextStyle(
+    color: AppColors.textGray.withOpacity(0.4),
+  );
+  static final grayO40S15 = grayO40.copyWith(fontSize: 15.sp);
+  static final grayO40S15W400 =
+      grayO40S15.copyWith(fontWeight: FontWeight.w400);
 }

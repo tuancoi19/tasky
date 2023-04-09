@@ -85,4 +85,22 @@ class AppDialog {
       },
     );
   }
+
+  static Future<void> showCustomDialog({
+    Color? color,
+    double? borderRadius,
+    required Widget content,
+    EdgeInsets? padding,
+  }) {
+    return Get.dialog(
+      Dialog(
+        backgroundColor: color ?? Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: content,
+      ),
+      barrierDismissible: false,
+    );
+  }
 }

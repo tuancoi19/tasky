@@ -72,6 +72,9 @@ class _SigninChildPageState extends State<SigninChildPage> {
           buildForm(),
           SizedBox(height: 44.h),
           AppButton(
+            onPressed: () {
+              _signUp();
+            },
             height: 56.h,
             title: S.current.log_in,
             cornerRadius: 15.r,
@@ -99,6 +102,8 @@ class _SigninChildPageState extends State<SigninChildPage> {
                   labelText: S.current.username_or_email,
                   hintText: S.current.enter_your_username_or_email,
                   borderRadius: 10,
+                  autoTrim: true,
+                  autoValidateMode: state.autoValidateMode,
                   onChanged: (value) {
                     _cubit.changeUsernameOrEmail(usernameOrEmail: value);
                   },
@@ -109,6 +114,8 @@ class _SigninChildPageState extends State<SigninChildPage> {
                   labelText: S.current.email,
                   hintText: S.current.enter_your_email,
                   borderRadius: 10,
+                  autoTrim: true,
+                  autoValidateMode: state.autoValidateMode,
                   onChanged: (value) {
                     _cubit.changeEmail(email: value);
                   },
@@ -123,6 +130,8 @@ class _SigninChildPageState extends State<SigninChildPage> {
                   textEditingController: passwordTextController,
                   obscureTextController: obscurePasswordController,
                   hintText: S.current.enter_your_password,
+                  autoTrim: true,
+                  autoValidateMode: state.autoValidateMode,
                   validator: (password) {
                     return Utils.currentPasswordValidator(password ?? '');
                   },
@@ -140,5 +149,23 @@ class _SigninChildPageState extends State<SigninChildPage> {
   void dispose() {
     _cubit.close();
     super.dispose();
+  }
+
+  void _signUp() {
+    if (!validateAndSave) {
+      _cubit.onValidateForm();
+    } else {
+      // _cubit.signUp();
+    }
+    FocusScope.of(context).unfocus();
+  }
+
+  bool get validateAndSave {
+    final form = _formKey.currentState ?? FormState();
+    if (form.validate()) {
+      form.save();
+      return true;
+    }
+    return false;
   }
 }

@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/ui/commons/app_dialog.dart';
+import 'package:tasky/ui/pages/forgot_password/forgot_password_page.dart';
 import 'package:tasky/ui/pages/login/widgets/option_list_widget.dart';
 import 'package:tasky/ui/pages/login/widgets/option_title.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
@@ -74,7 +76,11 @@ class _LoginChildPageState extends State<LoginChildPage> {
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                AppDialog.showCustomDialog(
+                  content: const ForgotPasswordPage(),
+                );
+              },
               child: Text(
                 S.current.forgot_password,
                 style: AppTextStyle.blackO80S14W400,
@@ -123,6 +129,8 @@ class _LoginChildPageState extends State<LoginChildPage> {
                 labelText: S.current.username_or_email,
                 hintText: S.current.enter_your_username_or_email,
                 borderRadius: 10,
+                autoTrim: true,
+                autoValidateMode: state.autoValidateMode,
                 onChanged: (value) {
                   _cubit.changeUsernameOrEmail(usernameOrEmail: value);
                 },
@@ -134,6 +142,8 @@ class _LoginChildPageState extends State<LoginChildPage> {
                 textEditingController: passwordTextController,
                 obscureTextController: obscurePasswordController,
                 hintText: S.current.enter_your_password,
+                autoTrim: true,
+                autoValidateMode: state.autoValidateMode,
                 validator: (password) {
                   return Utils.currentPasswordValidator(password ?? '');
                 },
