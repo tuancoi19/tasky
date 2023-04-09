@@ -40,6 +40,7 @@ class AppPasswordInput extends StatelessWidget {
   final AutovalidateMode? autoValidateMode;
   final bool autoTrim;
   final double borderRadius;
+  final Color? color;
 
   const AppPasswordInput({
     Key? key,
@@ -66,6 +67,7 @@ class AppPasswordInput extends StatelessWidget {
     this.autoValidateMode,
     this.autoTrim = false,
     this.borderRadius = 0,
+    this.color,
   }) : super(key: key);
 
   @override
@@ -143,7 +145,7 @@ class AppPasswordInput extends StatelessWidget {
                               AppColors.textFieldErrorBorder,
                         ),
                       ),
-                      fillColor: Colors.white,
+                      fillColor: color ?? Colors.white,
                       hintStyle: hintStyle ?? AppTextStyle.blackO40S14W400,
                       hintText: hintText,
                       isDense: true,

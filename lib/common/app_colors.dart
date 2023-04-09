@@ -25,6 +25,7 @@ class AppColors {
   static const Color textBlack = Color(0xFF303030);
   static const Color textBlue = Color(0xFF0000FF);
   static const Color textDisable = Color(0xFF89a3b1);
+  static const Color textGray = Color(0xFF252729);
 
   ///TextField
   static const Color textFieldEnabledBorder = Color(0xFF919191);
@@ -43,11 +44,17 @@ class AppColors {
   ///BottomNavigationBar
   static const Color bottomNavigationBar = Color(0xFF919191);
 
-  static final Color dotColor = const Color(0xFF212121).withOpacity(0.2);
+  static const Color secondaryTextBlackColor = Color(0xFF212121);
+
+  static final Color dotColor = secondaryTextBlackColor.withOpacity(0.2);
+
+  static final Color titleColor = secondaryTextBlackColor.withOpacity(0.8);
 
   static const Color welcomeBackgroundColor = Color(0xFFC4C4C4);
 
   static const Color boxShadowColor = Color(0xFFC5C5C5);
 
   static const Color authBackgroundColor = Color(0xFFFAFAFA);
+
+  static const Color backgroundTextFieldColor = Color(0xFFF9F9F9);
 }

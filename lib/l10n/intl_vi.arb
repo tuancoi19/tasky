@@ -24,7 +24,7 @@
   "password": "Mật khẩu",
   "enter_your_username_or_email": "Nhập tên đăng nhập hoặc E-mail của bạn",
   "enter_your_password": "Nhập mật khẩu của bạn",
-  "forgot_password": "Quên mật khẩu?",
+  "forgot_password": "Quên Mật khẩu?",
   "login": "Đăng nhập",
   "or_login_with": "Hoặc đăng nhập với",
   "email": "E-mail",
@@ -40,5 +40,14 @@
   "message_please_enter_new_email_address": "Nhập địa chỉ email mới của bạn.",
   "message_new_email_must_not_the_same_old_email": "Email mới không được trùng với email cũ",
   "message_please_enter_password_confirmation": "Nhập lại mật khẩu của bạn.",
-  "passwords_are_not_the_same": "Mật khẩu mới và mật khẩu xác nhận không trùng nhau."
+  "passwords_are_not_the_same": "Mật khẩu mới và mật khẩu xác nhận không trùng nhau.",
+  "forgot_password_title": "Quên Mật khẩu",
+  "forgot_password_description_1": "Nhập tên đăng nhâp hoặc email của bạn chúng tôi sẽ gửi mã xác nhận 5 chữ số",
+  "forgot_password_description_2": "Nhập mã xác nhận để xác thực tài khoản của bạn",
+  "enter_your_code": "Nhập mã của bạn",
+  "verification": "Xác thực",
+  "close": "Đóng",
+  "new_password": "Mật khẩu mới",
+  "enter_your_new_password": "Nhập mật khẩu mới của bạn",
+  "repeat_password": "Nhập lại mật khẩu"
 }
