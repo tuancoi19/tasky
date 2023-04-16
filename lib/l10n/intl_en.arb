@@ -49,5 +49,17 @@
   "close": "Close",
   "new_password": "New Password",
   "enter_your_new_password": "Enter your new password",
-  "repeat_password": "Repeat Password"
+  "repeat_password": "Repeat Password",
+  "upload_photo": "Upload photo",
+  "take_photo": "Take a photo",
+  "choose_from_library": "Choose from library",
+  "cancel": "Cancel",
+  "last_name": "Last Name",
+  "message_please_enter_name": "Name must not be empty",
+  "message_enter_name_within_50_characters": "Name must be within 50 characters",
+  "message_error_name_not_contain_number": "Name can not contain number and special characters",
+  "first_name": "First Name",
+  "enter_your_last_name": "Enter your last name",
+  "enter_your_first_name": "Enter your first name",
+  "done": "Done"
 }

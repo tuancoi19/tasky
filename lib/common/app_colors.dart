@@ -57,4 +57,6 @@ class AppColors {
   static const Color authBackgroundColor = Color(0xFFFAFAFA);
 
   static const Color backgroundTextFieldColor = Color(0xFFF9F9F9);
+
+  static const Color backgroundBackButtonColor = Color(0xFFFBFBFB);
 }

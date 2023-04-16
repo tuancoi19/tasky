@@ -10,7 +10,7 @@ import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/ui/commons/app_dialog.dart';
 import 'package:tasky/ui/pages/reset_password/reset_password_page.dart';
 import 'package:tasky/ui/widgets/buttons/app_icon_button.dart';
-import 'package:tasky/ui/widgets/input/app_username_or_email.dart';
+import 'package:tasky/ui/widgets/input/app_input.dart';
 
 import 'forgot_password_cubit.dart';
 
@@ -102,7 +102,7 @@ class _ForgotPasswordChildPageState extends State<ForgotPasswordChildPage> {
     return Form(
       key: _formKey,
       autovalidateMode: autoValidateMode,
-      child: AppUsernameOrEmailInput(
+      child: AppInput(
         textEditingController:
             isVerification ? verificationController : usernameOrEmailController,
         color: AppColors.backgroundTextFieldColor,
@@ -170,6 +170,8 @@ class _ForgotPasswordChildPageState extends State<ForgotPasswordChildPage> {
   @override
   void dispose() {
     _cubit.close();
+    usernameOrEmailController.dispose();
+    verificationController.dispose();
     super.dispose();
   }
 

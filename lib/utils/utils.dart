@@ -171,17 +171,17 @@ class Utils {
     return null;
   }
 
-  // /// show error text when name invalid
-  // static String? firstNameInvalid(String name) {
-  //   if (name.trim().isEmpty) {
-  //     return S.current.message_please_enter_name;
-  //   } else if (name.length > 50) {
-  //     return S.current.message_enter_name_within_50_characters;
-  //   } else if (nameValidator(name)) {
-  //     return S.current.message_error_name_not_contain_number;
-  //   }
-  //   return null;
-  // }
+  /// show error text when name invalid
+  static String? nameInvalid(String name) {
+    if (name.trim().isEmpty) {
+      return S.current.message_please_enter_name;
+    } else if (name.length > 50) {
+      return S.current.message_enter_name_within_50_characters;
+    } else if (nameValidator(name)) {
+      return S.current.message_error_name_not_contain_number;
+    }
+    return null;
+  }
 
   // /// show error text when last name invalid
   // static String? lastNameInvalid(String name) {

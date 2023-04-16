@@ -6,7 +6,7 @@ import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
 import 'package:tasky/ui/widgets/input/app_password_input.dart';
-import 'package:tasky/ui/widgets/input/app_username_or_email.dart';
+import 'package:tasky/ui/widgets/input/app_input.dart';
 import 'package:tasky/utils/utils.dart';
 
 import 'signup_cubit.dart';
@@ -97,7 +97,7 @@ class _SigninChildPageState extends State<SigninChildPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                AppUsernameOrEmailInput(
+                AppInput(
                   textEditingController: usernameOrEmailTextController,
                   labelText: S.current.username_or_email,
                   hintText: S.current.enter_your_username_or_email,
@@ -109,7 +109,7 @@ class _SigninChildPageState extends State<SigninChildPage> {
                   },
                 ),
                 SizedBox(height: 24.h),
-                AppUsernameOrEmailInput(
+                AppInput(
                   textEditingController: emailTextController,
                   labelText: S.current.email,
                   hintText: S.current.enter_your_email,

@@ -49,5 +49,17 @@
   "close": "Đóng",
   "new_password": "Mật khẩu mới",
   "enter_your_new_password": "Nhập mật khẩu mới của bạn",
-  "repeat_password": "Nhập lại mật khẩu"
+  "repeat_password": "Nhập lại mật khẩu",
+  "upload_photo": "Tải ảnh lên",
+  "take_photo": "Chụp ảnh",
+  "choose_from_library": "Tải lên từ thư viện",
+  "cancel": "Hủy",
+  "last_name": "Họ",
+  "message_please_enter_name": "Tên không được để trống",
+  "message_enter_name_within_50_characters": "Tên chỉ được tối đa 50 kí tự",
+  "message_error_name_not_contain_number": "Tên không thể chứa số và kí tự đặc biệt",
+  "first_name": "Tên",
+  "enter_your_last_name": "Nhập họ của bạn",
+  "enter_your_first_name": "Nhập tên của bạn",
+  "done": "Xong"
 }

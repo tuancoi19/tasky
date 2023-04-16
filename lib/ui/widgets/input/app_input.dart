@@ -4,7 +4,7 @@ import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/utils/utils.dart';
 
-class AppUsernameOrEmailInput extends StatelessWidget {
+class AppInput extends StatelessWidget {
   final String? labelText;
   final TextStyle? labelStyle;
   final String? highlightText;
@@ -18,7 +18,7 @@ class AppUsernameOrEmailInput extends StatelessWidget {
   final ValueChanged<String>? onSubmitted;
   final FormFieldValidator<String>? validator;
   final TextInputType textInputType;
-  final FocusNode? passwordFocusNode;
+  final FocusNode? focusNode;
   final Color? textFieldEnabledBorder;
   final Color? textFieldFocusedBorder;
   final Color? textFieldDisabledBorder;
@@ -29,7 +29,7 @@ class AppUsernameOrEmailInput extends StatelessWidget {
   final double borderRadius;
   final Color? color;
 
-  const AppUsernameOrEmailInput({
+  const AppInput({
     Key? key,
     this.labelText,
     this.labelStyle,
@@ -44,7 +44,7 @@ class AppUsernameOrEmailInput extends StatelessWidget {
     this.onSubmitted,
     this.validator,
     this.textInputType = TextInputType.text,
-    this.passwordFocusNode,
+    this.focusNode,
     this.textFieldEnabledBorder,
     this.textFieldDisabledBorder,
     this.textFieldFocusedBorder,
@@ -81,7 +81,6 @@ class AppUsernameOrEmailInput extends StatelessWidget {
             }
           },
           child: Container(
-            height: 56.h,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(borderRadius.r),
             ),
@@ -94,7 +93,7 @@ class AppUsernameOrEmailInput extends StatelessWidget {
                   },
               autovalidateMode: autoValidateMode,
               controller: textEditingController,
-              focusNode: passwordFocusNode,
+              focusNode: focusNode,
               style: textStyle ?? AppTextStyle.blackO40S14W400,
               maxLines: 1,
               decoration: InputDecoration(

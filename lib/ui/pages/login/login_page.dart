@@ -10,7 +10,7 @@ import 'package:tasky/ui/pages/login/widgets/option_list_widget.dart';
 import 'package:tasky/ui/pages/login/widgets/option_title.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
 import 'package:tasky/ui/widgets/input/app_password_input.dart';
-import 'package:tasky/ui/widgets/input/app_username_or_email.dart';
+import 'package:tasky/ui/widgets/input/app_input.dart';
 import 'package:tasky/utils/utils.dart';
 
 import 'login_cubit.dart';
@@ -124,7 +124,7 @@ class _LoginChildPageState extends State<LoginChildPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              AppUsernameOrEmailInput(
+              AppInput(
                 textEditingController: usernameOrEmailTextController,
                 labelText: S.current.username_or_email,
                 hintText: S.current.enter_your_username_or_email,
