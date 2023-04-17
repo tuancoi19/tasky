@@ -3,7 +3,7 @@ description: A project from TuanDQ
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -61,6 +61,10 @@ dependencies:
   cached_network_image: ^3.2.3
   flutter_svg: ^2.0.4
 
+  #Firebase
+  firebase_auth: ^4.4.0
+  firebase_core: ^2.9.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -83,7 +87,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "49143107546",
+    "project_id": "tasky-a5cb4",
+    "storage_bucket": "tasky-a5cb4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:49143107546:android:e33a561a5a87ba2552fae3",
+        "android_client_info": {
+          "package_name": "vn.tuandq.tasky"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "49143107546-6fb1ihqsdi7plbta32ufi2og969l7e5r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPZuVd-QXB0YmK8C7KsC_Xvrr91FkoRoA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "49143107546-6fb1ihqsdi7plbta32ufi2og969l7e5r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

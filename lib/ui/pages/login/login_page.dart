@@ -52,7 +52,6 @@ class _LoginChildPageState extends State<LoginChildPage> {
     usernameOrEmailTextController = TextEditingController();
     passwordTextController = TextEditingController();
     obscurePasswordController = ObscureTextController();
-    _cubit.loadInitialData();
   }
 
   @override
@@ -95,7 +94,31 @@ class _LoginChildPageState extends State<LoginChildPage> {
             textStyle: AppTextStyle.whiteS18Bold,
             backgroundColor: AppColors.primary,
             onPressed: () {
-              _logIn();
+              {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return Wrap(
+                      children: const [
+                        ListTile(
+                          leading: Icon(Icons.share),
+                          title: Text('Share'),
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.copy),
+                          title: Text('Copy Link'),
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.edit),
+                          title: Text('Edit'),
+                        ),
+                      ],
+                    );
+                  },
+                ).then((value) => Navigator.of(context).pop());
+              }
+
+              //_logIn();
             },
           ),
           SizedBox(height: 24.h),
@@ -166,13 +189,22 @@ class _LoginChildPageState extends State<LoginChildPage> {
     super.dispose();
   }
 
-  void _logIn() {
-    if (!validateAndSave) {
-      _cubit.onValidateForm();
-    } else {
-      // _cubit.logIn();
-    }
+  Future<void> _logIn() async {
+  
     FocusScope.of(context).unfocus();
+    _cubit.login(
+        mail: usernameOrEmailTextController.text,
+        password: passwordTextController.text,
+         onLoginSuccessful: (){
+          //save Token noti and push
+            
+        },
+        onLoginFailed: (){
+
+        }
+        );
+       
+        
   }
 
   bool get validateAndSave {
