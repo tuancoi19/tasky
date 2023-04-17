@@ -15,10 +15,10 @@ import 'package:tasky/utils/utils.dart';
 import 'edit_user_profile_cubit.dart';
 
 class EditUserProfileArguments {
-  String param;
+  bool fromSignUp;
 
   EditUserProfileArguments({
-    required this.param,
+    required this.fromSignUp,
   });
 }
 
@@ -86,7 +86,11 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
                     onTap: () {
                       AppDialog.showCustomBottomSheet(
                         context,
-                        widget: const SelectUploadImage(),
+                        widget: SelectUploadImage(
+                          onSubmitImage: (value) {
+                            return _cubit.setImagePath(imagePath: value.path);
+                          },
+                        ),
                       );
                     },
                     child: ClipOval(

@@ -35,8 +35,7 @@ class RouteConfig {
     ),
     GetPage(
       name: editUserProfile,
-      page: () => EditUserProfilePage(
-      ),
+      page: () => const EditUserProfilePage(),
     )
   ];
 }
