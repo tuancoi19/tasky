@@ -34,6 +34,9 @@ class AppConfigs {
 
   ///Max file
   static const maxAttachFile = 5;
+
+  ///Image
+  static const int imageSize = 10;
 }
 
 class FirebaseConfig {

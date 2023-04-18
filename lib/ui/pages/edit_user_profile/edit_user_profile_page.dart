@@ -107,8 +107,8 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
                       child: Image.asset(
                         AppImages.icUser,
                         fit: BoxFit.cover,
-                        width: 60.w,
-                        height: 60.h,
+                        width: 68.w,
+                        height: 68.h,
                       ),
                     ),
                   ),

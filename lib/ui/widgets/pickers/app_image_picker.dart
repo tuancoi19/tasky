@@ -9,9 +9,11 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
+import 'package:tasky/configs/app_configs.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
 import 'package:tasky/utils/logger.dart';
+import 'package:tasky/utils/utils.dart';
 
 class SelectUploadImage extends StatefulWidget {
   final Function(File)? onSubmitImage;
@@ -32,7 +34,6 @@ class _SelectUploadImageState extends State<SelectUploadImage> {
   late AppCubit appCubit;
   final picker = ImagePicker();
 
-  // final picker = ImagePicker();
   late PermissionStatus permissionCamera;
   late PermissionStatus permissionGallery;
 
@@ -56,9 +57,7 @@ class _SelectUploadImageState extends State<SelectUploadImage> {
         preferredCameraDevice: CameraDevice.front,
       );
       if (imageFile != null) {
-        // await processImage(imageFile.path, 0);
-        _image = File(imageFile.path);
-        widget.onSubmitImage?.call(_image);
+        await processImage(imageFile.path);
       }
     } catch (error) {
       logger.d(error);
@@ -70,30 +69,24 @@ class _SelectUploadImageState extends State<SelectUploadImage> {
       FocusScope.of(context).unfocus();
       XFile? imageFile = await picker.pickImage(source: ImageSource.gallery);
       if (imageFile != null) {
-        // if (imageFile.isNotEmpty) {
-        //       await processImage(imageFile[i].path, i);
-        //     }
-        _image = File(imageFile.path);
-        widget.onSubmitImage?.call(_image);
-        // } else {
-        //   AppSnackBar.showError(
-        //     message: S.current.upload_10_images_error,
-        //   );
-        // }
+        await processImage(imageFile.path);
       }
     } catch (error) {
       logger.d(error);
     }
   }
 
-  // Future<void> processImage(String path, int index) async {
-  //   File? temp = File(path);
-  //   if ((temp.lengthSync() / 1024 / 1024) > AppConfigs.imageSize) {
-  //     temp = await Utils.resizeImage(temp,
-  //         imageSize: AppConfigs.imageSize, index: index.toString());
-  //   }
-  //   _images.add(temp ?? File(path));
-  // }
+  Future<void> processImage(String path) async {
+    File? temp = File(path);
+    if ((temp.lengthSync() / 1024 / 1024) > AppConfigs.imageSize) {
+      temp = await Utils.resizeImage(
+        temp,
+        imageSize: AppConfigs.imageSize,
+      );
+    }
+    _image = temp ?? File(path);
+    widget.onSubmitImage?.call(_image);
+  }
 
   Future<bool> checkDevice() async {
     if (Platform.isAndroid) {
