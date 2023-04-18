@@ -6,7 +6,7 @@ import 'package:tasky/common/app_images.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/ui/commons/app_dialog.dart';
-import 'package:tasky/ui/widgets/appbar/app_bar_widget.dart';
+import 'package:tasky/ui/widgets/appbar/app_bar_with_icon_widget.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
 import 'package:tasky/ui/widgets/input/app_input.dart';
 import 'package:tasky/ui/widgets/pickers/app_image_picker.dart';
@@ -23,8 +23,11 @@ class EditUserProfileArguments {
 }
 
 class EditUserProfilePage extends StatelessWidget {
+  final EditUserProfileArguments arguments;
+
   const EditUserProfilePage({
     Key? key,
+    required this.arguments,
   }) : super(key: key);
 
   @override
@@ -33,13 +36,20 @@ class EditUserProfilePage extends StatelessWidget {
       create: (context) {
         return EditUserProfileCubit();
       },
-      child: const EditUserProfileChildPage(),
+      child: EditUserProfileChildPage(
+        arguments: arguments,
+      ),
     );
   }
 }
 
 class EditUserProfileChildPage extends StatefulWidget {
-  const EditUserProfileChildPage({Key? key}) : super(key: key);
+  final EditUserProfileArguments arguments;
+
+  const EditUserProfileChildPage({
+    Key? key,
+    required this.arguments,
+  }) : super(key: key);
 
   @override
   State<EditUserProfileChildPage> createState() =>
@@ -64,7 +74,7 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(showBackButton: true),
+      appBar: AppBarWithIconWidget(fromSignUp: widget.arguments.fromSignUp),
       body: SafeArea(
         child: _buildBodyWidget(),
       ),
