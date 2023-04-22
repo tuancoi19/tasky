@@ -1,4 +1,7 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/ui/pages/login/login_page.dart';
+import 'package:tasky/ui/pages/signup/signup_page.dart';
 
 class AppConfigs {
   AppConfigs._();
@@ -34,6 +37,21 @@ class AppConfigs {
 
   ///Max file
   static const maxAttachFile = 5;
+
+  static final listAuthTab = [
+    Tab(text: S.current.log_in),
+    Tab(text: S.current.sign_up)
+  ];
+
+  static const listAuthTabBarView = [
+    LoginPage(),
+    SignupPage(),
+  ];
+
+  static final listTaskStatusTab = [
+    Tab(text: S.current.in_progress),
+    Tab(text: S.current.complete),
+  ];
 }
 
 class FirebaseConfig {

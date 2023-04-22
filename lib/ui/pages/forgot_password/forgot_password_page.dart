@@ -122,6 +122,7 @@ class _ForgotPasswordChildPageState extends State<ForgotPasswordChildPage> {
         },
         validator: (value) {
           //TODO: Làm thêm validator dành cho trường hợp nhập mã
+          return null;
         },
       ),
     );

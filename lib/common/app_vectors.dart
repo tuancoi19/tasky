@@ -9,4 +9,10 @@ class AppVectors {
   static const String icHidePassword = 'assets/vectors/ic_hide_password.svg';
 
   static const String icArrowRight = 'assets/vectors/ic_arrow_right.svg';
+
+  static const String icMenu = 'assets/vectors/ic_menu.svg';
+
+  static const String icNotification = 'assets/vectors/ic_notification.svg';
+
+  static const String icSearch = 'assets/vectors/ic_search.svg';
 }

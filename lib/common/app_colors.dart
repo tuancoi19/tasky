@@ -57,4 +57,12 @@ class AppColors {
   static const Color authBackgroundColor = Color(0xFFFAFAFA);
 
   static const Color backgroundTextFieldColor = Color(0xFFF9F9F9);
+
+  static const Color backgroundBackButtonColor = Color(0xFFFBFBFB);
+
+  static final Color blueTaskShadow = const Color(0xFF5486E9).withOpacity(0.5);
+
+  static final Color redTaskShadow = const Color(0xFFED918E).withOpacity(0.5);
+
+  static final Color greenTaskShadow = const Color(0xFF3EAF99).withOpacity(0.5);
 }
