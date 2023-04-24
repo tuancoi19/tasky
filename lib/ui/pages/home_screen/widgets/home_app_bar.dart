@@ -16,7 +16,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: Container(
         width: double.infinity,
         height: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 24).r,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16).r,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -24,7 +24,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             buildIconButton(
               icon: SvgPicture.asset(
                 AppVectors.icMenu,
-                width: 24.w,
+                width: 24.h,
                 height: 24.h,
               ),
             ),
@@ -39,7 +39,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     return InkWell(
       onTap: () {},
       child: Container(
-        width: 48.w,
+        width: 48.h,
         height: 48.h,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10).r,
@@ -65,6 +65,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         buildIconButton(
           icon: Image.asset(
             AppImages.avatarTest,
+            width: 48.h,
+            height: 48.h,
             fit: BoxFit.cover,
           ),
         ),
@@ -73,5 +75,5 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(48.h);
+  Size get preferredSize => Size.fromHeight(80.h);
 }

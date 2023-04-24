@@ -15,4 +15,12 @@ class AppVectors {
   static const String icNotification = 'assets/vectors/ic_notification.svg';
 
   static const String icSearch = 'assets/vectors/ic_search.svg';
+
+  static const String icHome = 'assets/vectors/ic_home.svg';
+
+  static const String icActivity = 'assets/vectors/ic_activity.svg';
+
+  static const String icUser = 'assets/vectors/ic_user.svg';
+
+  static const String icPlus = 'assets/vectors/ic_plus.svg';
 }

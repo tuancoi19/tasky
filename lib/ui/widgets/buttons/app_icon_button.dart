@@ -40,8 +40,8 @@ class AppIconButton extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Container(
-        height: (height ?? AppDimens.buttonHeight).h,
-        width: (width ?? double.infinity).w,
+        height: height ?? AppDimens.buttonHeight,
+        width: width ?? double.infinity,
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(

@@ -13,7 +13,6 @@ import 'package:tasky/ui/pages/home_screen/widgets/home_status_tab_bar.dart';
 import 'home_screen_cubit.dart';
 
 class HomeScreenPage extends StatelessWidget {
-
   const HomeScreenPage({
     Key? key,
   }) : super(key: key);
@@ -47,7 +46,7 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage>
     _cubit = BlocProvider.of(context);
     _cubit.loadInitialData();
     _tabController = TabController(
-      length: AppConfigs.listTaskStatusTab.length,
+      length: AppConfigs.taskStatusTabList.length,
       vsync: this,
     );
   }
@@ -65,10 +64,9 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage>
   Widget _buildBodyWidget() {
     return SingleChildScrollView(
       physics: const ClampingScrollPhysics(),
-      padding: const EdgeInsets.symmetric(vertical: 28).r,
+      padding: const EdgeInsets.only(top: 12).r,
       child: SizedBox(
         height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -89,9 +87,7 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage>
                 style: AppTextStyle.blackS15W500,
               ),
             ),
-            SizedBox(height: 12.h),
             const HomeListView(),
-            SizedBox(height: 32.h),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24).r,
               child: HomeStatusTabBar(
@@ -101,7 +97,7 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage>
             Expanded(
               child: TabBarView(
                 controller: _tabController,
-                children: AppConfigs.listAuthTabBarView,
+                children: AppConfigs.authTabBarViewList,
               ),
             ),
           ],

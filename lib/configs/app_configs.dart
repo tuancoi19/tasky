@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/ui/pages/home_screen/home_screen_page.dart';
 import 'package:tasky/ui/pages/login/login_page.dart';
 import 'package:tasky/ui/pages/signup/signup_page.dart';
 
@@ -38,19 +40,31 @@ class AppConfigs {
   ///Max file
   static const maxAttachFile = 5;
 
-  static final listAuthTab = [
+  static final authTabList = [
     Tab(text: S.current.log_in),
     Tab(text: S.current.sign_up)
   ];
 
-  static const listAuthTabBarView = [
+  static const authTabBarViewList = [
     LoginPage(),
     SignupPage(),
   ];
 
-  static final listTaskStatusTab = [
+  static final taskStatusTabList = [
     Tab(text: S.current.in_progress),
     Tab(text: S.current.complete),
+  ];
+
+  static final bottomNavigatorBarIconList = [
+    AppVectors.icHome,
+    AppVectors.icActivity,
+    AppVectors.icUser,
+  ];
+
+  static final mainScreenPageList = [
+    const HomeScreenPage(),
+    Container(color: Colors.red),
+    Container(color: Colors.blue),
   ];
 }
 

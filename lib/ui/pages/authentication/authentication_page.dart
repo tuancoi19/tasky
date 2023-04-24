@@ -12,7 +12,7 @@ class AuthenticationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: AppConfigs.listAuthTab.length,
+      length: AppConfigs.authTabList.length,
       child: Scaffold(
         appBar: buildAppBar(context),
         body: SafeArea(
@@ -24,7 +24,7 @@ class AuthenticationPage extends StatelessWidget {
 
   Widget _buildBodyWidget() {
     return const TabBarView(
-      children: AppConfigs.listAuthTabBarView,
+      children: AppConfigs.authTabBarViewList,
     );
   }
 
@@ -42,7 +42,7 @@ class AuthenticationPage extends StatelessWidget {
       ),
       elevation: 0,
       bottom: TabBar(
-        tabs: AppConfigs.listAuthTab,
+        tabs: AppConfigs.authTabList,
         indicatorColor: AppColors.primary,
         indicatorWeight: 3,
         labelStyle: AppTextStyle.blackS20Bold,

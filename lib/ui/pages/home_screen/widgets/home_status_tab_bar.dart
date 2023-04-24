@@ -13,10 +13,10 @@ class HomeStatusTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: AppConfigs.listTaskStatusTab.length,
+      length: AppConfigs.taskStatusTabList.length,
       child: TabBar(
         controller: tabController,
-        tabs: AppConfigs.listTaskStatusTab
+        tabs: AppConfigs.taskStatusTabList
             .map(
               (child) => Padding(
                 padding: const EdgeInsets.only(right: 16).r,
