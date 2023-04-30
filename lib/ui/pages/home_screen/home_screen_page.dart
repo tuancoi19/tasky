@@ -97,7 +97,7 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage>
             Expanded(
               child: TabBarView(
                 controller: _tabController,
-                children: AppConfigs.authTabBarViewList,
+                children: AppConfigs.homeScreenPageList,
               ),
             ),
           ],

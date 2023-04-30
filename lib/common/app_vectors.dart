@@ -23,4 +23,9 @@ class AppVectors {
   static const String icUser = 'assets/vectors/ic_user.svg';
 
   static const String icPlus = 'assets/vectors/ic_plus.svg';
+
+  static const String icArrowLeft = 'assets/vectors/ic_arrow_left.svg';
+
+  static const String icMoreHorizontal =
+      'assets/vectors/ic_more_horizontal.svg';
 }

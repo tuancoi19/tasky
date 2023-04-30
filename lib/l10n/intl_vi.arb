@@ -56,5 +56,7 @@
   "my_tasks": "Công việc của tôi",
   "tasks": "Tác vụ",
   "in_progress": "Đang tiến hành",
-  "complete": "Đã hoàn thành"
+  "complete": "Hoàn thành",
+  "completed": "Đã hoàn thành",
+  "failed": "Đã thất bại"
 }

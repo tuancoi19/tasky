@@ -71,6 +71,8 @@ class HomeTaskItem extends StatelessWidget {
               Text(
                 'Some Unknown Tasks',
                 style: AppTextStyle.whiteS15W500,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
               )
             ],
           ),
@@ -89,11 +91,7 @@ class HomeTaskItem extends StatelessWidget {
   }
 
   Color generatedColor(int index) {
-    final listShadowColor = [
-      AppColors.blueTaskShadow,
-      AppColors.redTaskShadow,
-      AppColors.greenTaskShadow,
-    ];
-    return listShadowColor[index % listShadowColor.length];
+    return AppColors.taskColorList[index % AppColors.taskColorList.length]
+        .withOpacity(0.5);
   }
 }

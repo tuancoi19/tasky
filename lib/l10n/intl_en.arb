@@ -56,5 +56,7 @@
   "my_tasks": "My Tasks",
   "tasks": "Tasks",
   "in_progress": "In Progress",
-  "complete": "Complete"
+  "complete": "Complete",
+  "completed": "Completed",
+  "failed": "Failed"
 }

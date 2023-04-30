@@ -83,6 +83,10 @@ class AppTextStyle {
   static final blackO50S15W500 =
       blackO50S15.copyWith(fontWeight: FontWeight.w500);
 
+  static final blackO50S13 = blackO50.copyWith(fontSize: 13.sp);
+  static final blackO50S13W400 =
+      blackO50S13.copyWith(fontWeight: FontWeight.w400);
+
   ///Black 40%
   static final blackO40 = TextStyle(
     color: AppColors.textBlack.withOpacity(0.4),

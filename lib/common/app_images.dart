@@ -13,4 +13,9 @@ class AppImages {
   static const bgRedTask = 'assets/images/bg_red_task.png';
 
   static const bgGreenTask = 'assets/images/bg_green_task.png';
+
+  static const icCompleted = 'assets/images/ic_completed.png';
+
+  static const icFailed = 'assets/images/ic_failed.png';
+
 }

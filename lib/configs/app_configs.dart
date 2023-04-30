@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/ui/pages/home_screen/home_screen_page.dart';
+import 'package:tasky/ui/pages/home_screen/widgets/in_progress_list_view.dart';
 import 'package:tasky/ui/pages/login/login_page.dart';
+import 'package:tasky/ui/pages/notification_screen/notification_screen_page.dart';
 import 'package:tasky/ui/pages/signup/signup_page.dart';
 
 class AppConfigs {
@@ -65,6 +67,13 @@ class AppConfigs {
     const HomeScreenPage(),
     Container(color: Colors.red),
     Container(color: Colors.blue),
+  ];
+
+  static final homeScreenPageList = [
+    const InProgressListView(),
+    NotificationScreenPage(
+      arguments: NotificationScreenArguments(canPop: false),
+    )
   ];
 }
 

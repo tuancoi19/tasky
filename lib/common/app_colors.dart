@@ -60,9 +60,9 @@ class AppColors {
 
   static const Color backgroundBackButtonColor = Color(0xFFFBFBFB);
 
-  static final Color blueTaskShadow = const Color(0xFF5486E9).withOpacity(0.5);
-
-  static final Color redTaskShadow = const Color(0xFFED918E).withOpacity(0.5);
-
-  static final Color greenTaskShadow = const Color(0xFF3EAF99).withOpacity(0.5);
+  static const List<Color> taskColorList = [
+    Color(0xFF5486E9),
+    Color(0xFFED918E),
+    Color(0xFF3EAF99),
+  ];
 }
