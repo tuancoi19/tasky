@@ -6,8 +6,11 @@ import 'package:tasky/common/app_images.dart';
 import 'package:tasky/common/app_vectors.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final Function() onTap;
+
   const HomeAppBar({
     Key? key,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -22,12 +25,12 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             buildIconButton(
-              icon: SvgPicture.asset(
-                AppVectors.icMenu,
-                width: 24.h,
-                height: 24.h,
-              ),
-            ),
+                icon: SvgPicture.asset(
+                  AppVectors.icMenu,
+                  width: 24.h,
+                  height: 24.h,
+                ),
+                onTap: onTap),
             buildAccountRow(),
           ],
         ),
@@ -35,9 +38,12 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  Widget buildIconButton({required Widget icon}) {
+  Widget buildIconButton({
+    required Widget icon,
+    required Function() onTap,
+  }) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       child: Container(
         width: 48.h,
         height: 48.h,
@@ -60,6 +66,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             width: 20.w,
             height: 24.h,
           ),
+          onTap: () {},
         ),
         SizedBox(width: 16.w),
         buildIconButton(
@@ -69,6 +76,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             height: 48.h,
             fit: BoxFit.cover,
           ),
+          onTap: () {},
         ),
       ],
     );

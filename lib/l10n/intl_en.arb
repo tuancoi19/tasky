@@ -58,5 +58,10 @@
   "in_progress": "In Progress",
   "complete": "Complete",
   "completed": "Completed",
-  "failed": "Failed"
+  "failed": "Failed",
+  "manage_account": "Manage Account",
+  "search_tasks": "Search Tasks",
+  "activity": "Activity",
+  "app_settings": "App Settings",
+  "logout": "Logout"
 }

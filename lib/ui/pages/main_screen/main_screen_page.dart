@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tasky/configs/app_configs.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_zoom_drawer/config.dart';
+import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:tasky/common/app_colors.dart';
+import 'package:tasky/ui/pages/home_screen/home_screen_page.dart';
+import 'package:tasky/ui/pages/main_screen/widgets/main_screen_drawer.dart';
 import 'package:tasky/ui/pages/main_screen/widgets/main_screen_bottom_navigator_bar.dart';
 
 import 'main_screen_cubit.dart';
@@ -42,6 +47,7 @@ class MainScreenChildPage extends StatefulWidget {
 class _MainScreenChildPageState extends State<MainScreenChildPage> {
   late final MainScreenCubit _cubit;
   late final PageController _pageController;
+  late final ZoomDrawerController _zoomDrawerController;
 
   @override
   void initState() {
@@ -49,26 +55,43 @@ class _MainScreenChildPageState extends State<MainScreenChildPage> {
     _cubit = BlocProvider.of(context);
     _cubit.loadInitialData();
     _pageController = PageController();
+    _zoomDrawerController = ZoomDrawerController();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MainScreenCubit, MainScreenState>(
       builder: (context, state) {
-        return Scaffold(
-          body: SafeArea(
-            child: _buildBodyWidget(),
-          ),
-          bottomNavigationBar: MainScreenBottomNavigatorBar(
-            currentIndex: state.currentPage,
-            onPageChange: (page) {
-              _cubit.setCurrentPage(page);
-              _pageController.animateToPage(
-                page,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeOut,
-              );
+        return ZoomDrawer(
+          controller: _zoomDrawerController,
+          moveMenuScreen: true,
+          disableDragGesture: true,
+          borderRadius: 20.r,
+          menuBackgroundColor: AppColors.drawerBackgroundColor,
+          slideWidth: 256.w,
+          menuScreenWidth: MediaQuery.of(context).size.width * 0.67,
+          showShadow: true,
+          angle: 0.0,
+          shadowLayer2Color: Colors.transparent,
+          mainScreenScale: 0.15,
+          menuScreen: MainScreenDrawer(
+            onTap: () {
+              _zoomDrawerController.close?.call();
             },
+          ),
+          mainScreen: Scaffold(
+            body: _buildBodyWidget(),
+            bottomNavigationBar: MainScreenBottomNavigatorBar(
+              currentIndex: state.currentPage,
+              onPageChange: (page) {
+                _cubit.setCurrentPage(page);
+                _pageController.animateToPage(
+                  page,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeOut,
+                );
+              },
+            ),
           ),
         );
       },
@@ -81,8 +104,20 @@ class _MainScreenChildPageState extends State<MainScreenChildPage> {
       onPageChanged: (index) {
         _cubit.setCurrentPage(index);
       },
-      children: AppConfigs.mainScreenPageList,
+      children: buildMainScreenPageList(),
     );
+  }
+
+  List<Widget> buildMainScreenPageList() {
+    return [
+      HomeScreenPage(
+        arguments: HomeScreenArguments(
+          zoomDrawerController: _zoomDrawerController,
+        ),
+      ),
+      Container(color: Colors.red),
+      Container(color: Colors.blue),
+    ];
   }
 
   @override

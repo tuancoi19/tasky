@@ -52,11 +52,16 @@
   "repeat_password": "Nhập lại mật khẩu",
   "hello": "Xin chào, ",
   "complete_your_tasks_today": "Hoàn thành công việc hôm nay của bạn",
-  "search_your_task": "Tìm kiếm công việc của ",
+  "search_your_task": "Tìm kiếm công việc của bạn",
   "my_tasks": "Công việc của tôi",
   "tasks": "Tác vụ",
   "in_progress": "Đang tiến hành",
   "complete": "Hoàn thành",
   "completed": "Đã hoàn thành",
-  "failed": "Đã thất bại"
+  "failed": "Đã thất bại",
+  "manage_account": "Quản Lý Tài Khoản",
+  "search_tasks": "Tìm Kiếm Tác Vụ",
+  "activity": "Hoạt Động",
+  "app_settings": "Thiết Lập Ứng Dụng",
+  "logout": "Đăng xuất"
 }

@@ -65,4 +65,6 @@ class AppColors {
     Color(0xFFED918E),
     Color(0xFF3EAF99),
   ];
+
+  static const Color drawerBackgroundColor = Color(0xFF0E1F53);
 }

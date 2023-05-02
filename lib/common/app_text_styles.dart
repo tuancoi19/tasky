@@ -137,6 +137,7 @@ class AppTextStyle {
 
   //s16
   static final whiteS16 = white.copyWith(fontSize: 16.sp);
+  static final whiteS16W600 = whiteS16.copyWith(fontWeight: FontWeight.w600);
   static final whiteS16Bold = whiteS16.copyWith(fontWeight: FontWeight.bold);
   static final whiteS16ExtraBold =
       whiteS16.copyWith(fontWeight: FontWeight.w800);
@@ -146,6 +147,19 @@ class AppTextStyle {
   static final whiteS18Bold = whiteS18.copyWith(fontWeight: FontWeight.bold);
   static final whiteS18ExtraBold =
       whiteS18.copyWith(fontWeight: FontWeight.w800);
+
+  ///White O80
+  static final whiteO80 = TextStyle(color: Colors.white.withOpacity(0.8));
+
+  //s13
+  static final whiteO80S13 = whiteO80.copyWith(fontSize: 13.sp);
+  static final whiteO80S13W400 =
+      whiteO80S13.copyWith(fontWeight: FontWeight.w400);
+
+  //s14
+  static final whiteO80S14 = whiteO80.copyWith(fontSize: 14.sp);
+  static final whiteO80S14W500 =
+      whiteO80S14.copyWith(fontWeight: FontWeight.w500);
 
   ///White O50
   static final whiteO50 = TextStyle(color: Colors.white.withOpacity(0.5));

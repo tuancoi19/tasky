@@ -28,4 +28,10 @@ class AppVectors {
 
   static const String icMoreHorizontal =
       'assets/vectors/ic_more_horizontal.svg';
+
+  static const String icBackCircle = 'assets/vectors/ic_back_circle.svg';
+
+  static const String icSettings = 'assets/vectors/ic_settings.svg';
+
+  static const String icLogout = 'assets/vectors/ic_logout.svg';
 }

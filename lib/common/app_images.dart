@@ -17,5 +17,4 @@ class AppImages {
   static const icCompleted = 'assets/images/ic_completed.png';
 
   static const icFailed = 'assets/images/ic_failed.png';
-
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_zoom_drawer/config.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/configs/app_configs.dart';
 import 'package:tasky/generated/l10n.dart';
@@ -12,9 +13,20 @@ import 'package:tasky/ui/pages/home_screen/widgets/home_status_tab_bar.dart';
 
 import 'home_screen_cubit.dart';
 
+class HomeScreenArguments {
+  final ZoomDrawerController zoomDrawerController;
+
+  HomeScreenArguments({
+    required this.zoomDrawerController,
+  });
+}
+
 class HomeScreenPage extends StatelessWidget {
+  final HomeScreenArguments arguments;
+
   const HomeScreenPage({
     Key? key,
+    required this.arguments,
   }) : super(key: key);
 
   @override
@@ -23,13 +35,20 @@ class HomeScreenPage extends StatelessWidget {
       create: (context) {
         return HomeScreenCubit();
       },
-      child: const HomeScreenChildPage(),
+      child: HomeScreenChildPage(
+        zoomDrawerController: arguments.zoomDrawerController,
+      ),
     );
   }
 }
 
 class HomeScreenChildPage extends StatefulWidget {
-  const HomeScreenChildPage({Key? key}) : super(key: key);
+  final ZoomDrawerController zoomDrawerController;
+
+  const HomeScreenChildPage({
+    Key? key,
+    required this.zoomDrawerController,
+  }) : super(key: key);
 
   @override
   State<HomeScreenChildPage> createState() => _HomeScreenChildPageState();
@@ -54,7 +73,11 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const HomeAppBar(),
+      appBar: HomeAppBar(
+        onTap: () {
+          widget.zoomDrawerController.open?.call();
+        },
+      ),
       body: SafeArea(
         child: _buildBodyWidget(),
       ),

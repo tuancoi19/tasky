@@ -32,10 +32,13 @@ class _HomeSearchBarState extends State<HomeSearchBar> {
           prefixIconColor: AppColors.textBlack.withOpacity(0.4),
           prefixIcon: Padding(
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24).r,
-            child: SvgPicture.asset(
-              AppVectors.icSearch,
-              width: 20.w,
-              height: 20.h,
+            child: Opacity(
+              opacity: 0.4,
+              child: SvgPicture.asset(
+                AppVectors.icSearch,
+                width: 20.w,
+                height: 20.h,
+              ),
             ),
           ),
         ),
