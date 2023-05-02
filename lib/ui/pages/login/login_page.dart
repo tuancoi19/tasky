@@ -163,6 +163,7 @@ class _LoginChildPageState extends State<LoginChildPage> {
     _cubit.close();
     usernameOrEmailTextController.dispose();
     passwordTextController.dispose();
+    obscurePasswordController.dispose();
     super.dispose();
   }
 

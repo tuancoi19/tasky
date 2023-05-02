@@ -4,15 +4,15 @@ class EditUserProfileState extends Equatable {
   final LoadStatus loadDataStatus;
   final String? imagePath;
   final AutovalidateMode autoValidateMode;
-  final String? firstName;
-  final String? lastName;
+  final String? displayName;
+  final String? password;
 
   const EditUserProfileState({
     this.loadDataStatus = LoadStatus.initial,
     this.imagePath,
     this.autoValidateMode = AutovalidateMode.disabled,
-    this.firstName,
-    this.lastName,
+    this.displayName,
+    this.password,
   });
 
   @override
@@ -20,23 +20,23 @@ class EditUserProfileState extends Equatable {
         loadDataStatus,
         imagePath,
         autoValidateMode,
-        firstName,
-        lastName,
+        displayName,
+        password,
       ];
 
   EditUserProfileState copyWith({
     LoadStatus? loadDataStatus,
     String? imagePath,
     AutovalidateMode? autoValidateMode,
-    String? firstName,
-    String? lastName,
+    String? displayName,
+    String? password,
   }) {
     return EditUserProfileState(
       loadDataStatus: loadDataStatus ?? this.loadDataStatus,
       imagePath: imagePath ?? this.imagePath,
       autoValidateMode: autoValidateMode ?? this.autoValidateMode,
-      firstName: firstName ?? this.firstName,
-      lastName: lastName ?? this.lastName,
+      displayName: displayName ?? this.displayName,
+      password: password ?? this.password,
     );
   }
 }

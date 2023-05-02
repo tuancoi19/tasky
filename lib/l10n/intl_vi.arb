@@ -61,5 +61,10 @@
   "first_name": "Tên",
   "enter_your_last_name": "Nhập họ của bạn",
   "enter_your_first_name": "Nhập tên của bạn",
-  "done": "Xong"
+  "done": "Xong",
+  "vip_user": "Người dùng VIP",
+  "display_name": "Tên Hiển Thị",
+  "enter_your_display_name": "Nhập tên hiển thị của bạn",
+  "username": "Tên Đăng Nhập",
+  "enter_your_username": "Nhập tên đăng nhập của bạn"
 }

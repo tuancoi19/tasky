@@ -11,4 +11,6 @@ class AppVectors {
   static const String icArrowRight = 'assets/vectors/ic_arrow_right.svg';
 
   static const String icArrowLeft = 'assets/vectors/ic_arrow_left.svg';
+
+  static const String icVip = 'assets/vectors/ic_vip.svg';
 }

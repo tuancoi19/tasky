@@ -61,5 +61,10 @@
   "first_name": "First Name",
   "enter_your_last_name": "Enter your last name",
   "enter_your_first_name": "Enter your first name",
-  "done": "Done"
+  "done": "Done",
+  "vip_user": "VIP User",
+  "display_name": "Display Name",
+  "enter_your_display_name": "Enter your display name",
+  "username": "Username",
+  "enter_your_username": "Enter your username"
 }

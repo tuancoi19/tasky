@@ -31,11 +31,11 @@ class EditUserProfileCubit extends Cubit<EditUserProfileState> {
     );
   }
 
-  void changeFirstName({required String firstName}) {
-    emit(state.copyWith(firstName: firstName));
+  void changeDisplayName({required String displayName}) {
+    emit(state.copyWith(displayName: displayName));
   }
 
-  void changeLastName({required String lastName}) {
-    emit(state.copyWith(lastName: lastName));
+  void changePassword({required String password}) {
+    emit(state.copyWith(password: password));
   }
 }

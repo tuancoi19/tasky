@@ -28,6 +28,7 @@ class AppInput extends StatelessWidget {
   final bool autoTrim;
   final double borderRadius;
   final Color? color;
+  final bool readOnly;
 
   const AppInput({
     Key? key,
@@ -54,6 +55,7 @@ class AppInput extends StatelessWidget {
     this.autoTrim = false,
     this.borderRadius = 0,
     this.color,
+    this.readOnly = false,
   }) : super(key: key);
 
   @override
@@ -85,6 +87,7 @@ class AppInput extends StatelessWidget {
               borderRadius: BorderRadius.circular(borderRadius.r),
             ),
             child: TextFormField(
+              readOnly: readOnly,
               onFieldSubmitted: onSubmitted,
               onChanged: onChanged,
               validator: validator ??

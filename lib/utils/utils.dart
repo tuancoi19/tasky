@@ -218,11 +218,11 @@ class Utils {
 
   ///reSize Image
   static Future<File?> resizeImage(
-      File file, {
-        Function(File)? onSubmitImage,
-        required num imageSize,
-        Function? onErrorImage,
-      }) async {
+    File file, {
+    Function(File)? onSubmitImage,
+    required num imageSize,
+    Function? onErrorImage,
+  }) async {
     final dir = await getTemporaryDirectory();
 
     /// Create a temporary path to save the resized file

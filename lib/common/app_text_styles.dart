@@ -25,10 +25,14 @@ class AppTextStyle {
   static final blackS15W500 = blackS15.copyWith(fontWeight: FontWeight.w500);
 
   //s16
-  static final blackS16 = black.copyWith(fontSize: 14.sp);
+  static final blackS16 = black.copyWith(fontSize: 16.sp);
   static final blackS16Bold = blackS16.copyWith(fontWeight: FontWeight.bold);
   static final blackS16ExtraBold =
       blackS16.copyWith(fontWeight: FontWeight.w800);
+
+  //s16
+  static final blackS1 = black.copyWith(fontSize: 17.sp);
+  static final blackS17W600 = blackS16.copyWith(fontWeight: FontWeight.w600);
 
   //s18
   static final blackS18 = black.copyWith(fontSize: 18.sp);
@@ -179,6 +183,11 @@ class AppTextStyle {
 
   ///Primary
   static const primary = TextStyle(color: AppColors.primary);
+
+  //s14
+  static final primaryS14 = primary.copyWith(fontSize: 14.sp);
+  static final primaryS14W400 =
+      primaryS14.copyWith(fontWeight: FontWeight.w400);
 
   //s25
   static final primaryS25 = primary.copyWith(fontSize: 25.sp);

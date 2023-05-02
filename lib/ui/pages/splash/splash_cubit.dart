@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:tasky/router/route_config.dart';
+import 'package:tasky/ui/pages/edit_user_profile/edit_user_profile_page.dart';
 
 import 'splash_state.dart';
 
@@ -18,7 +19,10 @@ class SplashCubit extends Cubit<SplashState> {
 
   void checkLogin() async {
     await Future.delayed(const Duration(seconds: 2));
-    Get.offNamed(RouteConfig.authentication);
+    Get.offNamed(
+      RouteConfig.editUserProfile,
+      arguments: EditUserProfileArguments(fromSignUp: false),
+    );
     //   final token = await authRepo.getToken();
     //   if (token == null) {
     //     // Get.offAll(() => const SignInPage());
