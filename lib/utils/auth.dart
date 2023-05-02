@@ -9,6 +9,7 @@ class Auth {
     required String mail,
     required String password,
   }) async {
+
     await _firebaseAuth.signInWithEmailAndPassword(
       email: mail,
       password: password,

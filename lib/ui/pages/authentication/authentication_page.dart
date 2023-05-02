@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/configs/app_configs.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/models/enums/load_status.dart';
+import 'package:tasky/ui/commons/content_laoding_indicator.dart';
+import 'package:tasky/ui/pages/authentication/authentication_cubit.dart';
 import 'package:tasky/ui/pages/login/login_page.dart';
 import 'package:tasky/ui/pages/signup/signup_page.dart';
 
@@ -23,13 +27,28 @@ class AuthenticationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: buildAppBar(context),
-        body: SafeArea(
-          child: _buildBodyWidget(),
-        ),
+    return BlocProvider(
+      create: (context) {
+        return AuthenticationCubit();
+      },
+      child: BlocBuilder<AuthenticationCubit, AuthenticationState>(
+        builder: (context, state) {
+          return Stack(
+            children: [
+              DefaultTabController(
+                length: 2,
+                child: Scaffold(
+                  appBar: buildAppBar(context),
+                  body: SafeArea(
+                    child: _buildBodyWidget(),
+                  ),
+                ),
+              ),
+              if (state.loadDataStatus == LoadStatus.loading)
+                const LoadingIndicator(),
+            ],
+          );
+        },
       ),
     );
   }

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/commons/app_dialog.dart';
+import 'package:tasky/ui/pages/authentication/authentication_cubit.dart';
 import 'package:tasky/ui/pages/forgot_password/forgot_password_page.dart';
 import 'package:tasky/ui/pages/login/widgets/option_list_widget.dart';
 import 'package:tasky/ui/pages/login/widgets/option_title.dart';
@@ -24,7 +29,11 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        return LoginCubit();
+        final AuthenticationCubit authenticationCubit =
+            BlocProvider.of<AuthenticationCubit>(context);
+        final AppCubit appCubit = BlocProvider.of<AppCubit>(context);
+        return LoginCubit(
+            authenticationCubit: authenticationCubit, appCubit: appCubit);
       },
       child: const LoginChildPage(),
     );
@@ -95,30 +104,8 @@ class _LoginChildPageState extends State<LoginChildPage> {
             backgroundColor: AppColors.primary,
             onPressed: () {
               {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return Wrap(
-                      children: const [
-                        ListTile(
-                          leading: Icon(Icons.share),
-                          title: Text('Share'),
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.copy),
-                          title: Text('Copy Link'),
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.edit),
-                          title: Text('Edit'),
-                        ),
-                      ],
-                    );
-                  },
-                ).then((value) => Navigator.of(context).pop());
+                _logIn();
               }
-
-              //_logIn();
             },
           ),
           SizedBox(height: 24.h),
@@ -190,21 +177,15 @@ class _LoginChildPageState extends State<LoginChildPage> {
   }
 
   Future<void> _logIn() async {
-  
     FocusScope.of(context).unfocus();
     _cubit.login(
         mail: usernameOrEmailTextController.text,
         password: passwordTextController.text,
-         onLoginSuccessful: (){
+        onLoginSuccessful: () {
           //save Token noti and push
-            
+          Get.offAllNamed(RouteConfig.dashboard);
         },
-        onLoginFailed: (){
-
-        }
-        );
-       
-        
+        onLoginFailed: () {});
   }
 
   bool get validateAndSave {

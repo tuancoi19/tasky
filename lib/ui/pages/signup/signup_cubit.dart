@@ -1,21 +1,40 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:tasky/models/enums/load_status.dart';
+import 'package:tasky/ui/pages/authentication/authentication_cubit.dart';
+import 'package:tasky/utils/auth.dart';
+import 'package:tasky/utils/logger.dart';
 
 part 'signup_state.dart';
 
 class SignupCubit extends Cubit<SignupState> {
-  SignupCubit() : super(const SignupState());
+  SignupCubit({
+    required this.authenticationCubit,
+  }) : super(const SignupState());
 
-  Future<void> loadInitialData() async {
+  final AuthenticationCubit authenticationCubit;
+
+  Future<void> signUp({
+    required String mail,
+    required String password,
+    required void Function() onLoginSuccessful,
+    required void Function() onLoginFailed,
+  }) async {
+    authenticationCubit.setLoading(LoadStatus.loading);
     emit(state.copyWith(loadDataStatus: LoadStatus.initial));
     try {
       //Todo: add API calls
+      await Auth()
+          .createUserWithEmailAndPassword(mail: mail, password: password);
+      authenticationCubit.setLoading(LoadStatus.success);
       emit(state.copyWith(loadDataStatus: LoadStatus.success));
-    } catch (e) {
-      //Todo: should print exception here
-      emit(state.copyWith(loadDataStatus: LoadStatus.failure));
+      onLoginSuccessful();
+    } on FirebaseAuthException catch (e) {
+      logger.e(e.message ?? '');
+      onLoginFailed();
+      emit(state.copyWith(loadDataStatus: LoadStatus.success));
     }
   }
 

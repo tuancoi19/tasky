@@ -22,6 +22,7 @@
   "sign_up": "Đăng Ký",
   "username_or_email": "Tên đăng nhập hoặc E-mail",
   "password": "Mật khẩu",
+  "confirm_password": "Nhập lại mật khẩu",
   "enter_your_username_or_email": "Nhập tên đăng nhập hoặc E-mail của bạn",
   "enter_your_password": "Nhập mật khẩu của bạn",
   "forgot_password": "Quên Mật khẩu?",

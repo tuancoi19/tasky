@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/ui/pages/authentication/authentication_cubit.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
 import 'package:tasky/ui/widgets/input/app_password_input.dart';
 import 'package:tasky/ui/widgets/input/app_username_or_email.dart';
@@ -20,7 +21,9 @@ class SignupPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        return SignupCubit();
+        final AuthenticationCubit authenticationCubit =
+            BlocProvider.of<AuthenticationCubit>(context);
+        return SignupCubit(authenticationCubit: authenticationCubit);
       },
       child: const SigninChildPage(),
     );
@@ -36,7 +39,7 @@ class SigninChildPage extends StatefulWidget {
 
 class _SigninChildPageState extends State<SigninChildPage> {
   late final SignupCubit _cubit;
-  late TextEditingController usernameOrEmailTextController;
+  late TextEditingController confirmPasswordTextController;
   late TextEditingController emailTextController;
   late TextEditingController passwordTextController;
   late ObscureTextController obscurePasswordController;
@@ -46,11 +49,10 @@ class _SigninChildPageState extends State<SigninChildPage> {
   void initState() {
     super.initState();
     _cubit = BlocProvider.of(context);
-    usernameOrEmailTextController = TextEditingController();
+    confirmPasswordTextController = TextEditingController();
     emailTextController = TextEditingController();
     passwordTextController = TextEditingController();
     obscurePasswordController = ObscureTextController();
-    _cubit.loadInitialData();
   }
 
   @override
@@ -98,7 +100,7 @@ class _SigninChildPageState extends State<SigninChildPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 AppUsernameOrEmailInput(
-                  textEditingController: usernameOrEmailTextController,
+                  textEditingController: emailTextController,
                   labelText: S.current.username_or_email,
                   hintText: S.current.enter_your_username_or_email,
                   borderRadius: 10,
@@ -110,24 +112,24 @@ class _SigninChildPageState extends State<SigninChildPage> {
                 ),
                 SizedBox(height: 24.h),
                 AppUsernameOrEmailInput(
-                  textEditingController: emailTextController,
-                  labelText: S.current.email,
-                  hintText: S.current.enter_your_email,
+                  textEditingController: passwordTextController,
+                  labelText: S.current.password,
+                  hintText: S.current.enter_your_password,
                   borderRadius: 10,
                   autoTrim: true,
                   autoValidateMode: state.autoValidateMode,
                   onChanged: (value) {
                     _cubit.changeEmail(email: value);
                   },
-                  validator: (email) {
-                    return Utils.emailValidator(email ?? '');
-                  },
+                  // validator: (email) {
+                  //   return Utils.emailValidator(email ?? '');
+                  // },
                 ),
                 SizedBox(height: 24.h),
                 AppPasswordInput(
                   borderRadius: 10,
-                  labelText: S.current.password,
-                  textEditingController: passwordTextController,
+                  labelText: S.current.confirm_password,
+                  textEditingController: confirmPasswordTextController,
                   obscureTextController: obscurePasswordController,
                   hintText: S.current.enter_your_password,
                   autoTrim: true,
@@ -151,15 +153,6 @@ class _SigninChildPageState extends State<SigninChildPage> {
     super.dispose();
   }
 
-  void _signUp() {
-    if (!validateAndSave) {
-      _cubit.onValidateForm();
-    } else {
-      // _cubit.signUp();
-    }
-    FocusScope.of(context).unfocus();
-  }
-
   bool get validateAndSave {
     final form = _formKey.currentState ?? FormState();
     if (form.validate()) {
@@ -167,5 +160,18 @@ class _SigninChildPageState extends State<SigninChildPage> {
       return true;
     }
     return false;
+  }
+
+  Future<void> _signUp() async {
+    FocusScope.of(context).unfocus();
+    _cubit.signUp(
+        mail: emailTextController.text,
+        password: passwordTextController.text,
+        onLoginSuccessful: () {
+          print('SignUp susses');
+          //save Token noti and push
+          //Get.offAllNamed(RouteConfig.dashboard);
+        },
+        onLoginFailed: () {});
   }
 }
