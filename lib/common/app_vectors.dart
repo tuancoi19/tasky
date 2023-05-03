@@ -34,4 +34,8 @@ class AppVectors {
   static const String icSettings = 'assets/vectors/ic_settings.svg';
 
   static const String icLogout = 'assets/vectors/ic_logout.svg';
+
+  static const String icVip = 'assets/vectors/ic_vip.svg';
+
+  static const String icEnter = 'assets/vectors/ic_enter.svg';
 }

@@ -63,5 +63,9 @@
   "search_tasks": "Tìm Kiếm Tác Vụ",
   "activity": "Hoạt Động",
   "app_settings": "Thiết Lập Ứng Dụng",
-  "logout": "Đăng xuất"
+  "logout": "Đăng xuất",
+  "vip_user": "Người dùng VIP",
+  "general": "Chung",
+  "notification": "Thông báo",
+  "become_an_vip_user": "Trở thành người dùng VIP"
 }

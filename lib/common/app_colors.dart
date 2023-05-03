@@ -63,8 +63,32 @@ class AppColors {
   static const List<Color> taskColorList = [
     Color(0xFF5486E9),
     Color(0xFFED918E),
-    Color(0xFF3EAF99),
+    manageAccountIconColor,
   ];
 
   static const Color drawerBackgroundColor = Color(0xFF0E1F53);
+
+  static const Color manageAccountBackgroundColor = Color(0xFFA2F0E2);
+
+  static const Color notificationBackgroundColor = Color(0xFFF1EEAD);
+
+  static const Color becomeVipBackgroundColor = Color(0xFFCBADF1);
+
+  static const Color logoutBackgroundColor = Color(0xFFF4B6B6);
+
+  static const Color helpCenterBackgroundColor = Color(0xFFADF1E9);
+
+  static const Color aboutUsBackgroundColor = Color(0xFFADB8F1);
+
+  static const Color manageAccountIconColor = Color(0xFF3DAE99);
+
+  static const Color notificationIconColor = Color(0xFFBBB64F);
+
+  static const Color becomeVipIconColor = Color(0xFFA46CEB);
+
+  static const Color logoutIconColor = Color(0xFFE75151);
+
+  static const Color helpCenterIconColor = Color(0xFF32B0A1);
+
+  static const Color aboutUsIconColor = Color(0xFF485FD3);
 }

@@ -63,5 +63,9 @@
   "search_tasks": "Search Tasks",
   "activity": "Activity",
   "app_settings": "App Settings",
-  "logout": "Logout"
+  "logout": "Logout",
+  "vip_user": "VIP User",
+  "general": "General",
+  "notification": "Notification",
+  "become_an_vip_user": "Become An VIP User"
 }
