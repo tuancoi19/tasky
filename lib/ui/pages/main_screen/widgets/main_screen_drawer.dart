@@ -63,15 +63,13 @@ class MainScreenDrawer extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Container(
-          width: 68.h,
-          height: 68.h,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(7).r,
-          ),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(7).r,
           child: Image.asset(
             AppImages.avatarTest,
             fit: BoxFit.cover,
+            width: 68.h,
+            height: 68.h,
           ),
         ),
         SizedBox(width: 20.w),

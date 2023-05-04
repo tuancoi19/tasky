@@ -66,6 +66,9 @@
   "logout": "Đăng xuất",
   "vip_user": "Người dùng VIP",
   "general": "Chung",
-  "notification": "Thông báo",
-  "become_an_vip_user": "Trở thành người dùng VIP"
+  "notification": "Thông Báo",
+  "become_an_vip_user": "Trở Thành Người Dùng VIP",
+  "help_center": "Trung Tâm Hỗ Trợ",
+  "about_us": "Về Chúng Tôi",
+  "privacy": "Bảo Mật"
 }

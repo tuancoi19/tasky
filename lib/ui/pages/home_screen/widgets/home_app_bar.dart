@@ -70,11 +70,14 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         SizedBox(width: 16.w),
         buildIconButton(
-          icon: Image.asset(
-            AppImages.avatarTest,
-            width: 48.h,
-            height: 48.h,
-            fit: BoxFit.cover,
+          icon: ClipRRect(
+            borderRadius: BorderRadius.circular(10).r,
+            child: Image.asset(
+              AppImages.avatarTest,
+              width: 48.h,
+              height: 48.h,
+              fit: BoxFit.cover,
+            ),
           ),
           onTap: () {},
         ),

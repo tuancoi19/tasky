@@ -67,5 +67,8 @@
   "vip_user": "VIP User",
   "general": "General",
   "notification": "Notification",
-  "become_an_vip_user": "Become An VIP User"
+  "become_an_vip_user": "Become An VIP User",
+  "help_center": "Help Center",
+  "about_us": "About Us",
+  "privacy": "Privacy"
 }

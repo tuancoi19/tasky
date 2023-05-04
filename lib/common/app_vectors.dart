@@ -38,4 +38,8 @@ class AppVectors {
   static const String icVip = 'assets/vectors/ic_vip.svg';
 
   static const String icEnter = 'assets/vectors/ic_enter.svg';
+
+  static const String icHelpCenter = 'assets/vectors/ic_help_center.svg';
+
+  static const String icAboutUs = 'assets/vectors/ic_about_us.svg';
 }

@@ -31,15 +31,13 @@ class UserProfileCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              width: 84.h,
-              height: 84.h,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(9).r,
-              ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(9).r,
               child: Image.asset(
                 avatar ?? AppImages.avatarTest,
                 fit: BoxFit.cover,
+                width: 84.h,
+                height: 84.h,
               ),
             ),
             SizedBox(width: 24.w),

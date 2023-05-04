@@ -4,6 +4,7 @@ import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/ui/pages/user_profile/widgets/general_options_list.dart';
+import 'package:tasky/ui/pages/user_profile/widgets/privacy_options_list.dart';
 
 class SettingOptionsList extends StatefulWidget {
   const SettingOptionsList({Key? key}) : super(key: key);
@@ -42,6 +43,16 @@ class _SettingOptionsListState extends State<SettingOptionsList> {
           ),
           SizedBox(height: 24.h),
           const GeneralOptionsList(),
+          SizedBox(height: 24.h),
+          Padding(
+            padding: const EdgeInsets.only(left: 36).r,
+            child: Text(
+              S.current.privacy,
+              style: AppTextStyle.blackO50S14W500,
+            ),
+          ),
+          SizedBox(height: 24.h),
+          const PrivacyOptionsList(),
         ],
       ),
     );
