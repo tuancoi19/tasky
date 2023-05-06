@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:tasky/database/share_preferences_helper.dart';
 import 'package:tasky/models/entities/user/app_user.dart';
 import 'package:tasky/router/route_config.dart';
@@ -27,7 +26,7 @@ class SplashCubit extends Cubit<SplashState> {
     AppUser appUser = await sharedPreferencesHelper.loadAppUser();
 
     final routerName = (appUser.isUserLoggedIn)
-        ? RouteConfig.dashboard
+        ? RouteConfig.mainScreen
         : RouteConfig.authentication;
     Get.offAllNamed(
       isSeenIntro ? routerName : RouteConfig.welcome,

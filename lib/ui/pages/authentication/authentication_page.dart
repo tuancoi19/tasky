@@ -4,24 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/configs/app_configs.dart';
-import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/ui/commons/content_laoding_indicator.dart';
 import 'package:tasky/ui/pages/authentication/authentication_cubit.dart';
-import 'package:tasky/ui/pages/login/login_page.dart';
-import 'package:tasky/ui/pages/signup/signup_page.dart';
 
 class AuthenticationPage extends StatelessWidget {
-  final List<Tab> listTab = [
-    Tab(text: S.current.log_in),
-    Tab(text: S.current.sign_up)
-  ];
-  static const List<Widget> listTabBarView = [
-    LoginPage(),
-    SignupPage(),
-  ];
-
-  AuthenticationPage({
+  const AuthenticationPage({
     Key? key,
   }) : super(key: key);
 
@@ -55,7 +43,7 @@ class AuthenticationPage extends StatelessWidget {
 
   Widget _buildBodyWidget() {
     return const TabBarView(
-      children: listTabBarView,
+      children: AppConfigs.authTabBarViewList,
     );
   }
 
@@ -73,9 +61,9 @@ class AuthenticationPage extends StatelessWidget {
       ),
       elevation: 0,
       bottom: TabBar(
-        tabs: listTab,
+        tabs: AppConfigs.authTabList,
         indicatorColor: AppColors.primary,
-        indicatorWeight: 3.h,
+        indicatorWeight: 3,
         labelStyle: AppTextStyle.blackS20Bold,
         labelColor: AppColors.textBlack,
         unselectedLabelStyle: AppTextStyle.blackO50S20W600,
