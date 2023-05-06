@@ -6,8 +6,8 @@ import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/ui/pages/authentication/authentication_cubit.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
+import 'package:tasky/ui/widgets/input/app_input.dart';
 import 'package:tasky/ui/widgets/input/app_password_input.dart';
-import 'package:tasky/ui/widgets/input/app_username_or_email.dart';
 import 'package:tasky/utils/utils.dart';
 
 import 'signup_cubit.dart';

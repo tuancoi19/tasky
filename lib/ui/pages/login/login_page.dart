@@ -14,8 +14,8 @@ import 'package:tasky/ui/pages/forgot_password/forgot_password_page.dart';
 import 'package:tasky/ui/pages/login/widgets/option_list_widget.dart';
 import 'package:tasky/ui/pages/login/widgets/option_title.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
+import 'package:tasky/ui/widgets/input/app_input.dart';
 import 'package:tasky/ui/widgets/input/app_password_input.dart';
-import 'package:tasky/ui/widgets/input/app_username_or_email.dart';
 import 'package:tasky/utils/utils.dart';
 
 import 'login_cubit.dart';
