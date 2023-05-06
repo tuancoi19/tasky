@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
@@ -32,6 +31,7 @@ class LoginPage extends StatelessWidget {
         final AuthenticationCubit authenticationCubit =
             BlocProvider.of<AuthenticationCubit>(context);
         final AppCubit appCubit = BlocProvider.of<AppCubit>(context);
+
         return LoginCubit(
             authenticationCubit: authenticationCubit, appCubit: appCubit);
       },
@@ -179,13 +179,46 @@ class _LoginChildPageState extends State<LoginChildPage> {
   Future<void> _logIn() async {
     FocusScope.of(context).unfocus();
     _cubit.login(
-        mail: usernameOrEmailTextController.text,
-        password: passwordTextController.text,
-        onLoginSuccessful: () {
-          //save Token noti and push
-          Get.offAllNamed(RouteConfig.dashboard);
-        },
-        onLoginFailed: () {});
+      mail: usernameOrEmailTextController.text,
+      password: passwordTextController.text,
+      onLoginSuccessful: () {
+        //save Token noti and push
+        Get.offAllNamed(RouteConfig.mainScreen);
+      },
+      onLoginFailed: (error) {
+        AppDialog.showCustomDialog(
+          content: Padding(
+            padding: const EdgeInsets.all(16).r,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  S.current.login_failed,
+                  style: AppTextStyle.secondaryBlackO80S21W600,
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  error,
+                  style: AppTextStyle.grayO40S15W400,
+                ),
+                SizedBox(height: 32.h),
+                AppButton(
+                  height: 56.h,
+                  title: S.current.close,
+                  cornerRadius: 15.r,
+                  textStyle: AppTextStyle.whiteS18Bold,
+                  backgroundColor: AppColors.primary,
+                  onPressed: () {
+                    Get.back(closeOverlays: true);
+                  },
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   bool get validateAndSave {

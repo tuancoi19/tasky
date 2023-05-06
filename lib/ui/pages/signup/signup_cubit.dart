@@ -19,22 +19,21 @@ class SignupCubit extends Cubit<SignupState> {
   Future<void> signUp({
     required String mail,
     required String password,
-    required void Function() onLoginSuccessful,
-    required void Function() onLoginFailed,
+    required void Function() onSignUpSuccessful,
+    required void Function(String errorMessage) onSignUpFailed,
   }) async {
     authenticationCubit.setLoading(LoadStatus.loading);
-    emit(state.copyWith(loadDataStatus: LoadStatus.initial));
+
     try {
       //Todo: add API calls
       await Auth()
           .createUserWithEmailAndPassword(mail: mail, password: password);
       authenticationCubit.setLoading(LoadStatus.success);
-      emit(state.copyWith(loadDataStatus: LoadStatus.success));
-      onLoginSuccessful();
+      onSignUpSuccessful();
     } on FirebaseAuthException catch (e) {
       logger.e(e.message ?? '');
-      onLoginFailed();
-      emit(state.copyWith(loadDataStatus: LoadStatus.success));
+      onSignUpFailed(e.message ?? '');
+      authenticationCubit.setLoading(LoadStatus.success);
     }
   }
 

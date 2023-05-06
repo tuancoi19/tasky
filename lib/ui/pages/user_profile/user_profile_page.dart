@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/ui/pages/user_profile/widgets/setting_options_list.dart';
 import 'package:tasky/ui/pages/user_profile/widgets/user_profile_card.dart';
 
@@ -24,9 +25,11 @@ class UserProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppCubit appCubit = BlocProvider.of<AppCubit>(context);
+
     return BlocProvider(
       create: (context) {
-        return UserProfileCubit();
+        return UserProfileCubit(appCubit: appCubit);
       },
       child: const UserProfileChildPage(),
     );
@@ -60,20 +63,20 @@ class _UserProfileChildPageState extends State<UserProfileChildPage> {
   }
 
   Widget _buildBodyWidget() {
-    return ListView(
+    return SingleChildScrollView(
       padding: const EdgeInsets.only(top: 36).r,
       physics: const ClampingScrollPhysics(),
-      children: [
-        UserProfileCard(
-          displayName: 'Loren Ipsum',
-          isVip: true,
-          onTap: () {},
-        ),
-        SizedBox(height: 36.h),
-        const Expanded(
-          child: SettingOptionsList(),
-        ),
-      ],
+      child: Column(
+        children: [
+          UserProfileCard(
+            displayName: 'Loren Ipsum',
+            isVip: true,
+            onTap: () {},
+          ),
+          SizedBox(height: 36.h),
+          const SettingOptionsList(),
+        ],
+      ),
     );
   }
 

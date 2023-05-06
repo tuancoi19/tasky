@@ -23,17 +23,16 @@ class LoginCubit extends Cubit<LoginState> {
     required String mail,
     required String password,
     required void Function() onLoginSuccessful,
-    required void Function() onLoginFailed,
+    required void Function(String errorMessage) onLoginFailed,
   }) async {
     authenticationCubit.setLoading(LoadStatus.loading);
     try {
-      //Todo: add API calls
       await Auth().signInWithEmailAndPassword(mail: mail, password: password);
       final FirebaseAuth auth = FirebaseAuth.instance;
       final User? user = auth.currentUser;
       if (user == null) {
         authenticationCubit.setLoading(LoadStatus.success);
-        onLoginFailed();
+        onLoginFailed('Something wrong');
         return;
       }
       final token = await user.getIdToken();
@@ -55,7 +54,7 @@ class LoginCubit extends Cubit<LoginState> {
       onLoginSuccessful();
     } on FirebaseAuthException catch (e) {
       logger.e(e.message ?? '');
-      onLoginFailed();
+      onLoginFailed(e.message ?? 'Something wrong');
       authenticationCubit.setLoading(LoadStatus.success);
     }
   }

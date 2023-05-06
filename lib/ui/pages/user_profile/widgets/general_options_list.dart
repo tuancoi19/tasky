@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/pages/user_profile/user_profile_cubit.dart';
 import 'package:tasky/ui/pages/user_profile/widgets/setting_option_item.dart';
 
@@ -45,7 +48,13 @@ class GeneralOptionsList extends StatelessWidget {
           leadingColor: AppColors.logoutIconColor,
           leadingBackgroundColor: AppColors.logoutBackgroundColor,
           isLogout: true,
-          onTap: () {},
+          onTap: () {
+            BlocProvider.of<UserProfileCubit>(context).signOut(
+                onSignOutFailed: () {},
+                onSignOutSuccessful: () {
+                  Get.offAllNamed(RouteConfig.authentication);
+                });
+          },
         ),
       ],
     );

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/ui/commons/app_dialog.dart';
 import 'package:tasky/ui/pages/authentication/authentication_cubit.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
 import 'package:tasky/ui/widgets/input/app_input.dart';
@@ -111,8 +114,9 @@ class _SigninChildPageState extends State<SigninChildPage> {
                   },
                 ),
                 SizedBox(height: 24.h),
-                AppUsernameOrEmailInput(
+                AppPasswordInput(
                   textEditingController: passwordTextController,
+                  obscureTextController: obscurePasswordController,
                   labelText: S.current.password,
                   hintText: S.current.enter_your_password,
                   borderRadius: 10,
@@ -121,9 +125,6 @@ class _SigninChildPageState extends State<SigninChildPage> {
                   onChanged: (value) {
                     _cubit.changeEmail(email: value);
                   },
-                  // validator: (email) {
-                  //   return Utils.emailValidator(email ?? '');
-                  // },
                 ),
                 SizedBox(height: 24.h),
                 AppPasswordInput(
@@ -136,9 +137,6 @@ class _SigninChildPageState extends State<SigninChildPage> {
                   autoValidateMode: state.autoValidateMode,
                   validator: (password) {
                     return Utils.currentPasswordValidator(password ?? '');
-                  },
-                  onChanged: (value) {
-                    _cubit.changePassword(password: value);
                   },
                 ),
               ],
@@ -165,13 +163,69 @@ class _SigninChildPageState extends State<SigninChildPage> {
   Future<void> _signUp() async {
     FocusScope.of(context).unfocus();
     _cubit.signUp(
-        mail: emailTextController.text,
-        password: passwordTextController.text,
-        onLoginSuccessful: () {
-          print('SignUp susses');
-          //save Token noti and push
-          //Get.offAllNamed(RouteConfig.dashboard);
-        },
-        onLoginFailed: () {});
+      mail: emailTextController.text,
+      password: passwordTextController.text,
+      onSignUpSuccessful: () {
+        AppDialog.showCustomDialog(
+          content: Padding(
+            padding: const EdgeInsets.all(16).r,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  S.current.sign_up_success,
+                  style: AppTextStyle.secondaryBlackO80S21W600,
+                ),
+                SizedBox(height: 32.h),
+                AppButton(
+                  height: 56.h,
+                  title: S.current.close,
+                  cornerRadius: 15.r,
+                  textStyle: AppTextStyle.whiteS18Bold,
+                  backgroundColor: AppColors.primary,
+                  onPressed: () {
+                    Get.back(closeOverlays: true);
+                  },
+                )
+              ],
+            ),
+          ),
+        );
+      },
+      onSignUpFailed: (error) {
+        AppDialog.showCustomDialog(
+          content: Padding(
+            padding: const EdgeInsets.all(16).r,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  S.current.sign_up_failed,
+                  style: AppTextStyle.secondaryBlackO80S21W600,
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  error,
+                  style: AppTextStyle.grayO40S15W400,
+                ),
+                SizedBox(height: 32.h),
+                AppButton(
+                  height: 56.h,
+                  title: S.current.close,
+                  cornerRadius: 15.r,
+                  textStyle: AppTextStyle.whiteS18Bold,
+                  backgroundColor: AppColors.primary,
+                  onPressed: () {
+                    Get.back(closeOverlays: true);
+                  },
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }
