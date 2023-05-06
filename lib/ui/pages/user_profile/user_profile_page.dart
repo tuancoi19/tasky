@@ -70,9 +70,7 @@ class _UserProfileChildPageState extends State<UserProfileChildPage> {
           onTap: () {},
         ),
         SizedBox(height: 36.h),
-        const Expanded(
-          child: SettingOptionsList(),
-        ),
+        const SettingOptionsList(),
       ],
     );
   }
