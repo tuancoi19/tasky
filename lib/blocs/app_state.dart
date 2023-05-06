@@ -1,7 +1,7 @@
 part of 'app_cubit.dart';
 
 class AppState extends Equatable {
-  final UserEntity? user;
+  final AppUser? user;
   final LoadStatus fetchProfileStatus;
   final LoadStatus signOutStatus;
 
@@ -12,7 +12,7 @@ class AppState extends Equatable {
   });
 
   AppState copyWith({
-    UserEntity? user,
+    AppUser? user,
     LoadStatus? fetchProfileStatus,
     LoadStatus? signOutStatus,
   }) {

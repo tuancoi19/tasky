@@ -10,8 +10,7 @@ import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/ui/commons/app_dialog.dart';
 import 'package:tasky/ui/pages/reset_password/reset_password_page.dart';
 import 'package:tasky/ui/widgets/buttons/app_icon_button.dart';
-import 'package:tasky/ui/widgets/input/app_username_or_email.dart';
-
+import 'package:tasky/ui/widgets/input/app_input.dart';
 import 'forgot_password_cubit.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
@@ -122,6 +121,7 @@ class _ForgotPasswordChildPageState extends State<ForgotPasswordChildPage> {
         },
         validator: (value) {
           //TODO: Làm thêm validator dành cho trường hợp nhập mã
+          return null;
         },
       ),
     );

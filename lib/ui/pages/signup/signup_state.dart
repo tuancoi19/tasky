@@ -4,14 +4,14 @@ class SignupState extends Equatable {
   final LoadStatus loadDataStatus;
   final AutovalidateMode autoValidateMode;
   final String? usernameOrEmail;
-  final String? email;
+  final String? confirmPassword;
   final String? password;
 
   const SignupState({
     this.loadDataStatus = LoadStatus.initial,
     this.autoValidateMode = AutovalidateMode.disabled,
     this.usernameOrEmail,
-    this.email,
+    this.confirmPassword,
     this.password,
   });
 
@@ -20,7 +20,7 @@ class SignupState extends Equatable {
         loadDataStatus,
         autoValidateMode,
         usernameOrEmail,
-        email,
+        confirmPassword,
         password,
       ];
 
@@ -35,7 +35,7 @@ class SignupState extends Equatable {
       loadDataStatus: loadDataStatus ?? this.loadDataStatus,
       autoValidateMode: autoValidateMode ?? this.autoValidateMode,
       usernameOrEmail: usernameOrEmail ?? this.usernameOrEmail,
-      email: email ?? this.email,
+      confirmPassword: confirmPassword ?? confirmPassword,
       password: password ?? this.password,
     );
   }

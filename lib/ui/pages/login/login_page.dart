@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/commons/app_dialog.dart';
+import 'package:tasky/ui/pages/authentication/authentication_cubit.dart';
 import 'package:tasky/ui/pages/forgot_password/forgot_password_page.dart';
 import 'package:tasky/ui/pages/login/widgets/option_list_widget.dart';
 import 'package:tasky/ui/pages/login/widgets/option_title.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
+import 'package:tasky/ui/widgets/input/app_input.dart';
 import 'package:tasky/ui/widgets/input/app_password_input.dart';
-import 'package:tasky/ui/widgets/input/app_username_or_email.dart';
 import 'package:tasky/utils/utils.dart';
 
 import 'login_cubit.dart';
@@ -24,7 +28,12 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        return LoginCubit();
+        final AuthenticationCubit authenticationCubit =
+            BlocProvider.of<AuthenticationCubit>(context);
+        final AppCubit appCubit = BlocProvider.of<AppCubit>(context);
+
+        return LoginCubit(
+            authenticationCubit: authenticationCubit, appCubit: appCubit);
       },
       child: const LoginChildPage(),
     );
@@ -52,7 +61,6 @@ class _LoginChildPageState extends State<LoginChildPage> {
     usernameOrEmailTextController = TextEditingController();
     passwordTextController = TextEditingController();
     obscurePasswordController = ObscureTextController();
-    _cubit.loadInitialData();
   }
 
   @override
@@ -95,7 +103,9 @@ class _LoginChildPageState extends State<LoginChildPage> {
             textStyle: AppTextStyle.whiteS18Bold,
             backgroundColor: AppColors.primary,
             onPressed: () {
-              _logIn();
+              {
+                _logIn();
+              }
             },
           ),
           SizedBox(height: 24.h),
@@ -166,13 +176,49 @@ class _LoginChildPageState extends State<LoginChildPage> {
     super.dispose();
   }
 
-  void _logIn() {
-    if (!validateAndSave) {
-      _cubit.onValidateForm();
-    } else {
-      // _cubit.logIn();
-    }
+  Future<void> _logIn() async {
     FocusScope.of(context).unfocus();
+    _cubit.login(
+      mail: usernameOrEmailTextController.text,
+      password: passwordTextController.text,
+      onLoginSuccessful: () {
+        //save Token noti and push
+        Get.offAllNamed(RouteConfig.mainScreen);
+      },
+      onLoginFailed: (error) {
+        AppDialog.showCustomDialog(
+          content: Padding(
+            padding: const EdgeInsets.all(16).r,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  S.current.login_failed,
+                  style: AppTextStyle.secondaryBlackO80S21W600,
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  error,
+                  style: AppTextStyle.grayO40S15W400,
+                ),
+                SizedBox(height: 32.h),
+                AppButton(
+                  height: 56.h,
+                  title: S.current.close,
+                  cornerRadius: 15.r,
+                  textStyle: AppTextStyle.whiteS18Bold,
+                  backgroundColor: AppColors.primary,
+                  onPressed: () {
+                    Get.back(closeOverlays: true);
+                  },
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   bool get validateAndSave {

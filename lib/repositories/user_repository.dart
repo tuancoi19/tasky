@@ -1,8 +1,8 @@
-import 'package:tasky/models/entities/user/user_entity.dart';
+import 'package:tasky/models/entities/user/app_user.dart';
 import 'package:tasky/network/api_client.dart';
 
 abstract class UserRepository {
-  Future<UserEntity> getProfile();
+  Future<AppUser> getProfile();
 }
 
 class UserRepositoryImpl extends UserRepository {
@@ -11,9 +11,9 @@ class UserRepositoryImpl extends UserRepository {
   UserRepositoryImpl({required this.apiClient});
 
   @override
-  Future<UserEntity> getProfile() async {
+  Future<AppUser> getProfile() async {
     await Future.delayed(const Duration(seconds: 2));
     //Mock data
-    return UserEntity.mockData();
+    return AppUser.mockData();
   }
 }

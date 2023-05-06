@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/ui/commons/app_dialog.dart';
+import 'package:tasky/ui/pages/authentication/authentication_cubit.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
+import 'package:tasky/ui/widgets/input/app_input.dart';
 import 'package:tasky/ui/widgets/input/app_password_input.dart';
-import 'package:tasky/ui/widgets/input/app_username_or_email.dart';
 import 'package:tasky/utils/utils.dart';
 
 import 'signup_cubit.dart';
@@ -20,7 +24,9 @@ class SignupPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        return SignupCubit();
+        final AuthenticationCubit authenticationCubit =
+            BlocProvider.of<AuthenticationCubit>(context);
+        return SignupCubit(authenticationCubit: authenticationCubit);
       },
       child: const SigninChildPage(),
     );
@@ -36,7 +42,7 @@ class SigninChildPage extends StatefulWidget {
 
 class _SigninChildPageState extends State<SigninChildPage> {
   late final SignupCubit _cubit;
-  late TextEditingController usernameOrEmailTextController;
+  late TextEditingController confirmPasswordTextController;
   late TextEditingController emailTextController;
   late TextEditingController passwordTextController;
   late ObscureTextController obscurePasswordController;
@@ -46,11 +52,10 @@ class _SigninChildPageState extends State<SigninChildPage> {
   void initState() {
     super.initState();
     _cubit = BlocProvider.of(context);
-    usernameOrEmailTextController = TextEditingController();
+    confirmPasswordTextController = TextEditingController();
     emailTextController = TextEditingController();
     passwordTextController = TextEditingController();
     obscurePasswordController = ObscureTextController();
-    _cubit.loadInitialData();
   }
 
   @override
@@ -98,7 +103,7 @@ class _SigninChildPageState extends State<SigninChildPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 AppUsernameOrEmailInput(
-                  textEditingController: usernameOrEmailTextController,
+                  textEditingController: emailTextController,
                   labelText: S.current.username_or_email,
                   hintText: S.current.enter_your_username_or_email,
                   borderRadius: 10,
@@ -109,34 +114,29 @@ class _SigninChildPageState extends State<SigninChildPage> {
                   },
                 ),
                 SizedBox(height: 24.h),
-                AppUsernameOrEmailInput(
-                  textEditingController: emailTextController,
-                  labelText: S.current.email,
-                  hintText: S.current.enter_your_email,
+                AppPasswordInput(
+                  textEditingController: passwordTextController,
+                  obscureTextController: obscurePasswordController,
+                  labelText: S.current.password,
+                  hintText: S.current.enter_your_password,
                   borderRadius: 10,
                   autoTrim: true,
                   autoValidateMode: state.autoValidateMode,
                   onChanged: (value) {
                     _cubit.changeEmail(email: value);
                   },
-                  validator: (email) {
-                    return Utils.emailValidator(email ?? '');
-                  },
                 ),
                 SizedBox(height: 24.h),
                 AppPasswordInput(
                   borderRadius: 10,
-                  labelText: S.current.password,
-                  textEditingController: passwordTextController,
+                  labelText: S.current.confirm_password,
+                  textEditingController: confirmPasswordTextController,
                   obscureTextController: obscurePasswordController,
                   hintText: S.current.enter_your_password,
                   autoTrim: true,
                   autoValidateMode: state.autoValidateMode,
                   validator: (password) {
                     return Utils.currentPasswordValidator(password ?? '');
-                  },
-                  onChanged: (value) {
-                    _cubit.changePassword(password: value);
                   },
                 ),
               ],
@@ -151,15 +151,6 @@ class _SigninChildPageState extends State<SigninChildPage> {
     super.dispose();
   }
 
-  void _signUp() {
-    if (!validateAndSave) {
-      _cubit.onValidateForm();
-    } else {
-      // _cubit.signUp();
-    }
-    FocusScope.of(context).unfocus();
-  }
-
   bool get validateAndSave {
     final form = _formKey.currentState ?? FormState();
     if (form.validate()) {
@@ -167,5 +158,74 @@ class _SigninChildPageState extends State<SigninChildPage> {
       return true;
     }
     return false;
+  }
+
+  Future<void> _signUp() async {
+    FocusScope.of(context).unfocus();
+    _cubit.signUp(
+      mail: emailTextController.text,
+      password: passwordTextController.text,
+      onSignUpSuccessful: () {
+        AppDialog.showCustomDialog(
+          content: Padding(
+            padding: const EdgeInsets.all(16).r,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  S.current.sign_up_success,
+                  style: AppTextStyle.secondaryBlackO80S21W600,
+                ),
+                SizedBox(height: 32.h),
+                AppButton(
+                  height: 56.h,
+                  title: S.current.close,
+                  cornerRadius: 15.r,
+                  textStyle: AppTextStyle.whiteS18Bold,
+                  backgroundColor: AppColors.primary,
+                  onPressed: () {
+                    Get.back(closeOverlays: true);
+                  },
+                )
+              ],
+            ),
+          ),
+        );
+      },
+      onSignUpFailed: (error) {
+        AppDialog.showCustomDialog(
+          content: Padding(
+            padding: const EdgeInsets.all(16).r,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  S.current.sign_up_failed,
+                  style: AppTextStyle.secondaryBlackO80S21W600,
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  error,
+                  style: AppTextStyle.grayO40S15W400,
+                ),
+                SizedBox(height: 32.h),
+                AppButton(
+                  height: 56.h,
+                  title: S.current.close,
+                  cornerRadius: 15.r,
+                  textStyle: AppTextStyle.whiteS18Bold,
+                  backgroundColor: AppColors.primary,
+                  onPressed: () {
+                    Get.back(closeOverlays: true);
+                  },
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

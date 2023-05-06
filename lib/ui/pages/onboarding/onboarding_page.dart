@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_vectors.dart';
+import 'package:tasky/database/share_preferences_helper.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/pages/onboarding/onboarding_cubit.dart';
@@ -145,6 +146,7 @@ class _OnboardingChildPageState extends State<OnboardingChildPage> {
       buildOnboardingScreen(
         vector: AppVectors.icSaveTheTime,
         onPressed: () {
+          SharedPreferencesHelper.setSeenIntro(isSeen: true);
           Get.offAllNamed(RouteConfig.authentication);
         },
         title: S.current.save_the_time,
