@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/ui/pages/authentication/authentication_cubit.dart';
 import 'package:tasky/utils/auth.dart';
@@ -15,20 +17,37 @@ class SignupCubit extends Cubit<SignupState> {
   }) : super(const SignupState());
 
   final AuthenticationCubit authenticationCubit;
+  final ref = FirebaseDatabase.instance.ref().child('users');
 
   Future<void> signUp({
     required String mail,
     required String password,
+    required String userName,
     required void Function() onSignUpSuccessful,
     required void Function(String errorMessage) onSignUpFailed,
   }) async {
     authenticationCubit.setLoading(LoadStatus.loading);
 
     try {
-      //Todo: add API calls
-      await Auth()
+      final user = await Auth()
           .createUserWithEmailAndPassword(mail: mail, password: password);
-      authenticationCubit.setLoading(LoadStatus.success);
+      if (user.user == null) {
+        authenticationCubit.setLoading(LoadStatus.success);
+        onSignUpFailed(S.current.sign_up_failed);
+        return;
+      }
+      final userDefaultInfo = user.user;
+      ref.child((userDefaultInfo?.uid ?? '').toString()).set({
+        'uid': userDefaultInfo?.uid ?? '',
+        'email': userDefaultInfo?.email ?? '',
+        'image': '',
+        'userName': 'userName',
+      }).then((value) {
+        authenticationCubit.setLoading(LoadStatus.success);
+      }).onError((error, stackTrace) {
+        authenticationCubit.setLoading(LoadStatus.success);
+        onSignUpFailed(error.toString());
+      });
       onSignUpSuccessful();
     } on FirebaseAuthException catch (e) {
       logger.e(e.message ?? '');

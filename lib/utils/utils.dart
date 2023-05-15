@@ -129,7 +129,7 @@ class Utils {
 
   static String? emptyValidator(String text) {
     if (text.isEmpty) {
-      return S.current.enter_your_username_or_email;
+      return S.current.enter_your_email;
     }
     return null;
   }

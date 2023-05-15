@@ -137,7 +137,7 @@ class _LoginChildPageState extends State<LoginChildPage> {
               AppUsernameOrEmailInput(
                 textEditingController: usernameOrEmailTextController,
                 labelText: S.current.username_or_email,
-                hintText: S.current.enter_your_username_or_email,
+                hintText: S.current.enter_your_email,
                 borderRadius: 10,
                 autoTrim: true,
                 autoValidateMode: state.autoValidateMode,

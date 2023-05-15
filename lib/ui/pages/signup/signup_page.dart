@@ -6,6 +6,7 @@ import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/commons/app_dialog.dart';
 import 'package:tasky/ui/pages/authentication/authentication_cubit.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
@@ -43,6 +44,7 @@ class SigninChildPage extends StatefulWidget {
 class _SigninChildPageState extends State<SigninChildPage> {
   late final SignupCubit _cubit;
   late TextEditingController confirmPasswordTextController;
+  late TextEditingController userNameTextController;
   late TextEditingController emailTextController;
   late TextEditingController passwordTextController;
   late ObscureTextController obscurePasswordController;
@@ -54,6 +56,7 @@ class _SigninChildPageState extends State<SigninChildPage> {
     _cubit = BlocProvider.of(context);
     confirmPasswordTextController = TextEditingController();
     emailTextController = TextEditingController();
+    userNameTextController = TextEditingController();
     passwordTextController = TextEditingController();
     obscurePasswordController = ObscureTextController();
   }
@@ -79,9 +82,10 @@ class _SigninChildPageState extends State<SigninChildPage> {
           AppButton(
             onPressed: () {
               _signUp();
+              //Get.toNamed(RouteConfig.editProfile);
             },
             height: 56.h,
-            title: S.current.log_in,
+            title: S.current.sign_up,
             cornerRadius: 15.r,
             textStyle: AppTextStyle.whiteS18Bold,
             backgroundColor: AppColors.primary,
@@ -105,7 +109,18 @@ class _SigninChildPageState extends State<SigninChildPage> {
                 AppUsernameOrEmailInput(
                   textEditingController: emailTextController,
                   labelText: S.current.username_or_email,
-                  hintText: S.current.enter_your_username_or_email,
+                  hintText: S.current.enter_your_email,
+                  borderRadius: 10,
+                  autoTrim: true,
+                  autoValidateMode: state.autoValidateMode,
+                  onChanged: (value) {
+                    _cubit.changeUsernameOrEmail(usernameOrEmail: value);
+                  },
+                ),
+                AppUsernameOrEmailInput(
+                  textEditingController: userNameTextController,
+                  labelText: S.current.username,
+                  hintText: S.current.enter_your_username,
                   borderRadius: 10,
                   autoTrim: true,
                   autoValidateMode: state.autoValidateMode,
@@ -164,68 +179,57 @@ class _SigninChildPageState extends State<SigninChildPage> {
     FocusScope.of(context).unfocus();
     _cubit.signUp(
       mail: emailTextController.text,
+      userName: userNameTextController.text,
       password: passwordTextController.text,
       onSignUpSuccessful: () {
         AppDialog.showCustomDialog(
-          content: Padding(
-            padding: const EdgeInsets.all(16).r,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  S.current.sign_up_success,
-                  style: AppTextStyle.secondaryBlackO80S21W600,
-                ),
-                SizedBox(height: 32.h),
-                AppButton(
-                  height: 56.h,
-                  title: S.current.close,
-                  cornerRadius: 15.r,
-                  textStyle: AppTextStyle.whiteS18Bold,
-                  backgroundColor: AppColors.primary,
-                  onPressed: () {
-                    Get.back(closeOverlays: true);
-                  },
-                )
-              ],
-            ),
+          content: customDialogContent(
+            title: S.current.sign_up_success,
           ),
         );
       },
       onSignUpFailed: (error) {
         AppDialog.showCustomDialog(
-          content: Padding(
-            padding: const EdgeInsets.all(16).r,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  S.current.sign_up_failed,
-                  style: AppTextStyle.secondaryBlackO80S21W600,
-                ),
-                SizedBox(height: 8.h),
-                Text(
-                  error,
-                  style: AppTextStyle.grayO40S15W400,
-                ),
-                SizedBox(height: 32.h),
-                AppButton(
-                  height: 56.h,
-                  title: S.current.close,
-                  cornerRadius: 15.r,
-                  textStyle: AppTextStyle.whiteS18Bold,
-                  backgroundColor: AppColors.primary,
-                  onPressed: () {
-                    Get.back(closeOverlays: true);
-                  },
-                )
-              ],
-            ),
+          content: customDialogContent(
+            title: S.current.sign_up_failed,
+            content: error,
           ),
         );
       },
+    );
+  }
+
+  Widget customDialogContent({required String title, String? content}) {
+    return Padding(
+      padding: const EdgeInsets.all(16).r,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: AppTextStyle.secondaryBlackO80S21W600,
+          ),
+          SizedBox(height: content != null ? 8.h : 0),
+          content != null
+              ? Text(
+                  content,
+                  style: AppTextStyle.grayO40S15W400,
+                )
+              : const SizedBox(),
+          SizedBox(height: 32.h),
+          AppButton(
+            height: 56.h,
+            title: S.current.close,
+            cornerRadius: 15.r,
+            textStyle: AppTextStyle.whiteS18Bold,
+            backgroundColor: AppColors.primary,
+            onPressed: () {
+              Get.back(closeOverlays: true);
+            },
+          )
+        ],
+      ),
     );
   }
 }

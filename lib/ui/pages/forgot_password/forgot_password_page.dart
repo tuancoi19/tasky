@@ -113,7 +113,7 @@ class _ForgotPasswordChildPageState extends State<ForgotPasswordChildPage> {
             : S.current.username_or_email,
         hintText: isVerification
             ? S.current.enter_your_code
-            : S.current.enter_your_username_or_email,
+            : S.current.enter_your_email,
         onChanged: (value) {
           isVerification
               ? _cubit.changeCode(code: value)

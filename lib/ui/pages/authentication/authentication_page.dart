@@ -8,10 +8,24 @@ import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/ui/commons/content_laoding_indicator.dart';
 import 'package:tasky/ui/pages/authentication/authentication_cubit.dart';
 
-class AuthenticationPage extends StatelessWidget {
+class AuthenticationPage extends StatefulWidget {
   const AuthenticationPage({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<AuthenticationPage> createState() => _AuthenticationPageState();
+}
+
+class _AuthenticationPageState extends State<AuthenticationPage>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,14 +64,11 @@ class AuthenticationPage extends StatelessWidget {
   PreferredSizeWidget buildAppBar(BuildContext context) {
     return AppBar(
       toolbarHeight: 188.h,
-      flexibleSpace: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            AppConfigs.appName,
-            style: AppTextStyle.primaryS26Bold,
-          ),
-        ],
+      flexibleSpace: Center(
+        child: Text(
+          AppConfigs.appName,
+          style: AppTextStyle.primaryS26Bold,
+        ),
       ),
       elevation: 0,
       bottom: TabBar(
@@ -68,6 +79,7 @@ class AuthenticationPage extends StatelessWidget {
         labelColor: AppColors.textBlack,
         unselectedLabelStyle: AppTextStyle.blackO50S20W600,
         unselectedLabelColor: AppColors.textBlack.withOpacity(0.5),
+        controller: _tabController,
       ),
     );
   }

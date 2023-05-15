@@ -9,21 +9,21 @@ class Auth {
     required String mail,
     required String password,
   }) async {
-
     await _firebaseAuth.signInWithEmailAndPassword(
       email: mail,
       password: password,
     );
   }
 
-  Future<void> createUserWithEmailAndPassword({
+  Future<UserCredential> createUserWithEmailAndPassword({
     required String mail,
     required String password,
   }) async {
-    await _firebaseAuth.createUserWithEmailAndPassword(
+    final user = await _firebaseAuth.createUserWithEmailAndPassword(
       email: mail,
       password: password,
     );
+    return user;
   }
 
   Future<void> signOut() async {
