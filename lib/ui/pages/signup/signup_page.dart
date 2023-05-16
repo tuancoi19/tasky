@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,9 +19,9 @@ import 'package:tasky/utils/utils.dart';
 import 'signup_cubit.dart';
 
 class SignupPage extends StatelessWidget {
-  const SignupPage({
-    Key? key,
-  }) : super(key: key);
+  const SignupPage({Key? key, this.tabController}) : super(key: key);
+
+  final TabController? tabController;
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +31,16 @@ class SignupPage extends StatelessWidget {
             BlocProvider.of<AuthenticationCubit>(context);
         return SignupCubit(authenticationCubit: authenticationCubit);
       },
-      child: const SigninChildPage(),
+      child: SigninChildPage(
+        tabController: tabController,
+      ),
     );
   }
 }
 
 class SigninChildPage extends StatefulWidget {
-  const SigninChildPage({Key? key}) : super(key: key);
-
+  const SigninChildPage({Key? key, this.tabController}) : super(key: key);
+  final TabController? tabController;
   @override
   State<SigninChildPage> createState() => _SigninChildPageState();
 }
@@ -81,8 +85,18 @@ class _SigninChildPageState extends State<SigninChildPage> {
           SizedBox(height: 44.h),
           AppButton(
             onPressed: () {
-              _signUp();
+              // _signUp();
               //Get.toNamed(RouteConfig.editProfile);
+              AppDialog.showCustomDialog(
+                content: customDialogContent(
+                  title: S.current.sign_up_success,
+                  onPressed: () {
+                    Get.back(closeOverlays: true);
+                    _cubit.authenticationCubit.setCurentPage(0);
+                    widget.tabController!.index = 0;
+                  },
+                ),
+              );
             },
             height: 56.h,
             title: S.current.sign_up,
@@ -185,6 +199,10 @@ class _SigninChildPageState extends State<SigninChildPage> {
         AppDialog.showCustomDialog(
           content: customDialogContent(
             title: S.current.sign_up_success,
+            onPressed: () {
+              Get.back(closeOverlays: true);
+              _cubit.authenticationCubit.setCurentPage(0);
+            },
           ),
         );
       },
@@ -193,13 +211,20 @@ class _SigninChildPageState extends State<SigninChildPage> {
           content: customDialogContent(
             title: S.current.sign_up_failed,
             content: error,
+            onPressed: () {
+              Get.back(closeOverlays: true);
+            },
           ),
         );
       },
     );
   }
 
-  Widget customDialogContent({required String title, String? content}) {
+  Widget customDialogContent({
+    required String title,
+    String? content,
+    void Function()? onPressed,
+  }) {
     return Padding(
       padding: const EdgeInsets.all(16).r,
       child: Column(
@@ -224,9 +249,7 @@ class _SigninChildPageState extends State<SigninChildPage> {
             cornerRadius: 15.r,
             textStyle: AppTextStyle.whiteS18Bold,
             backgroundColor: AppColors.primary,
-            onPressed: () {
-              Get.back(closeOverlays: true);
-            },
+            onPressed: onPressed,
           )
         ],
       ),

@@ -7,6 +7,8 @@ import 'package:tasky/configs/app_configs.dart';
 import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/ui/commons/content_laoding_indicator.dart';
 import 'package:tasky/ui/pages/authentication/authentication_cubit.dart';
+import 'package:tasky/ui/pages/login/login_page.dart';
+import 'package:tasky/ui/pages/signup/signup_page.dart';
 
 class AuthenticationPage extends StatefulWidget {
   const AuthenticationPage({
@@ -19,12 +21,17 @@ class AuthenticationPage extends StatefulWidget {
 
 class _AuthenticationPageState extends State<AuthenticationPage>
     with TickerProviderStateMixin {
-  late TabController _tabController;
+  late TabController tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    tabController = TabController(length: 2, vsync: this);
+  }
+
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -56,9 +63,12 @@ class _AuthenticationPageState extends State<AuthenticationPage>
   }
 
   Widget _buildBodyWidget() {
-    return const TabBarView(
-      children: AppConfigs.authTabBarViewList,
-    );
+    return TabBarView(controller: tabController, children: [
+      const LoginPage(),
+      SignupPage(
+        tabController: tabController,
+      ),
+    ]);
   }
 
   PreferredSizeWidget buildAppBar(BuildContext context) {
@@ -79,7 +89,7 @@ class _AuthenticationPageState extends State<AuthenticationPage>
         labelColor: AppColors.textBlack,
         unselectedLabelStyle: AppTextStyle.blackO50S20W600,
         unselectedLabelColor: AppColors.textBlack.withOpacity(0.5),
-        controller: _tabController,
+        controller: tabController,
       ),
     );
   }
