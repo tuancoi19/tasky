@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_zoom_drawer/config.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/ui/pages/home_screen/home_screen_page.dart';
 import 'package:tasky/ui/pages/main_screen/widgets/main_screen_drawer.dart';
@@ -50,6 +51,7 @@ class _MainScreenChildPageState extends State<MainScreenChildPage> {
   late final MainScreenCubit _cubit;
   late final PageController _pageController;
   late final ZoomDrawerController _zoomDrawerController;
+late AppCubit appCubit;
 
   @override
   void initState() {
@@ -58,6 +60,7 @@ class _MainScreenChildPageState extends State<MainScreenChildPage> {
     _cubit.loadInitialData();
     _pageController = PageController();
     _zoomDrawerController = ZoomDrawerController();
+    appCubit = BlocProvider.of(context);
   }
 
   @override
@@ -79,7 +82,7 @@ class _MainScreenChildPageState extends State<MainScreenChildPage> {
           menuScreen: MainScreenDrawer(
             onTap: () {
               _zoomDrawerController.close?.call();
-            },
+            }, appCubit: appCubit,
           ),
           mainScreen: Scaffold(
             body: _buildBodyWidget(),
