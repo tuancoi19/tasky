@@ -12,8 +12,6 @@ import 'blocs/setting/app_setting_cubit.dart';
 import 'common/app_themes.dart';
 import 'network/api_client.dart';
 import 'network/api_util.dart';
-import 'repositories/auth_repository.dart';
-import 'repositories/user_repository.dart';
 import 'router/route_config.dart';
 
 class MyApp extends StatefulWidget {
@@ -50,61 +48,46 @@ class _MyAppState extends State<MyApp> {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (BuildContext context, Widget? child) {
-        return MultiRepositoryProvider(
+        return MultiBlocProvider(
           providers: [
-            RepositoryProvider<AuthRepository>(create: (context) {
-              return AuthRepositoryImpl(apiClient: _apiClient);
+            BlocProvider<AppCubit>(create: (context) {
+              return AppCubit();
             }),
-            RepositoryProvider<UserRepository>(create: (context) {
-              return UserRepositoryImpl(apiClient: _apiClient);
+            BlocProvider<AppSettingCubit>(create: (context) {
+              return AppSettingCubit();
             }),
           ],
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<AppCubit>(create: (context) {
-                final userRepo = RepositoryProvider.of<UserRepository>(context);
-                final authRepo = RepositoryProvider.of<AuthRepository>(context);
-                return AppCubit(
-                  userRepo: userRepo,
-                  authRepo: authRepo,
-                );
-              }),
-              BlocProvider<AppSettingCubit>(create: (context) {
-                return AppSettingCubit();
-              }),
-            ],
-            child: BlocBuilder<AppSettingCubit, AppSettingState>(
-              builder: (context, state) {
-                return GestureDetector(
-                  onTap: () {
-                    _hideKeyboard(context);
-                  },
-                  child: GetMaterialApp(
-                    title: AppConfigs.appName,
-                    theme: AppThemes(
-                      isDarkMode: false,
-                      primaryColor: state.primaryColor,
-                    ).theme,
-                    // darkTheme: AppThemes(
-                    //   isDarkMode: true,
-                    //   primaryColor: state.primaryColor,
-                    // ).theme,
-                    themeMode: state.themeMode,
-                    initialRoute: RouteConfig.splash,
-                    getPages: RouteConfig.getPages,
-                    localizationsDelegates: const [
-                      GlobalMaterialLocalizations.delegate,
-                      GlobalWidgetsLocalizations.delegate,
-                      GlobalCupertinoLocalizations.delegate,
-                      S.delegate,
-                    ],
-                    locale: state.locale,
-                    supportedLocales: S.delegate.supportedLocales,
-                    debugShowCheckedModeBanner: false,
-                  ),
-                );
-              },
-            ),
+          child: BlocBuilder<AppSettingCubit, AppSettingState>(
+            builder: (context, state) {
+              return GestureDetector(
+                onTap: () {
+                  _hideKeyboard(context);
+                },
+                child: GetMaterialApp(
+                  title: AppConfigs.appName,
+                  theme: AppThemes(
+                    isDarkMode: false,
+                    primaryColor: state.primaryColor,
+                  ).theme,
+                  // darkTheme: AppThemes(
+                  //   isDarkMode: true,
+                  //   primaryColor: state.primaryColor,
+                  // ).theme,
+                  themeMode: state.themeMode,
+                  initialRoute: RouteConfig.splash,
+                  getPages: RouteConfig.getPages,
+                  localizationsDelegates: const [
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                    S.delegate,
+                  ],
+                  locale: state.locale,
+                  supportedLocales: S.delegate.supportedLocales,
+                  debugShowCheckedModeBanner: false,
+                ),
+              );
+            },
           ),
         );
       },

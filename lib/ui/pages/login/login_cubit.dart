@@ -6,7 +6,6 @@ import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/models/entities/user/app_user.dart';
 import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/ui/pages/authentication/authentication_cubit.dart';
-import 'package:tasky/utils/auth.dart';
 import 'package:tasky/utils/logger.dart';
 
 part 'login_state.dart';
@@ -27,7 +26,7 @@ class LoginCubit extends Cubit<LoginState> {
   }) async {
     authenticationCubit.setLoading(LoadStatus.loading);
     try {
-      await Auth().signInWithEmailAndPassword(mail: mail, password: password);
+      await appCubit.signInWithEmailAndPassword(mail: mail, password: password);
       final FirebaseAuth auth = FirebaseAuth.instance;
       final User? user = auth.currentUser;
       if (user == null) {
