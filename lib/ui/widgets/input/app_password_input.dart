@@ -117,9 +117,8 @@ class AppPasswordInput extends StatelessWidget {
                     maxLines: 1,
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 16,
-                      ).r,
+                              horizontal: 20, vertical: 16)
+                          .r,
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(borderRadius.r),
                         borderSide: BorderSide.none,

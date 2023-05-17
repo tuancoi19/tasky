@@ -68,6 +68,8 @@ class AppConfigs {
       arguments: NotificationScreenArguments(canPop: false),
     )
   ];
+  ///Image
+  static const int imageSize = 10;
 }
 
 class FirebaseConfig {

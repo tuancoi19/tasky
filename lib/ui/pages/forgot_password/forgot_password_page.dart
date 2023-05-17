@@ -101,7 +101,7 @@ class _ForgotPasswordChildPageState extends State<ForgotPasswordChildPage> {
     return Form(
       key: _formKey,
       autovalidateMode: autoValidateMode,
-      child: AppUsernameOrEmailInput(
+      child: AppInput(
         textEditingController:
             isVerification ? verificationController : usernameOrEmailController,
         color: AppColors.backgroundTextFieldColor,
@@ -170,6 +170,8 @@ class _ForgotPasswordChildPageState extends State<ForgotPasswordChildPage> {
   @override
   void dispose() {
     _cubit.close();
+    usernameOrEmailController.dispose();
+    verificationController.dispose();
     super.dispose();
   }
 

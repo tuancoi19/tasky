@@ -4,7 +4,7 @@ import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/utils/utils.dart';
 
-class AppUsernameOrEmailInput extends StatelessWidget {
+class AppInput extends StatelessWidget {
   final String? labelText;
   final TextStyle? labelStyle;
   final String? highlightText;
@@ -18,7 +18,7 @@ class AppUsernameOrEmailInput extends StatelessWidget {
   final ValueChanged<String>? onSubmitted;
   final FormFieldValidator<String>? validator;
   final TextInputType textInputType;
-  final FocusNode? passwordFocusNode;
+  final FocusNode? focusNode;
   final Color? textFieldEnabledBorder;
   final Color? textFieldFocusedBorder;
   final Color? textFieldDisabledBorder;
@@ -28,8 +28,9 @@ class AppUsernameOrEmailInput extends StatelessWidget {
   final bool autoTrim;
   final double borderRadius;
   final Color? color;
+  final bool readOnly;
 
-  const AppUsernameOrEmailInput({
+  const AppInput({
     Key? key,
     this.labelText,
     this.labelStyle,
@@ -44,7 +45,7 @@ class AppUsernameOrEmailInput extends StatelessWidget {
     this.onSubmitted,
     this.validator,
     this.textInputType = TextInputType.text,
-    this.passwordFocusNode,
+    this.focusNode,
     this.textFieldEnabledBorder,
     this.textFieldDisabledBorder,
     this.textFieldFocusedBorder,
@@ -54,6 +55,7 @@ class AppUsernameOrEmailInput extends StatelessWidget {
     this.autoTrim = false,
     this.borderRadius = 0,
     this.color,
+    this.readOnly = false,
   }) : super(key: key);
 
   @override
@@ -81,11 +83,11 @@ class AppUsernameOrEmailInput extends StatelessWidget {
             }
           },
           child: Container(
-            height: 56.h,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(borderRadius.r),
             ),
             child: TextFormField(
+              readOnly: readOnly,
               onFieldSubmitted: onSubmitted,
               onChanged: onChanged,
               validator: validator ??
@@ -94,7 +96,7 @@ class AppUsernameOrEmailInput extends StatelessWidget {
                   },
               autovalidateMode: autoValidateMode,
               controller: textEditingController,
-              focusNode: passwordFocusNode,
+              focusNode: focusNode,
               style: textStyle ?? AppTextStyle.blackO40S14W400,
               maxLines: 1,
               decoration: InputDecoration(

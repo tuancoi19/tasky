@@ -134,7 +134,7 @@ class _LoginChildPageState extends State<LoginChildPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              AppUsernameOrEmailInput(
+              AppInput(
                 textEditingController: usernameOrEmailTextController,
                 labelText: S.current.username_or_email,
                 hintText: S.current.enter_your_username_or_email,
@@ -173,6 +173,7 @@ class _LoginChildPageState extends State<LoginChildPage> {
     _cubit.close();
     usernameOrEmailTextController.dispose();
     passwordTextController.dispose();
+    obscurePasswordController.dispose();
     super.dispose();
   }
 

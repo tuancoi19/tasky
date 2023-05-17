@@ -74,5 +74,22 @@
   "become_an_vip_user": "Trở Thành Người Dùng VIP",
   "help_center": "Trung Tâm Hỗ Trợ",
   "about_us": "Về Chúng Tôi",
-  "privacy": "Bảo Mật"
+  "privacy": "Bảo Mật",
+  "upload_photo": "Tải ảnh lên",
+  "take_photo": "Chụp ảnh",
+  "choose_from_library": "Tải lên từ thư viện",
+  "cancel": "Hủy",
+  "last_name": "Họ",
+  "message_please_enter_name": "Tên không được để trống",
+  "message_enter_name_within_50_characters": "Tên chỉ được tối đa 50 kí tự",
+  "message_error_name_not_contain_number": "Tên không thể chứa số và kí tự đặc biệt",
+  "first_name": "Tên",
+  "enter_your_last_name": "Nhập họ của bạn",
+  "enter_your_first_name": "Nhập tên của bạn",
+  "done": "Xong",
+  "vip_user": "Người dùng VIP",
+  "display_name": "Tên Hiển Thị",
+  "enter_your_display_name": "Nhập tên hiển thị của bạn",
+  "username": "Tên Đăng Nhập",
+  "enter_your_username": "Nhập tên đăng nhập của bạn"
 }

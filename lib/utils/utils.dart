@@ -1,6 +1,9 @@
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:tasky/generated/l10n.dart';
 
 class Utils {
@@ -171,17 +174,17 @@ class Utils {
     return null;
   }
 
-  // /// show error text when name invalid
-  // static String? firstNameInvalid(String name) {
-  //   if (name.trim().isEmpty) {
-  //     return S.current.message_please_enter_name;
-  //   } else if (name.length > 50) {
-  //     return S.current.message_enter_name_within_50_characters;
-  //   } else if (nameValidator(name)) {
-  //     return S.current.message_error_name_not_contain_number;
-  //   }
-  //   return null;
-  // }
+  /// show error text when name invalid
+  static String? nameInvalid(String name) {
+    if (name.trim().isEmpty) {
+      return S.current.message_please_enter_name;
+    } else if (name.length > 50) {
+      return S.current.message_enter_name_within_50_characters;
+    } else if (nameValidator(name)) {
+      return S.current.message_error_name_not_contain_number;
+    }
+    return null;
+  }
 
   // /// show error text when last name invalid
   // static String? lastNameInvalid(String name) {
@@ -211,5 +214,33 @@ class Utils {
     String colorString = color.toString(); // Color(0x12345678)
     String valueString = colorString.split('(0x')[1].split(')')[0];
     return valueString;
+  }
+
+  ///reSize Image
+  static Future<File?> resizeImage(
+    File file, {
+    Function(File)? onSubmitImage,
+    required num imageSize,
+    Function? onErrorImage,
+  }) async {
+    final dir = await getTemporaryDirectory();
+
+    /// Create a temporary path to save the resized file
+    /// Nên thay DateTime.now() bằng cái gì đó cá nhân và cụ thể hơn như id người dùng chẳng hạn
+    final targetPath = "${dir.absolute.path}/${"temp${DateTime.now()}.jpg"}";
+    File? result;
+    for (int i = 95; i > 5; i -= 5) {
+      result = await FlutterImageCompress.compressAndGetFile(
+          file.absolute.path, targetPath,
+          quality: i);
+      final bytes = (result?.lengthSync());
+      final mb = ((bytes ?? 0) / 1024.0) / 1024.0;
+      if (mb <= imageSize) {
+        onSubmitImage?.call(result!);
+        return result;
+      }
+    }
+    onErrorImage?.call();
+    return result;
   }
 }

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:tasky/database/share_preferences_helper.dart';
 import 'package:tasky/models/entities/user/app_user.dart';
 import 'package:tasky/router/route_config.dart';
+import 'package:tasky/ui/pages/edit_user_profile/edit_user_profile_page.dart';
 
 import 'splash_state.dart';
 
