@@ -42,4 +42,11 @@ class AppVectors {
   static const String icHelpCenter = 'assets/vectors/ic_help_center.svg';
 
   static const String icAboutUs = 'assets/vectors/ic_about_us.svg';
+
+  static const String icTaskBackground =
+      'assets/vectors/ic_task_background.svg';
+
+  static const String icTextFile = 'assets/vectors/ic_text_file.svg';
+
+  static const String icImageFile = 'assets/vectors/ic_image_file.svg';
 }

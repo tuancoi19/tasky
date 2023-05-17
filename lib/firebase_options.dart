@@ -63,7 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '49143107546',
     projectId: 'tasky-a5cb4',
     storageBucket: 'tasky-a5cb4.appspot.com',
-    iosClientId: '49143107546-bafehiphfb3jqi98j15k4thght9601dq.apps.googleusercontent.com',
+    iosClientId:
+        '49143107546-bafehiphfb3jqi98j15k4thght9601dq.apps.googleusercontent.com',
     iosBundleId: 'it.thoson.flutterBase',
   );
 }

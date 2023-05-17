@@ -7,6 +7,7 @@ import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/ui/pages/home_screen/home_screen_page.dart';
 import 'package:tasky/ui/pages/main_screen/widgets/main_screen_drawer.dart';
 import 'package:tasky/ui/pages/main_screen/widgets/main_screen_bottom_navigator_bar.dart';
+import 'package:tasky/ui/pages/task_screen/detail_task_screen/detail_task_screen_page.dart';
 import 'package:tasky/ui/pages/user_profile/user_profile_page.dart';
 
 import 'main_screen_cubit.dart';
@@ -118,6 +119,7 @@ class _MainScreenChildPageState extends State<MainScreenChildPage> {
       ),
       Container(color: Colors.red),
       const UserProfilePage(),
+      const DetailTaskScreenPage(),
     ];
   }
 

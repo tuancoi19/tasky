@@ -34,7 +34,8 @@ class EditUserProfileChildPage extends StatefulWidget {
   const EditUserProfileChildPage({Key? key}) : super(key: key);
 
   @override
-  State<EditUserProfileChildPage> createState() => _EditUserProfileChildPageState();
+  State<EditUserProfileChildPage> createState() =>
+      _EditUserProfileChildPageState();
 }
 
 class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
@@ -49,12 +50,12 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
 
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
-       appBar: AppBar(),
-       body: SafeArea(
-         child: _buildBodyWidget(),
-       ),
-     );
+    return Scaffold(
+      appBar: AppBar(),
+      body: SafeArea(
+        child: _buildBodyWidget(),
+      ),
+    );
   }
 
   Widget _buildBodyWidget() {

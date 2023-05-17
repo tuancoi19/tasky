@@ -102,7 +102,7 @@ class _SigninChildPageState extends State<SigninChildPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                AppUsernameOrEmailInput(
+                AppInput(
                   textEditingController: emailTextController,
                   labelText: S.current.username_or_email,
                   hintText: S.current.enter_your_username_or_email,

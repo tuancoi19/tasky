@@ -74,5 +74,12 @@
   "become_an_vip_user": "Become An VIP User",
   "help_center": "Help Center",
   "about_us": "About Us",
-  "privacy": "Privacy"
+  "privacy": "Privacy",
+  "type_your_title": "Type your Title",
+  "description": "Description",
+  "documents": "Documents",
+  "title": "Title",
+  "please_enter_your_task_title": "Please enter your task title",
+  "start_time": "Start time",
+  "end_time": "End time"
 }

@@ -74,5 +74,12 @@
   "become_an_vip_user": "Trở Thành Người Dùng VIP",
   "help_center": "Trung Tâm Hỗ Trợ",
   "about_us": "Về Chúng Tôi",
-  "privacy": "Bảo Mật"
+  "privacy": "Bảo Mật",
+  "type_your_title": "Nhập Tiêu đề của bạn",
+  "description": "Mô tả",
+  "documents": "Các tài liệu",
+  "title": "Tiêu đề",
+  "please_enter_your_task_title": "Nhập tiêu đề tác vụ của bạn",
+  "start_time": "Bắt đầu",
+  "end_time": "Kết thúc"
 }

@@ -4,7 +4,7 @@ import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/utils/utils.dart';
 
-class AppUsernameOrEmailInput extends StatelessWidget {
+class AppInput extends StatelessWidget {
   final String? labelText;
   final TextStyle? labelStyle;
   final String? highlightText;
@@ -29,7 +29,7 @@ class AppUsernameOrEmailInput extends StatelessWidget {
   final double borderRadius;
   final Color? color;
 
-  const AppUsernameOrEmailInput({
+  const AppInput({
     Key? key,
     this.labelText,
     this.labelStyle,

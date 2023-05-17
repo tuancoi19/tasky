@@ -91,4 +91,6 @@ class AppColors {
   static const Color helpCenterIconColor = Color(0xFF32B0A1);
 
   static const Color aboutUsIconColor = Color(0xFF485FD3);
+
+  static const Color iconBackgroundColor = Color(0xFFF5F8FF);
 }

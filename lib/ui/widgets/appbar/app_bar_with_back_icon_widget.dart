@@ -11,7 +11,7 @@ class AppBarWithBackIconWidget extends StatelessWidget
 
   const AppBarWithBackIconWidget({
     super.key,
-    this.fromSignUp = true,
+    this.fromSignUp = false,
   });
 
   @override
@@ -28,9 +28,9 @@ class AppBarWithBackIconWidget extends StatelessWidget
                   Get.back();
                 },
                 child: Container(
-                  width: 48.w,
+                  width: 48.h,
                   height: 48.h,
-                  padding: const EdgeInsets.only(left: 24).r,
+                  margin: const EdgeInsets.only(left: 24).r,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: AppColors.backgroundBackButtonColor,

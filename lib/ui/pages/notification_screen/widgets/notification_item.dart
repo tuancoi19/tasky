@@ -40,6 +40,7 @@ class NotificationItem extends StatelessWidget {
                 SizedBox(width: 32.w),
                 Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       title,
