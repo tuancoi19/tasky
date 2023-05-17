@@ -31,4 +31,12 @@ class TaskInformationCubit extends Cubit<TaskInformationState> {
   void changeEndTime({required String endTime}) {
     emit(state.copyWith(endTime: endTime));
   }
+
+  void changeDate({required String date}) {
+    emit(state.copyWith(date: date));
+  }
+
+  void changeNote({required String note}) {
+    emit(state.copyWith(note: note));
+  }
 }

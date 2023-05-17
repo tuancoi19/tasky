@@ -1,21 +1,17 @@
-import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
-import 'package:tasky/configs/app_configs.dart';
+import 'package:tasky/generated/l10n.dart';
 
-class AppTimePicker extends StatelessWidget {
+class NoteTextField extends StatelessWidget {
+  final Function(String) onChanged;
   final TextEditingController controller;
-  final String title;
-  final Function(String?) onChange;
 
-  const AppTimePicker({
+  const NoteTextField({
     Key? key,
+    required this.onChanged,
     required this.controller,
-    required this.title,
-    required this.onChange,
   }) : super(key: key);
 
   @override
@@ -24,18 +20,20 @@ class AppTimePicker extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          title,
+          S.current.note,
           style: AppTextStyle.blackS15W500,
         ),
         SizedBox(height: 20.h),
-        SizedBox(
-          height: 56.h,
-          child: DateTimePicker(
-            type: DateTimePickerType.time,
-            locale: AppConfigs.defaultLocal,
-            onChanged: onChange,
+        Container(
+          height: 152.h,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10).r,
+          ),
+          child: TextField(
+            onChanged: onChanged,
             controller: controller,
-            textAlign: TextAlign.center,
+            style: AppTextStyle.blackO40S14W400,
+            maxLines: 5,
             decoration: InputDecoration(
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 16).r,
@@ -50,32 +48,13 @@ class AppTimePicker extends StatelessWidget {
                 ),
               ),
               disabledBorder: InputBorder.none,
-              focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10).r,
-                borderSide: const BorderSide(
-                  color: AppColors.textFieldErrorBorder,
-                ),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10).r,
-                borderSide: const BorderSide(
-                  color: AppColors.textFieldErrorBorder,
-                ),
-              ),
               fillColor: AppColors.backgroundBackButtonColor,
               hintStyle: AppTextStyle.blackO40S14W400,
-              hintText: DateFormat(AppConfigs.timeDisplayFormat)
-                  .format(DateTime.now()),
+              hintText: S.current.take_note,
               isDense: true,
               filled: true,
             ),
-
-            //TODO
-            // validator: (val) {
-            //   setState(() => {});
-            //   return null;
-            // },
-            onSaved: (val) => onChange(val),
+            cursorColor: AppColors.primary,
           ),
         ),
       ],

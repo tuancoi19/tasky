@@ -81,5 +81,8 @@
   "title": "Title",
   "please_enter_your_task_title": "Please enter your task title",
   "start_time": "Start time",
-  "end_time": "End time"
+  "end_time": "End time",
+  "date": "Date",
+  "note": "Note",
+  "take_note": "Take note"
 }

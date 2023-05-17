@@ -81,5 +81,8 @@
   "title": "Tiêu đề",
   "please_enter_your_task_title": "Nhập tiêu đề tác vụ của bạn",
   "start_time": "Bắt đầu",
-  "end_time": "Kết thúc"
+  "end_time": "Kết thúc",
+  "date": "Thời gian",
+  "note": "Ghi chú",
+  "take_note": "Viết ghi chú"
 }

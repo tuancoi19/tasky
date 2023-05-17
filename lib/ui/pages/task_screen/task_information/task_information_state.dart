@@ -6,6 +6,8 @@ class TaskInformationState extends Equatable {
   final AutovalidateMode autoValidateMode;
   final String? startTime;
   final String? endTime;
+  final String? date;
+  final String? note;
 
   const TaskInformationState({
     this.loadDataStatus = LoadStatus.initial,
@@ -13,6 +15,8 @@ class TaskInformationState extends Equatable {
     this.autoValidateMode = AutovalidateMode.disabled,
     this.startTime,
     this.endTime,
+    this.date,
+    this.note,
   });
 
   @override
@@ -22,6 +26,8 @@ class TaskInformationState extends Equatable {
         autoValidateMode,
         startTime,
         endTime,
+        date,
+        note,
       ];
 
   TaskInformationState copyWith({
@@ -30,6 +36,8 @@ class TaskInformationState extends Equatable {
     AutovalidateMode? autoValidateMode,
     String? startTime,
     String? endTime,
+    String? date,
+    String? note,
   }) {
     return TaskInformationState(
       loadDataStatus: loadDataStatus ?? this.loadDataStatus,
@@ -37,6 +45,8 @@ class TaskInformationState extends Equatable {
       autoValidateMode: autoValidateMode ?? this.autoValidateMode,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
+      date: date ?? this.date,
+      note: note ?? this.note,
     );
   }
 }

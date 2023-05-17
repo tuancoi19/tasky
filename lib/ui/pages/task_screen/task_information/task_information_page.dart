@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/generated/l10n.dart';
-import 'package:tasky/ui/widgets/app_time_picker.dart';
+import 'package:tasky/ui/pages/task_screen/task_information/widgets/note_text_field.dart';
+import 'package:tasky/ui/pages/task_screen/task_information/widgets/task_information_duration_picker.dart';
+import 'package:tasky/ui/widgets/app_date_picker.dart';
 import 'package:tasky/ui/widgets/appbar/app_bar_with_back_icon_widget.dart';
 import 'package:tasky/ui/widgets/input/app_input.dart';
 
@@ -49,6 +51,8 @@ class _TaskInformationChildPageState extends State<TaskInformationChildPage> {
   late TextEditingController titleController;
   late TextEditingController startTimeController;
   late TextEditingController endTimeController;
+  late TextEditingController dateController;
+  late TextEditingController noteController;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -59,6 +63,8 @@ class _TaskInformationChildPageState extends State<TaskInformationChildPage> {
     titleController = TextEditingController();
     startTimeController = TextEditingController();
     endTimeController = TextEditingController();
+    dateController = TextEditingController();
+    noteController = TextEditingController();
   }
 
   @override
@@ -74,7 +80,7 @@ class _TaskInformationChildPageState extends State<TaskInformationChildPage> {
   Widget _buildBodyWidget() {
     return BlocBuilder<TaskInformationCubit, TaskInformationState>(
       builder: (context, state) {
-        return Container(
+        return SingleChildScrollView(
           padding: const EdgeInsets.all(24).r,
           child: Form(
             key: _formKey,
@@ -94,38 +100,30 @@ class _TaskInformationChildPageState extends State<TaskInformationChildPage> {
                   },
                 ),
                 SizedBox(height: 32.h),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: AppTimePicker(
-                        title: S.current.start_time,
-                        onChange: (value) {
-                          _cubit.changeStartTime(startTime: value ?? '');
-                        },
-                        controller: startTimeController,
-                      ),
-                    ),
-                    SizedBox(width: 24.w),
-                    Expanded(
-                      child: Divider(
-                        color: AppColors.primary,
-                        thickness: 1,
-                        height: 56.h,
-                      ),
-                    ),
-                    SizedBox(width: 24.w),
-                    Expanded(
-                      child: AppTimePicker(
-                        title: S.current.end_time,
-                        onChange: (value) {
-                          _cubit.changeEndTime(endTime: value ?? '');
-                        },
-                        controller: endTimeController,
-                      ),
-                    )
-                  ],
+                AppDatePicker(
+                  controller: dateController,
+                  onChange: (value) {
+                    _cubit.changeDate(date: value ?? '');
+                  },
                 ),
+                SizedBox(height: 32.h),
+                TaskInformationDurationPicker(
+                  startTimeOnChange: (value) {
+                    _cubit.changeStartTime(startTime: value ?? '');
+                  },
+                  endTimeOnChange: (value) {
+                    _cubit.changeEndTime(endTime: value ?? '');
+                  },
+                  startTimeController: startTimeController,
+                  endTimeController: endTimeController,
+                ),
+                SizedBox(height: 32.h),
+                NoteTextField(
+                  onChanged: (value) {
+                    _cubit.changeNote(note: value);
+                  },
+                  controller: noteController,
+                )
               ],
             ),
           ),
