@@ -63,12 +63,10 @@ class _AuthenticationPageState extends State<AuthenticationPage>
   }
 
   Widget _buildBodyWidget() {
-    return TabBarView(controller: tabController, children: [
-      const LoginPage(),
-      SignupPage(
-        tabController: tabController,
-      ),
-    ]);
+    return TabBarView(
+      controller: tabController,
+      children: AppConfigs.authTabBarViewList,
+    );
   }
 
   PreferredSizeWidget buildAppBar(BuildContext context) {

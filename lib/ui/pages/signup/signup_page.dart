@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
@@ -19,9 +20,7 @@ import 'package:tasky/utils/utils.dart';
 import 'signup_cubit.dart';
 
 class SignupPage extends StatelessWidget {
-  const SignupPage({Key? key, this.tabController}) : super(key: key);
-
-  final TabController? tabController;
+  const SignupPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,18 +28,20 @@ class SignupPage extends StatelessWidget {
       create: (context) {
         final AuthenticationCubit authenticationCubit =
             BlocProvider.of<AuthenticationCubit>(context);
-        return SignupCubit(authenticationCubit: authenticationCubit);
+        final AppCubit appCubit = BlocProvider.of<AppCubit>(context);
+
+        return SignupCubit(
+          authenticationCubit: authenticationCubit,
+          appCubit: appCubit,
+        );
       },
-      child: SigninChildPage(
-        tabController: tabController,
-      ),
+      child: const SigninChildPage(),
     );
   }
 }
 
 class SigninChildPage extends StatefulWidget {
-  const SigninChildPage({Key? key, this.tabController}) : super(key: key);
-  final TabController? tabController;
+  const SigninChildPage({Key? key, t}) : super(key: key);
   @override
   State<SigninChildPage> createState() => _SigninChildPageState();
 }
@@ -48,7 +49,6 @@ class SigninChildPage extends StatefulWidget {
 class _SigninChildPageState extends State<SigninChildPage> {
   late final SignupCubit _cubit;
   late TextEditingController confirmPasswordTextController;
-  late TextEditingController userNameTextController;
   late TextEditingController emailTextController;
   late TextEditingController passwordTextController;
   late ObscureTextController obscurePasswordController;
@@ -60,7 +60,6 @@ class _SigninChildPageState extends State<SigninChildPage> {
     _cubit = BlocProvider.of(context);
     confirmPasswordTextController = TextEditingController();
     emailTextController = TextEditingController();
-    userNameTextController = TextEditingController();
     passwordTextController = TextEditingController();
     obscurePasswordController = ObscureTextController();
   }
@@ -85,18 +84,7 @@ class _SigninChildPageState extends State<SigninChildPage> {
           SizedBox(height: 44.h),
           AppButton(
             onPressed: () {
-              // _signUp();
-              //Get.toNamed(RouteConfig.editProfile);
-              AppDialog.showCustomDialog(
-                content: customDialogContent(
-                  title: S.current.sign_up_success,
-                  onPressed: () {
-                    Get.back(closeOverlays: true);
-                    _cubit.authenticationCubit.setCurentPage(0);
-                    widget.tabController!.index = 0;
-                  },
-                ),
-              );
+              _signUp();
             },
             height: 56.h,
             title: S.current.sign_up,
@@ -124,17 +112,6 @@ class _SigninChildPageState extends State<SigninChildPage> {
                   textEditingController: emailTextController,
                   labelText: S.current.username_or_email,
                   hintText: S.current.enter_your_email,
-                  borderRadius: 10,
-                  autoTrim: true,
-                  autoValidateMode: state.autoValidateMode,
-                  onChanged: (value) {
-                    _cubit.changeUsernameOrEmail(usernameOrEmail: value);
-                  },
-                ),
-                AppUsernameOrEmailInput(
-                  textEditingController: userNameTextController,
-                  labelText: S.current.username,
-                  hintText: S.current.enter_your_username,
                   borderRadius: 10,
                   autoTrim: true,
                   autoValidateMode: state.autoValidateMode,
@@ -193,7 +170,6 @@ class _SigninChildPageState extends State<SigninChildPage> {
     FocusScope.of(context).unfocus();
     _cubit.signUp(
       mail: emailTextController.text,
-      userName: userNameTextController.text,
       password: passwordTextController.text,
       onSignUpSuccessful: () {
         AppDialog.showCustomDialog(
@@ -201,7 +177,7 @@ class _SigninChildPageState extends State<SigninChildPage> {
             title: S.current.sign_up_success,
             onPressed: () {
               Get.back(closeOverlays: true);
-              _cubit.authenticationCubit.setCurentPage(0);
+              Get.toNamed(RouteConfig.editProfile);
             },
           ),
         );
