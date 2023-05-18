@@ -18,6 +18,7 @@ The app has been setup to work with [retrofit](https://pub.dev/packages/retrofit
 
 ## File structure
 
+
 ```
 assets
 └───font
