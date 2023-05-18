@@ -181,43 +181,7 @@ class _LoginChildPageState extends State<LoginChildPage> {
     _cubit.login(
       mail: usernameOrEmailTextController.text,
       password: passwordTextController.text,
-      onLoginSuccessful: () {
-        //save Token noti and push
-        Get.offAllNamed(RouteConfig.mainScreen);
-      },
-      onLoginFailed: (error) {
-        AppDialog.showCustomDialog(
-          content: Padding(
-            padding: const EdgeInsets.all(16).r,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  S.current.login_failed,
-                  style: AppTextStyle.secondaryBlackO80S21W600,
-                ),
-                SizedBox(height: 8.h),
-                Text(
-                  error,
-                  style: AppTextStyle.grayO40S15W400,
-                ),
-                SizedBox(height: 32.h),
-                AppButton(
-                  height: 56.h,
-                  title: S.current.close,
-                  cornerRadius: 15.r,
-                  textStyle: AppTextStyle.whiteS18Bold,
-                  backgroundColor: AppColors.primary,
-                  onPressed: () {
-                    Get.back(closeOverlays: true);
-                  },
-                )
-              ],
-            ),
-          ),
-        );
-      },
+
     );
   }
 

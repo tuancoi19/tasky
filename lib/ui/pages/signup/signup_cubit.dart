@@ -30,19 +30,6 @@ class SignupCubit extends Cubit<SignupState> {
       User? user = await appCubit
           .createUserWithEmailAndPassword(mail: mail, password: password);
       if(user != null){
-        final token = await user.getIdToken();
-        final AppUser appUser = AppUser(
-          avatarUrl: user.photoURL ?? '',
-          fcmToken: token,
-          fullName: user.displayName ?? '',
-          isUserLoggedIn: true,
-          userId: user.uid,
-        );
-        appCubit.saveSession(
-          currentAppUser: appUser,
-          refreshToken: user.refreshToken ?? '',
-          token: token,
-        );
         authenticationCubit.setLoading(LoadStatus.success);
         Get.offAllNamed(RouteConfig.mainScreen);
       }else{

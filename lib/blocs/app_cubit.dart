@@ -30,13 +30,50 @@ class AppCubit extends Cubit<AppState> {
     required String mail,
     required String password,
   }) async {
-    //lam lai !!
-    ///TODO
-    await _firebaseAuth.signInWithEmailAndPassword(
-      email: mail,
-      password: password,
-    );
+
+    // await _firebaseAuth.signInWithEmailAndPassword(
+    //   email: mail,
+    //   password: password,
+    // );
     SharedPreferencesHelper.setSeenIntro(isSeen: true);
+
+    try{
+      UserCredential credential = await _firebaseAuth.signInWithEmailAndPassword(
+        email: mail,
+        password: password,
+      );
+
+    } on FirebaseAuthException catch (e) {
+      AppDialog.showCustomDialog(
+        content: Padding(
+          padding: const EdgeInsets.all(16).r,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                e.message ?? '',
+                style: AppTextStyle.secondaryBlackO80S21W600,
+              ),
+              SizedBox(height: 32.h),
+              AppButton(
+                height: 56.h,
+                title: S.current.close,
+                cornerRadius: 15.r,
+                textStyle: AppTextStyle.whiteS18Bold,
+                backgroundColor: AppColors.primary,
+                onPressed: () {
+                  Get.back(closeOverlays: true);
+                },
+              )
+            ],
+          ),
+        ),
+      );
+    } catch (e) {
+      print(e);
+    }
+    return null;
   }
 
   Future<User?> createUserWithEmailAndPassword({
@@ -52,7 +89,30 @@ class AppCubit extends Cubit<AppState> {
       User? user = credential.user;
       if (user != null) {
         logger.log('🙍‍🙍‍🙍‍ Login success  =->>>> : $user');
-         SharedPreferencesHelper.setSeenIntro(isSeen: true);
+
+        final token = await user.getIdToken();
+
+        final appUser = AppUser(
+          avatarUrl: user.photoURL ?? '',
+          fcmToken: token,
+          fullName: user.displayName ?? '',
+          isUserLoggedIn: true,
+          userId: user.uid,
+        );
+
+        saveSession(
+          currentAppUser: appUser,
+          refreshToken: user.refreshToken ?? '',
+          token: token,
+        );
+
+        SharedPreferencesHelper.setSeenIntro(isSeen: true);
+
+        emit(
+          state.copyWith(
+            user: appUser,
+          ),
+        );
         return user;
       }
     } on FirebaseAuthException catch (e) {
