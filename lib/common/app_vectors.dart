@@ -26,6 +26,8 @@ class AppVectors {
 
   static const String icArrowLeft = 'assets/vectors/ic_arrow_left.svg';
 
+  static const String icMore = 'assets/vectors/ic_more.svg';
+
   static const String icMoreHorizontal =
       'assets/vectors/ic_more_horizontal.svg';
 

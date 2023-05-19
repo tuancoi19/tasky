@@ -8,10 +8,14 @@ import 'package:tasky/common/app_vectors.dart';
 class AppBarWithBackIconWidget extends StatelessWidget
     implements PreferredSizeWidget {
   final bool fromSignUp;
+  final Function()? onTap;
+  final String? icon;
 
   const AppBarWithBackIconWidget({
     super.key,
     this.fromSignUp = false,
+    this.onTap,
+    this.icon,
   });
 
   @override
@@ -21,6 +25,7 @@ class AppBarWithBackIconWidget extends StatelessWidget
         width: double.infinity,
         height: double.infinity,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             if (!fromSignUp)
               InkWell(
@@ -32,7 +37,7 @@ class AppBarWithBackIconWidget extends StatelessWidget
                   height: 48.h,
                   margin: const EdgeInsets.only(left: 24).r,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(10).r,
                     color: AppColors.backgroundBackButtonColor,
                   ),
                   child: Center(
@@ -43,7 +48,26 @@ class AppBarWithBackIconWidget extends StatelessWidget
                     ),
                   ),
                 ),
-              )
+              ),
+            InkWell(
+              onTap: onTap,
+              child: Container(
+                width: 48.h,
+                height: 48.h,
+                margin: const EdgeInsets.only(right: 24).r,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10).r,
+                  color: AppColors.backgroundBackButtonColor,
+                ),
+                child: Center(
+                  child: SvgPicture.asset(
+                    icon ?? '',
+                    width: 24.h,
+                    height: 24.h,
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),

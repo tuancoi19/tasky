@@ -84,5 +84,6 @@
   "end_time": "End time",
   "date": "Date",
   "note": "Note",
-  "take_note": "Take note"
+  "take_note": "Take note",
+  "done": "Done"
 }

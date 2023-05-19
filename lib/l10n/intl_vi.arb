@@ -84,5 +84,6 @@
   "end_time": "Kết thúc",
   "date": "Thời gian",
   "note": "Ghi chú",
-  "take_note": "Viết ghi chú"
+  "take_note": "Viết ghi chú",
+  "done": "Xong"
 }
