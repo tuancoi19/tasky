@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_images.dart';
 import 'package:tasky/common/app_text_styles.dart';
@@ -9,11 +10,13 @@ import 'package:tasky/generated/l10n.dart';
 import 'package:tuple/tuple.dart';
 
 class MainScreenDrawer extends StatelessWidget {
+  final AppCubit appCubit;
   final Function() onTap;
 
   const MainScreenDrawer({
     Key? key,
     required this.onTap,
+    required this.appCubit,
   }) : super(key: key);
 
   @override
@@ -130,7 +133,9 @@ class MainScreenDrawer extends StatelessWidget {
       Tuple3(S.current.search_tasks, AppVectors.icSearch, () {}),
       Tuple3(S.current.activity, AppVectors.icActivity, () {}),
       Tuple3(S.current.app_settings, AppVectors.icSettings, () {}),
-      Tuple3(S.current.logout, AppVectors.icLogout, () {}),
+      Tuple3(S.current.logout, AppVectors.icLogout, () {
+        appCubit.signOut();
+      }),
     ];
   }
 }
