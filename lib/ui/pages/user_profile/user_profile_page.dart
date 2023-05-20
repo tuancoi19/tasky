@@ -63,20 +63,18 @@ class _UserProfileChildPageState extends State<UserProfileChildPage> {
   }
 
   Widget _buildBodyWidget() {
-    return SingleChildScrollView(
+    return ListView(
       padding: const EdgeInsets.only(top: 36).r,
       physics: const ClampingScrollPhysics(),
-      child: Column(
-        children: [
-          UserProfileCard(
-            displayName: 'Loren Ipsum',
-            isVip: true,
-            onTap: () {},
-          ),
-          SizedBox(height: 36.h),
-          const SettingOptionsList(),
-        ],
-      ),
+      children: [
+        UserProfileCard(
+          displayName: 'Loren Ipsum',
+          isVip: true,
+          onTap: () {},
+        ),
+        SizedBox(height: 36.h),
+        const SettingOptionsList(),
+      ],
     );
   }
 
