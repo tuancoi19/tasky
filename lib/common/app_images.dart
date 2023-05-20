@@ -17,4 +17,10 @@ class AppImages {
   static const icCompleted = 'assets/images/ic_completed.png';
 
   static const icFailed = 'assets/images/ic_failed.png';
+
+  static const bgDetailBlueTask = 'assets/images/bg_detail_blue_task.png';
+
+  static const bgDetailRedTask = 'assets/images/bg_detail_red_task.png';
+
+  static const bgDetailGreenTask = 'assets/images/bg_detail_green_task.png';
 }

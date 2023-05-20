@@ -76,7 +76,7 @@ class _MainScreenBottomNavigatorBarState
     list.add(
       InkWell(
         onTap: () {
-          //TODO: Navigate to new page
+          widget.onPageChange(3);
         },
         child: SizedBox(
           height: double.infinity,

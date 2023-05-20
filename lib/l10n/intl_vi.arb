@@ -91,5 +91,17 @@
   "display_name": "Tên Hiển Thị",
   "enter_your_display_name": "Nhập tên hiển thị của bạn",
   "username": "Tên Đăng Nhập",
-  "enter_your_username": "Nhập tên đăng nhập của bạn"
+  "enter_your_username": "Nhập tên đăng nhập của bạn",
+  "privacy": "Bảo Mật",
+  "type_your_title": "Nhập Tiêu đề của bạn",
+  "description": "Mô tả",
+  "documents": "Các tài liệu",
+  "title": "Tiêu đề",
+  "please_enter_your_task_title": "Nhập tiêu đề tác vụ của bạn",
+  "start_time": "Bắt đầu",
+  "end_time": "Kết thúc",
+  "date": "Thời gian",
+  "note": "Ghi chú",
+  "take_note": "Viết ghi chú",
+  "done": "Xong"
 }

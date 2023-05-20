@@ -33,7 +33,6 @@ class UserProfileCubit extends Cubit<UserProfileState> {
     required void Function() onSignOutSuccessful,
     required void Function() onSignOutFailed,
   }) async {
-   
     emit(state.copyWith(loadDataStatus: LoadStatus.loading));
     try {
       appCubit.signOut();

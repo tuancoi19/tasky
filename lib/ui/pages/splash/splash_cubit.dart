@@ -27,7 +27,7 @@ class SplashCubit extends Cubit<SplashState> {
     AppUser appUser = await sharedPreferencesHelper.loadAppUser();
 
     final routerName = (appUser.isUserLoggedIn)
-        ? RouteConfig.mainScreen
+        ? RouteConfig.taskInformation
         : RouteConfig.authentication;
     Get.offAllNamed(
       isSeenIntro ? routerName : RouteConfig.welcome,

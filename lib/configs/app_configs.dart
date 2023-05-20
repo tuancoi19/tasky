@@ -25,6 +25,8 @@ class AppConfigs {
   static const dateAPIFormat = 'dd/MM/yyyy';
   static const dateDisplayFormat = 'dd/MM/yyyy';
 
+  static const timeDisplayFormat = 'HH:mm';
+
   static const dateTimeAPIFormat =
       "MM/dd/yyyy'T'hh:mm:ss.SSSZ"; //Use DateTime.parse(date) instead of ...
   static const dateTimeDisplayFormat = 'dd/MM/yyyy HH:mm';
@@ -41,6 +43,16 @@ class AppConfigs {
   ///Max file
   static const maxAttachFile = 5;
 
+  static const List<String> listImageFileType = ['PNG', 'JPEG', 'JPG'];
+
+  static const List<String> listTextFileType = [
+    'DOC',
+    'XLS',
+    'DOCX',
+    'XLSX',
+    'PDF'
+  ];
+
   static final authTabList = [
     Tab(text: S.current.log_in),
     Tab(text: S.current.sign_up)
@@ -56,6 +68,11 @@ class AppConfigs {
     Tab(text: S.current.complete),
   ];
 
+  static final taskDetailTabList = [
+    Tab(text: S.current.description),
+    Tab(text: S.current.documents),
+  ];
+
   static final bottomNavigatorBarIconList = [
     AppVectors.icHome,
     AppVectors.icActivity,
@@ -65,7 +82,7 @@ class AppConfigs {
   static final homeScreenPageList = [
     const InProgressListView(),
     NotificationScreenPage(
-      arguments: NotificationScreenArguments(canPop: false),
+      arguments: NotificationScreenArguments(isNotification: false),
     )
   ];
   ///Image

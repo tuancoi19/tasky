@@ -6,10 +6,10 @@ import 'package:tasky/ui/widgets/appbar/app_bar_with_back_icon_widget.dart';
 import 'notification_screen_cubit.dart';
 
 class NotificationScreenArguments {
-  final bool canPop;
+  final bool isNotification;
 
   NotificationScreenArguments({
-    required this.canPop,
+    required this.isNotification,
   });
 }
 
@@ -28,7 +28,7 @@ class NotificationScreenPage extends StatelessWidget {
         return NotificationScreenCubit();
       },
       child: NotificationScreenChildPage(
-        canPop: arguments.canPop,
+        canPop: arguments.isNotification,
       ),
     );
   }

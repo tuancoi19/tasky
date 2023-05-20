@@ -82,7 +82,7 @@ class SharedPreferencesHelper {
     final value = jsonEncode(appUser.toJson());
     await prefs.setString(_keyAppUser, value);
   }
-  
+
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_keyAppUser);
