@@ -25,7 +25,8 @@ class SignupPage extends StatelessWidget {
         final AuthenticationCubit authenticationCubit =
             BlocProvider.of<AuthenticationCubit>(context);
         final AppCubit appCubit = BlocProvider.of<AppCubit>(context);
-        return SignupCubit(authenticationCubit: authenticationCubit, appCubit:  appCubit);
+        return SignupCubit(
+            authenticationCubit: authenticationCubit, appCubit: appCubit);
       },
       child: const SignInChildPage(),
     );
@@ -83,7 +84,7 @@ class _SignInChildPageState extends State<SignInChildPage> {
               );
             },
             height: 56.h,
-            title: S.current.log_in,
+            title: S.current.sign_up,
             cornerRadius: 15.r,
             textStyle: AppTextStyle.whiteS18Bold,
             backgroundColor: AppColors.primary,
@@ -106,8 +107,8 @@ class _SignInChildPageState extends State<SignInChildPage> {
               children: [
                 AppInput(
                   textEditingController: emailTextController,
-                  labelText: S.current.username_or_email,
-                  hintText: S.current.enter_your_username_or_email,
+                  labelText: S.current.email,
+                  hintText: S.current.enter_your_email,
                   borderRadius: 10,
                   autoTrim: true,
                   autoValidateMode: state.autoValidateMode,
@@ -161,5 +162,4 @@ class _SignInChildPageState extends State<SignInChildPage> {
     }
     return false;
   }
-
 }

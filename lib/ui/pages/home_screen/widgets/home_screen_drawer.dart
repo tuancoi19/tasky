@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tasky/blocs/app_cubit.dart';
+import 'package:get/get.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_images.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/router/route_config.dart';
+import 'package:tasky/ui/pages/edit_user_profile/edit_user_profile_page.dart';
 import 'package:tuple/tuple.dart';
 
-class MainScreenDrawer extends StatelessWidget {
-  final AppCubit appCubit;
+class HomeScreenDrawer extends StatelessWidget {
+  final Function() logout;
   final Function() onTap;
 
-  const MainScreenDrawer({
+  const HomeScreenDrawer({
     Key? key,
     required this.onTap,
-    required this.appCubit,
+    required this.logout,
   }) : super(key: key);
 
   @override
@@ -62,39 +64,57 @@ class MainScreenDrawer extends StatelessWidget {
   }
 
   Widget buildRowInfo() {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(7).r,
-          child: Image.asset(
-            AppImages.avatarTest,
-            fit: BoxFit.cover,
-            width: 68.h,
-            height: 68.h,
+    return InkWell(
+      onTap: () {
+        Get.toNamed(
+          RouteConfig.editUserProfile,
+          arguments: EditUserProfileArguments(fromSignUp: false),
+        );
+      },
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(7).r,
+            child: Image.asset(
+              AppImages.avatarTest,
+              fit: BoxFit.cover,
+              width: 68.h,
+              height: 68.h,
+            ),
           ),
-        ),
-        SizedBox(width: 20.w),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Loren Ipsum',
-              style: AppTextStyle.whiteS16W600,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
+          SizedBox(width: 20.w),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Loren Ipsum',
+                style: AppTextStyle.whiteS16W600,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+              Text(
+                'Loren Ipsum',
+                style: AppTextStyle.whiteO80S13W400,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+            ],
+          ),
+          SizedBox(width: 20.w),
+          SvgPicture.asset(
+            AppVectors.icEnter,
+            width: 24.h,
+            height: 24.h,
+            colorFilter: ColorFilter.mode(
+              Colors.white.withOpacity(0.8),
+              BlendMode.srcIn,
             ),
-            Text(
-              'Loren Ipsum',
-              style: AppTextStyle.whiteO80S13W400,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-            ),
-          ],
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 
@@ -109,7 +129,7 @@ class MainScreenDrawer extends StatelessWidget {
             opacity: 0.8,
             child: SvgPicture.asset(
               listOptions().elementAt(index).item2,
-              width: 24.w,
+              width: 24.h,
               height: 24.h,
               colorFilter: const ColorFilter.mode(
                 Colors.white,
@@ -129,13 +149,10 @@ class MainScreenDrawer extends StatelessWidget {
 
   List<Tuple3<String, String, Function()>> listOptions() {
     return [
-      Tuple3(S.current.manage_account, AppVectors.icUser, () {}),
       Tuple3(S.current.search_tasks, AppVectors.icSearch, () {}),
-      Tuple3(S.current.activity, AppVectors.icActivity, () {}),
+      Tuple3(S.current.activity, AppVectors.icCalendar, () {}),
       Tuple3(S.current.app_settings, AppVectors.icSettings, () {}),
-      Tuple3(S.current.logout, AppVectors.icLogout, () {
-        appCubit.signOut();
-      }),
+      Tuple3(S.current.logout, AppVectors.icLogout, logout),
     ];
   }
 }

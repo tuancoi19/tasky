@@ -1,3 +1,4 @@
+import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,8 +11,6 @@ import 'package:tasky/generated/l10n.dart';
 import 'blocs/app_cubit.dart';
 import 'blocs/setting/app_setting_cubit.dart';
 import 'common/app_themes.dart';
-import 'network/api_client.dart';
-import 'network/api_util.dart';
 import 'router/route_config.dart';
 
 class MyApp extends StatefulWidget {
@@ -24,11 +23,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late ApiClient _apiClient;
 
   @override
   void initState() {
-    _apiClient = ApiUtil.apiClient;
     super.initState();
   }
 
@@ -63,28 +60,31 @@ class _MyAppState extends State<MyApp> {
                 onTap: () {
                   _hideKeyboard(context);
                 },
-                child: GetMaterialApp(
-                  title: AppConfigs.appName,
-                  theme: AppThemes(
-                    isDarkMode: false,
-                    primaryColor: state.primaryColor,
-                  ).theme,
-                  // darkTheme: AppThemes(
-                  //   isDarkMode: true,
-                  //   primaryColor: state.primaryColor,
-                  // ).theme,
-                  themeMode: state.themeMode,
-                  initialRoute: RouteConfig.splash,
-                  getPages: RouteConfig.getPages,
-                  localizationsDelegates: const [
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                    S.delegate,
-                  ],
-                  locale: state.locale,
-                  supportedLocales: S.delegate.supportedLocales,
-                  debugShowCheckedModeBanner: false,
+                child: CalendarControllerProvider(
+                  controller: EventController(),
+                  child: GetMaterialApp(
+                    title: AppConfigs.appName,
+                    theme: AppThemes(
+                      isDarkMode: false,
+                      primaryColor: state.primaryColor,
+                    ).theme,
+                    // darkTheme: AppThemes(
+                    //   isDarkMode: true,
+                    //   primaryColor: state.primaryColor,
+                    // ).theme,
+                    themeMode: state.themeMode,
+                    initialRoute: RouteConfig.splash,
+                    getPages: RouteConfig.getPages,
+                    localizationsDelegates: const [
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                      S.delegate,
+                    ],
+                    locale: state.locale,
+                    supportedLocales: S.delegate.supportedLocales,
+                    debugShowCheckedModeBanner: false,
+                  ),
                 ),
               );
             },

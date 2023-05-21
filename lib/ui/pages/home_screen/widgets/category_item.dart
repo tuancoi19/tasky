@@ -5,10 +5,10 @@ import 'package:tasky/common/app_images.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
 
-class HomeTaskItem extends StatelessWidget {
+class CategoryItem extends StatelessWidget {
   final int index;
 
-  const HomeTaskItem({
+  const CategoryItem({
     Key? key,
     required this.index,
   }) : super(key: key);
@@ -54,14 +54,6 @@ class HomeTaskItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: 32.h,
-                height: 32.h,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5).r,
-                  color: Colors.white.withOpacity(0.2),
-                ),
-              ),
               SizedBox(height: 4.h),
               Text(
                 '0 ${S.current.tasks}',

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/database/secure_storage_helper.dart';
@@ -13,6 +12,7 @@ import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/models/entities/token_entity.dart';
 import 'package:tasky/models/entities/user/app_user.dart';
 import 'package:tasky/models/enums/load_status.dart';
+import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/commons/app_dialog.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
 import 'package:tasky/utils/logger.dart';
@@ -23,7 +23,9 @@ class AppCubit extends Cubit<AppState> {
   AppCubit() : super(const AppState());
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
   User? get currentUser => _firebaseAuth.currentUser;
+
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
   Future<void> signInWithEmailAndPassword({
@@ -52,7 +54,7 @@ class AppCubit extends Cubit<AppState> {
       User? user = credential.user;
       if (user != null) {
         logger.log('🙍‍🙍‍🙍‍ Login success  =->>>> : $user');
-         SharedPreferencesHelper.setSeenIntro(isSeen: true);
+        SharedPreferencesHelper.setSeenIntro(isSeen: true);
         return user;
       }
     } on FirebaseAuthException catch (e) {
@@ -83,13 +85,15 @@ class AppCubit extends Cubit<AppState> {
         ),
       );
     } catch (e) {
-      print(e);
+      logger.log('LOGIN FAILED! $e');
     }
     return null;
   }
 
   Future<void> signOut() async {
-    await _firebaseAuth.signOut();
+    await _firebaseAuth.signOut().then(
+          (value) => Get.offAllNamed(RouteConfig.splash),
+        );
   }
 
   void fetchProfile() {
@@ -131,18 +135,18 @@ class AppCubit extends Cubit<AppState> {
   }
 
   ///Sign Out
-  // void signOut() async {
-  //   emit(state.copyWith(signOutStatus: LoadStatus.loading));
-  //   try {
-  //     await Future.delayed(const Duration(seconds: 2));
-  //     final sharedPreferencesHelper = SharedPreferencesHelper();
-  //     final secureStorageHelper = SecureStorageHelper.instance;
-  //
-  //     secureStorageHelper.removeToken();
-  //     await sharedPreferencesHelper.logout();
-  //   } catch (e) {
-  //     logger.e(e);
-  //     emit(state.copyWith(signOutStatus: LoadStatus.failure));
-  //   }
-  // }
+// void signOut() async {
+//   emit(state.copyWith(signOutStatus: LoadStatus.loading));
+//   try {
+//     await Future.delayed(const Duration(seconds: 2));
+//     final sharedPreferencesHelper = SharedPreferencesHelper();
+//     final secureStorageHelper = SecureStorageHelper.instance;
+//
+//     secureStorageHelper.removeToken();
+//     await sharedPreferencesHelper.logout();
+//   } catch (e) {
+//     logger.e(e);
+//     emit(state.copyWith(signOutStatus: LoadStatus.failure));
+//   }
+// }
 }

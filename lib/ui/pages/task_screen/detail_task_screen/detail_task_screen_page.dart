@@ -1,3 +1,4 @@
+import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,7 +10,6 @@ import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/ui/pages/task_screen/detail_task_screen/widgets/detail_task_description.dart';
 import 'package:tasky/ui/pages/task_screen/detail_task_screen/widgets/detail_task_documents_list_view.dart';
 import 'package:tasky/ui/pages/task_screen/detail_task_screen/widgets/detail_task_tab_bar.dart';
-import 'package:tasky/ui/widgets/app_schedule.dart';
 import 'package:tasky/ui/widgets/app_task_page.dart';
 
 import 'detail_task_screen_cubit.dart';
@@ -150,7 +150,11 @@ class _DetailTaskScreenChildPageState extends State<DetailTaskScreenChildPage>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppSchedule(height: 252.h),
+        Container(
+          height: 252.h,
+          padding: const EdgeInsets.symmetric(vertical: 20).r,
+          child: const DayView(),
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24).r,
           child: DetailTaskTabBar(

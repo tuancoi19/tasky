@@ -103,5 +103,7 @@
   "date": "Thời gian",
   "note": "Ghi chú",
   "take_note": "Viết ghi chú",
-  "done": "Xong"
+  "done": "Xong",
+  "today_tasks": "Các tác vụ hôm nay",
+  "categories": "Các danh mục"
 }

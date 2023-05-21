@@ -15,4 +15,3 @@ class CustomWidget extends StatelessWidget {
     return Container();
   }
 }
-

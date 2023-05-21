@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/generated/l10n.dart';
-import 'package:tasky/ui/pages/home_screen/widgets/in_progress_list_view.dart';
 import 'package:tasky/ui/pages/login/login_page.dart';
-import 'package:tasky/ui/pages/notification_screen/notification_screen_page.dart';
 import 'package:tasky/ui/pages/signup/signup_page.dart';
 
 class AppConfigs {
@@ -63,11 +61,6 @@ class AppConfigs {
     SignupPage(),
   ];
 
-  static final taskStatusTabList = [
-    Tab(text: S.current.in_progress),
-    Tab(text: S.current.complete),
-  ];
-
   static final taskDetailTabList = [
     Tab(text: S.current.description),
     Tab(text: S.current.documents),
@@ -75,16 +68,10 @@ class AppConfigs {
 
   static final bottomNavigatorBarIconList = [
     AppVectors.icHome,
-    AppVectors.icActivity,
+    AppVectors.icCalendar,
     AppVectors.icUser,
   ];
 
-  static final homeScreenPageList = [
-    const InProgressListView(),
-    NotificationScreenPage(
-      arguments: NotificationScreenArguments(isNotification: false),
-    )
-  ];
   ///Image
   static const int imageSize = 10;
 }

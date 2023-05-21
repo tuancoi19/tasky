@@ -51,4 +51,6 @@ class AppVectors {
   static const String icTextFile = 'assets/vectors/ic_text_file.svg';
 
   static const String icImageFile = 'assets/vectors/ic_image_file.svg';
+
+  static const String icCalendar = 'assets/vectors/ic_calendar.svg';
 }

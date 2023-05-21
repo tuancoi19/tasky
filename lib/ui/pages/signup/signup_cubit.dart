@@ -12,11 +12,9 @@ import 'package:tasky/ui/pages/authentication/authentication_cubit.dart';
 part 'signup_state.dart';
 
 class SignupCubit extends Cubit<SignupState> {
-
   SignupCubit({
     required this.authenticationCubit,
     required this.appCubit,
-
   }) : super(const SignupState());
 
   final AuthenticationCubit authenticationCubit;
@@ -27,27 +25,27 @@ class SignupCubit extends Cubit<SignupState> {
     required String password,
   }) async {
     authenticationCubit.setLoading(LoadStatus.loading);
-      User? user = await appCubit
-          .createUserWithEmailAndPassword(mail: mail, password: password);
-      if(user != null){
-        final token = await user.getIdToken();
-        final AppUser appUser = AppUser(
-          avatarUrl: user.photoURL ?? '',
-          fcmToken: token,
-          fullName: user.displayName ?? '',
-          isUserLoggedIn: true,
-          userId: user.uid,
-        );
-        appCubit.saveSession(
-          currentAppUser: appUser,
-          refreshToken: user.refreshToken ?? '',
-          token: token,
-        );
-        authenticationCubit.setLoading(LoadStatus.success);
-        Get.offAllNamed(RouteConfig.mainScreen);
-      }else{
-        authenticationCubit.setLoading(LoadStatus.failure);
-      }
+    User? user = await appCubit.createUserWithEmailAndPassword(
+        mail: mail, password: password);
+    if (user != null) {
+      final token = await user.getIdToken();
+      final AppUser appUser = AppUser(
+        avatarUrl: user.photoURL ?? '',
+        fcmToken: token,
+        fullName: user.displayName ?? '',
+        isUserLoggedIn: true,
+        userId: user.uid,
+      );
+      appCubit.saveSession(
+        currentAppUser: appUser,
+        refreshToken: user.refreshToken ?? '',
+        token: token,
+      );
+      authenticationCubit.setLoading(LoadStatus.success);
+      Get.offAllNamed(RouteConfig.homeScreen);
+    } else {
+      authenticationCubit.setLoading(LoadStatus.failure);
+    }
   }
 
   void changeUsernameOrEmail({required String usernameOrEmail}) {

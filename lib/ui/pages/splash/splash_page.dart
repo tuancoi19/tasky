@@ -14,8 +14,8 @@ class SplashPage extends StatelessWidget {
       create: (context) {
         final AppCubit appCubit = BlocProvider.of<AppCubit>(context);
         return SplashCubit(
-            appCubit: appCubit,
-            );
+          appCubit: appCubit,
+        );
       },
       child: const SplashChildPage(),
     );

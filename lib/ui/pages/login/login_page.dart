@@ -136,8 +136,8 @@ class _LoginChildPageState extends State<LoginChildPage> {
             children: [
               AppInput(
                 textEditingController: usernameOrEmailTextController,
-                labelText: S.current.username_or_email,
-                hintText: S.current.enter_your_username_or_email,
+                labelText: S.current.email,
+                hintText: S.current.enter_your_email,
                 borderRadius: 10,
                 autoTrim: true,
                 autoValidateMode: state.autoValidateMode,
@@ -184,7 +184,7 @@ class _LoginChildPageState extends State<LoginChildPage> {
       password: passwordTextController.text,
       onLoginSuccessful: () {
         //save Token noti and push
-        Get.offAllNamed(RouteConfig.mainScreen);
+        Get.offAllNamed(RouteConfig.homeScreen);
       },
       onLoginFailed: (error) {
         AppDialog.showCustomDialog(

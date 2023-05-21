@@ -2,31 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_zoom_drawer/config.dart';
+import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:tasky/blocs/app_cubit.dart';
+import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
-import 'package:tasky/configs/app_configs.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/hello_text.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/home_app_bar.dart';
-import 'package:tasky/ui/pages/home_screen/widgets/home_list_view.dart';
-import 'package:tasky/ui/pages/home_screen/widgets/home_search_bar.dart';
-import 'package:tasky/ui/pages/home_screen/widgets/home_status_tab_bar.dart';
+import 'package:tasky/ui/pages/home_screen/widgets/category_list_view.dart';
+import 'package:tasky/ui/pages/home_screen/widgets/today_tasks_list_view.dart';
+import 'package:tasky/ui/pages/home_screen/widgets/home_screen_drawer.dart';
 
 import 'home_screen_cubit.dart';
 
-class HomeScreenArguments {
-  final ZoomDrawerController zoomDrawerController;
-
-  HomeScreenArguments({
-    required this.zoomDrawerController,
-  });
-}
+// class HomeScreenArguments {
+//   HomeScreenArguments();
+// }
 
 class HomeScreenPage extends StatelessWidget {
-  final HomeScreenArguments arguments;
+  // final HomeScreenArguments arguments;
 
   const HomeScreenPage({
     Key? key,
-    required this.arguments,
+    // required this.arguments,
   }) : super(key: key);
 
   @override
@@ -35,59 +33,72 @@ class HomeScreenPage extends StatelessWidget {
       create: (context) {
         return HomeScreenCubit();
       },
-      child: HomeScreenChildPage(
-        zoomDrawerController: arguments.zoomDrawerController,
-      ),
+      child: const HomeScreenChildPage(),
     );
   }
 }
 
 class HomeScreenChildPage extends StatefulWidget {
-  final ZoomDrawerController zoomDrawerController;
-
   const HomeScreenChildPage({
     Key? key,
-    required this.zoomDrawerController,
   }) : super(key: key);
 
   @override
   State<HomeScreenChildPage> createState() => _HomeScreenChildPageState();
 }
 
-class _HomeScreenChildPageState extends State<HomeScreenChildPage>
-    with TickerProviderStateMixin {
+class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
   late final HomeScreenCubit _cubit;
-  late final TabController _tabController;
+  late final ZoomDrawerController _zoomDrawerController;
+  late final AppCubit _appCubit;
 
   @override
   void initState() {
     super.initState();
     _cubit = BlocProvider.of(context);
+    _appCubit = BlocProvider.of(context);
     _cubit.loadInitialData();
-    _tabController = TabController(
-      length: AppConfigs.taskStatusTabList.length,
-      vsync: this,
-    );
+    _zoomDrawerController = ZoomDrawerController();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: HomeAppBar(
+    return ZoomDrawer(
+      controller: _zoomDrawerController,
+      moveMenuScreen: true,
+      disableDragGesture: true,
+      borderRadius: 20.r,
+      menuBackgroundColor: AppColors.drawerBackgroundColor,
+      slideWidth: 256.w,
+      menuScreenWidth: MediaQuery.of(context).size.width * 0.67,
+      showShadow: true,
+      angle: 0.0,
+      shadowLayer2Color: Colors.transparent,
+      mainScreenScale: 0.15,
+      menuScreen: HomeScreenDrawer(
         onTap: () {
-          widget.zoomDrawerController.open?.call();
+          _zoomDrawerController.close?.call();
+        },
+        logout: () {
+          _appCubit.signOut();
         },
       ),
-      body: SafeArea(
-        child: _buildBodyWidget(),
+      mainScreen: Scaffold(
+        appBar: HomeAppBar(
+          onTap: () {
+            _zoomDrawerController.open?.call();
+          },
+        ),
+        body: SafeArea(
+          child: _buildBodyWidget(),
+        ),
       ),
     );
   }
 
   Widget _buildBodyWidget() {
-    return SingleChildScrollView(
-      physics: const ClampingScrollPhysics(),
-      padding: const EdgeInsets.only(top: 12).r,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12).r,
       child: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Column(
@@ -100,28 +111,35 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage>
             SizedBox(height: 24.h),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24).r,
-              child: const HomeSearchBar(),
-            ),
-            SizedBox(height: 24.h),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24).r,
               child: Text(
-                S.current.my_tasks,
+                S.current.categories,
                 style: AppTextStyle.blackS15W500,
               ),
             ),
-            const HomeListView(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24).r,
-              child: HomeStatusTabBar(
-                tabController: _tabController,
+            const CategoryListView(),
+            Container(
+              width: 100.w,
+              padding: const EdgeInsets.only(left: 24).r,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    S.current.today_tasks,
+                    style: AppTextStyle.blackS15W500,
+                  ),
+                  SizedBox(height: 12.h),
+                  Divider(
+                    color: AppColors.primary,
+                    thickness: 3,
+                    height: 0,
+                    endIndent: 28.w,
+                  ),
+                ],
               ),
             ),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: AppConfigs.homeScreenPageList,
-              ),
+            const Expanded(
+              child: TodayTasksListView(),
             ),
           ],
         ),

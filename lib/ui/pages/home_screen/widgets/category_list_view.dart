@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tasky/ui/pages/home_screen/widgets/home_task_item.dart';
+import 'package:tasky/ui/pages/home_screen/widgets/category_item.dart';
 
-class HomeListView extends StatelessWidget {
-  const HomeListView({Key? key}) : super(key: key);
+class CategoryListView extends StatelessWidget {
+  const CategoryListView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +11,7 @@ class HomeListView extends StatelessWidget {
       height: 236.h,
       child: ListView.separated(
         itemBuilder: (context, index) {
-          return HomeTaskItem(index: index);
+          return CategoryItem(index: index);
         },
         separatorBuilder: (context, index) {
           return SizedBox(width: 16.w);

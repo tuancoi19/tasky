@@ -103,5 +103,7 @@
   "date": "Date",
   "note": "Note",
   "take_note": "Take note",
-  "done": "Done"
+  "done": "Done",
+  "today_tasks": "Today's tasks",
+  "categories": "Categories"
 }

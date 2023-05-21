@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_images.dart';
 import 'package:tasky/common/app_vectors.dart';
+import 'package:tasky/ui/pages/home_screen/widgets/home_search_bar.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function() onTap;
@@ -21,7 +22,6 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         height: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16).r,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             buildIconButton(
@@ -31,6 +31,11 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                   height: 24.h,
                 ),
                 onTap: onTap),
+            SizedBox(width: 16.w),
+            const Expanded(
+              child: HomeSearchBar(),
+            ),
+            SizedBox(width: 16.w),
             buildAccountRow(),
           ],
         ),

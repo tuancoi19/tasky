@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_images.dart';
 import 'package:tasky/common/app_text_styles.dart';
-import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/ui/commons/app_dialog.dart';
 import 'package:tasky/ui/widgets/appbar/app_bar_with_back_icon_widget.dart';
@@ -92,9 +90,8 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
         return !widget.arguments.fromSignUp;
       },
       child: Scaffold(
-        appBar: widget.arguments.fromSignUp
-            ? null
-            : const AppBarWithBackIconWidget(),
+        appBar:
+            AppBarWithBackIconWidget(fromSignUp: widget.arguments.fromSignUp),
         body: SafeArea(
           child: _buildBodyWidget(),
         ),
@@ -141,21 +138,9 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
                     ),
                   ),
                   SizedBox(height: 16.h),
-                  Text('Loren Ipsum', style: AppTextStyle.blackS17W600),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SvgPicture.asset(
-                        AppVectors.icVip,
-                        width: 20.w,
-                        height: 12.h,
-                      ),
-                      SizedBox(width: 8.w),
-                      Text(
-                        S.current.vip_user,
-                        style: AppTextStyle.primaryS14W400,
-                      )
-                    ],
+                  Text(
+                    'Loren Ipsum',
+                    style: AppTextStyle.blackS17W600,
                   ),
                   SizedBox(height: 40.h),
                   buildInfoColumn(state.autoValidateMode),

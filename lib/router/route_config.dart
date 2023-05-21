@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:tasky/ui/pages/authentication/authentication_page.dart';
 import 'package:tasky/ui/pages/dashboard/dashboard_page.dart';
-import 'package:tasky/ui/pages/main_screen/main_screen_page.dart';
+import 'package:tasky/ui/pages/home_screen/home_screen_page.dart';
 import 'package:tasky/ui/pages/edit_user_profile/edit_user_profile_page.dart';
 import 'package:tasky/ui/pages/onboarding/onboarding_page.dart';
 import 'package:tasky/ui/pages/splash/splash_page.dart';
@@ -17,9 +17,9 @@ class RouteConfig {
   static const String onboarding = '/onboarding';
   static const String authentication = '/authentication';
   static const String dashboard = '/dashboard';
-  static const String mainScreen = '/main_screen';
   static const String editUserProfile = '/edit_user_profile';
   static const String taskInformation = '/task_information';
+  static const String homeScreen = '/home_screen';
 
   ///Alias ​​mapping page
   static final List<GetPage> getPages = [
@@ -40,10 +40,6 @@ class RouteConfig {
       page: () => const AuthenticationPage(),
     ),
     GetPage(
-      name: mainScreen,
-      page: () => const MainScreenPage(),
-    ),
-    GetPage(
       name: dashboard,
       page: () => const DashboardPage(),
     ),
@@ -56,6 +52,12 @@ class RouteConfig {
       page: () => EditUserProfilePage(
         arguments: Get.arguments,
       ),
-    )
+    ),
+    GetPage(
+      name: homeScreen,
+      page: () => const HomeScreenPage(
+          // arguments: Get.arguments,
+          ),
+    ),
   ];
 }
