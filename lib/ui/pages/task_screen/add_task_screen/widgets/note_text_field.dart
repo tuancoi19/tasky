@@ -33,7 +33,7 @@ class NoteTextField extends StatelessWidget {
             onChanged: onChanged,
             controller: controller,
             style: AppTextStyle.blackO40S14W400,
-            maxLines: 5,
+            maxLines: 8,
             decoration: InputDecoration(
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 16).r,

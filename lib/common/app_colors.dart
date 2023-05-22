@@ -66,6 +66,8 @@ class AppColors {
     manageAccountIconColor,
   ];
 
+  static const Color addTaskBackgroundColor = Color(0xFF87C19B);
+
   static const Color drawerBackgroundColor = Color(0xFF0E1F53);
 
   static const Color manageAccountBackgroundColor = Color(0xFFA2F0E2);

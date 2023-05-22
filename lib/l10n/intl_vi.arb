@@ -105,5 +105,7 @@
   "take_note": "Viết ghi chú",
   "done": "Xong",
   "today_tasks": "Các tác vụ hôm nay",
-  "categories": "Các danh mục"
+  "categories": "Các danh mục",
+  "please_select_your_date": "Hãy chọn ngày mong muốn",
+  "category": "Danh mục"
 }

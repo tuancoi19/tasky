@@ -105,5 +105,7 @@
   "take_note": "Take note",
   "done": "Done",
   "today_tasks": "Today's tasks",
-  "categories": "Categories"
+  "categories": "Categories",
+  "please_select_your_date": "Please select your date",
+  "category": "Category"
 }

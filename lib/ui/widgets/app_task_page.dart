@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_images.dart';
 
 class AppTaskPage extends StatelessWidget {
@@ -20,10 +21,11 @@ class AppTaskPage extends StatelessWidget {
       children: [
         Container(
           decoration: const BoxDecoration(
+            color: AppColors.addTaskBackgroundColor,
             image: DecorationImage(
               fit: BoxFit.cover,
               image: AssetImage(
-                AppImages.bgDetailBlueTask,
+                AppImages.firstTaskOverlay,
               ),
               alignment: Alignment.topCenter,
             ),

@@ -23,4 +23,10 @@ class AppImages {
   static const bgDetailRedTask = 'assets/images/bg_detail_red_task.png';
 
   static const bgDetailGreenTask = 'assets/images/bg_detail_green_task.png';
+
+  static const firstTaskOverlay = 'assets/images/first_task_overlay.png';
+
+  static const secondTaskOverlay = 'assets/images/second_task_overlay.png';
+
+  static const thirdTaskOverlay = 'assets/images/third_task_overlay.png';
 }

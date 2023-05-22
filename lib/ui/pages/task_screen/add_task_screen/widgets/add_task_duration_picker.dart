@@ -4,13 +4,13 @@ import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/ui/widgets/app_time_picker.dart';
 
-class TaskInformationDurationPicker extends StatelessWidget {
+class AddTaskDurationPicker extends StatelessWidget {
   final Function(String?) startTimeOnChange;
   final Function(String?) endTimeOnChange;
   final TextEditingController startTimeController;
   final TextEditingController endTimeController;
 
-  const TaskInformationDurationPicker({
+  const AddTaskDurationPicker({
     Key? key,
     required this.startTimeOnChange,
     required this.endTimeOnChange,
@@ -33,7 +33,7 @@ class TaskInformationDurationPicker extends StatelessWidget {
         SizedBox(width: 24.w),
         Expanded(
           child: Divider(
-            color: AppColors.primary,
+            color: AppColors.addTaskBackgroundColor,
             thickness: 1,
             height: 56.h,
           ),
