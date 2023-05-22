@@ -117,8 +117,7 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
               ),
             ),
             const CategoryListView(),
-            Container(
-              width: 100.w,
+            Padding(
               padding: const EdgeInsets.only(left: 24).r,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,13 +126,16 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
                   Text(
                     S.current.today_tasks,
                     style: AppTextStyle.blackS15W500,
+                    maxLines: 1,
                   ),
                   SizedBox(height: 12.h),
-                  Divider(
-                    color: AppColors.primary,
-                    thickness: 3,
-                    height: 0,
-                    endIndent: 28.w,
+                  SizedBox(
+                    width: 60.w,
+                    child: const Divider(
+                      color: AppColors.primary,
+                      thickness: 3,
+                      height: 0,
+                    ),
                   ),
                 ],
               ),
