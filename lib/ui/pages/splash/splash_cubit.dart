@@ -18,6 +18,7 @@ class SplashCubit extends Cubit<SplashState> {
       if (user == null) {
         bool isSeenIntro = await SharedPreferencesHelper.isSeenIntro();
         route = isSeenIntro ? RouteConfig.authentication : RouteConfig.welcome;
+        SharedPreferencesHelper.setSeenIntro(isSeen: true);
       } else {
         route = RouteConfig.homeScreen;
       }

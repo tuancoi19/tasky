@@ -1,3 +1,6 @@
+import 'dart:ffi';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -23,22 +26,54 @@ class AppCubit extends Cubit<AppState> {
   AppCubit() : super(const AppState());
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final userCollection = FirebaseFirestore.instance.collection("users");
 
   User? get currentUser => _firebaseAuth.currentUser;
 
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
-  Future<void> signInWithEmailAndPassword({
+  Future<User?> logInWithEmailAndPassword({
     required String mail,
     required String password,
   }) async {
-    //lam lai !!
-    ///TODO
-    await _firebaseAuth.signInWithEmailAndPassword(
-      email: mail,
-      password: password,
-    );
-    SharedPreferencesHelper.setSeenIntro(isSeen: true);
+    try {
+      UserCredential credential =
+          await _firebaseAuth.signInWithEmailAndPassword(
+        email: mail,
+        password: password,
+      );
+      return credential.user;
+    } on FirebaseAuthException catch (e) {
+      AppDialog.showCustomDialog(
+        content: Padding(
+          padding: const EdgeInsets.all(16).r,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                e.message ?? '',
+                style: AppTextStyle.secondaryBlackO80S21W600,
+              ),
+              SizedBox(height: 32.h),
+              AppButton(
+                height: 56.h,
+                title: S.current.close,
+                cornerRadius: 15.r,
+                textStyle: AppTextStyle.whiteS18Bold,
+                backgroundColor: AppColors.primary,
+                onPressed: () {
+                  Get.back(closeOverlays: true);
+                },
+              )
+            ],
+          ),
+        ),
+      );
+    } catch (e) {
+      print(e);
+    }
+    return null;
   }
 
   Future<User?> createUserWithEmailAndPassword({
@@ -88,6 +123,33 @@ class AppCubit extends Cubit<AppState> {
       logger.log('LOGIN FAILED! $e');
     }
     return null;
+  }
+
+  Future saveUserToFirebase({
+    required User user,
+    required String userName,
+  }) async {
+    final newUser = {
+      'user_name': userName,
+      'email': user.email,
+      'create_at': user.metadata.creationTime,
+    };
+    try {
+      await userCollection.doc(user.uid).set(newUser).catchError((e) {
+        logger.e('❌❌ ERROR : Save new user to firebase - ${e}');
+      });
+    } catch (e) {
+      logger.e('❌❌ ERROR : Save new user to firebase - ${e}');
+    }
+  }
+
+  Future<String?> forgotPassword({required String email}) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      return null;
+    } on FirebaseAuthException catch (e) {
+      return e.message;
+    }
   }
 
   Future<void> signOut() async {

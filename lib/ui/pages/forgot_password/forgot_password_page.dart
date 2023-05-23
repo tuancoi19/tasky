@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/common/app_vectors.dart';
@@ -22,7 +23,8 @@ class ForgotPasswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        return ForgotPasswordCubit();
+        final AppCubit appCubit = BlocProvider.of<AppCubit>(context);
+        return ForgotPasswordCubit(appCubit: appCubit);
       },
       child: const ForgotPasswordChildPage(),
     );
@@ -39,16 +41,18 @@ class ForgotPasswordChildPage extends StatefulWidget {
 
 class _ForgotPasswordChildPageState extends State<ForgotPasswordChildPage> {
   late final ForgotPasswordCubit _cubit;
-  late final TextEditingController usernameOrEmailController;
+  late final TextEditingController textEmailController;
   late final TextEditingController verificationController;
+  late AppCubit appCubit;
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
     _cubit = BlocProvider.of(context);
+    appCubit = BlocProvider.of(context);
     _cubit.loadInitialData();
-    usernameOrEmailController = TextEditingController();
+    textEmailController = TextEditingController();
     verificationController = TextEditingController();
   }
 
@@ -60,7 +64,7 @@ class _ForgotPasswordChildPageState extends State<ForgotPasswordChildPage> {
   Widget _buildBodyWidget() {
     return BlocBuilder<ForgotPasswordCubit, ForgotPasswordState>(
       buildWhen: (previous, current) =>
-          previous.isVerification != current.isVerification ||
+
           previous.autoValidateMode != current.autoValidateMode,
       builder: (context, state) {
         return Padding(
@@ -75,18 +79,15 @@ class _ForgotPasswordChildPageState extends State<ForgotPasswordChildPage> {
               ),
               SizedBox(height: 8.h),
               Text(
-                state.isVerification
-                    ? S.current.forgot_password_description_1
-                    : S.current.forgot_password_description_2,
+                     S.current.forgot_password_description_1,
                 style: AppTextStyle.grayO40S15W400,
               ),
               SizedBox(height: 32.h),
               buildTextFormField(
-                isVerification: state.isVerification,
                 autoValidateMode: state.autoValidateMode,
               ),
               SizedBox(height: 24.h),
-              buildRowOption(state.isVerification),
+              buildRowOption(),
             ],
           ),
         );
@@ -95,7 +96,6 @@ class _ForgotPasswordChildPageState extends State<ForgotPasswordChildPage> {
   }
 
   Widget buildTextFormField({
-    required bool isVerification,
     required AutovalidateMode autoValidateMode,
   }) {
     return Form(
@@ -103,21 +103,17 @@ class _ForgotPasswordChildPageState extends State<ForgotPasswordChildPage> {
       autovalidateMode: autoValidateMode,
       child: AppInput(
         textEditingController:
-            isVerification ? verificationController : usernameOrEmailController,
+            textEmailController,
         color: AppColors.backgroundTextFieldColor,
         borderRadius: 10,
         autoTrim: true,
         autoValidateMode: autoValidateMode,
-        labelText: isVerification
-            ? S.current.verification
-            : S.current.username_or_email,
-        hintText: isVerification
-            ? S.current.enter_your_code
-            : S.current.enter_your_username_or_email,
+        labelText:
+            S.current.username_or_email,
+        hintText:
+             S.current.enter_your_username_or_email,
         onChanged: (value) {
-          isVerification
-              ? _cubit.changeCode(code: value)
-              : _cubit.changeUsernameOrEmail(usernameOrEmail: value);
+          _cubit.changEmail(email: value);
         },
         validator: (value) {
           //TODO: Làm thêm validator dành cho trường hợp nhập mã
@@ -127,7 +123,7 @@ class _ForgotPasswordChildPageState extends State<ForgotPasswordChildPage> {
     );
   }
 
-  Widget buildRowOption(bool isVerification) {
+  Widget buildRowOption() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -143,11 +139,7 @@ class _ForgotPasswordChildPageState extends State<ForgotPasswordChildPage> {
         ),
         AppIconButton(
           onPressed: () {
-            if (isVerification) {
-              _verify();
-            } else {
               _forgotPassword();
-            }
           },
           backgroundColor: AppColors.primary,
           cornerRadius: 10,
@@ -170,17 +162,15 @@ class _ForgotPasswordChildPageState extends State<ForgotPasswordChildPage> {
   @override
   void dispose() {
     _cubit.close();
-    usernameOrEmailController.dispose();
+    textEmailController.dispose();
     verificationController.dispose();
     super.dispose();
   }
 
   void _forgotPassword() {
-    if (!validateAndSave) {
-      _cubit.onValidateForm();
-    } else {
+
       _cubit.forgotPassword();
-    }
+
     FocusScope.of(context).unfocus();
   }
 
