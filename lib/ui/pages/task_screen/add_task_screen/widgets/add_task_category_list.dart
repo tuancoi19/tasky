@@ -1,93 +1,106 @@
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/generated/l10n.dart';
-
-class CategoryItem {
-  final Color color;
-  final String title;
-
-  CategoryItem({required this.color, required this.title});
-}
+import 'package:tasky/models/entities/category/category_entity.dart';
 
 class AddTaskCategoryList extends StatelessWidget {
-  const AddTaskCategoryList({super.key});
+  final List<CategoryEntity> listData;
+  final Function(CategoryEntity) onSelected;
+  final CategoryEntity selectedCategory;
+
+  const AddTaskCategoryList({
+    super.key,
+    required this.listData,
+    required this.onSelected,
+    required this.selectedCategory,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          S.current.category,
-          style: AppTextStyle.blackS15W500,
-        ),
-        SizedBox(height: 20.h),
-        Wrap(
-          spacing: 8.0,
-          runSpacing: 8.0,
-          children: items.map((item) {
-            return buildItem(color: item.color, title: item.title);
-          }).toList()
-            ..insert(
-              0,
-              buildItem(isAdd: true),
-            ),
-        ),
-      ],
-    );
-  }
-
-  Widget buildItem({
-    bool isAdd = false,
-    Color? color,
-    String? title,
-  }) {
-    return DottedBorder(
-      color: isAdd ? Colors.grey : color!,
-      borderType: BorderType.RRect,
-      radius: const Radius.circular(12),
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          isAdd
-              ? SvgPicture.asset(
-                  AppVectors.icPlus,
-                  width: 16,
-                  height: 16,
-                  colorFilter: const ColorFilter.mode(
-                    Colors.grey,
-                    BlendMode.srcIn,
-                  ),
-                )
-              : CircleAvatar(backgroundColor: color, radius: 8),
-          SizedBox(width: 8.w),
           Text(
-            title ?? 'Add Category',
-            style: TextStyle(
-              color: color,
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w400,
-            ),
+            S.current.category,
+            style: AppTextStyle.blackS15W500,
+          ),
+          SizedBox(height: 20.h),
+          Wrap(
+            spacing: 8.0.w,
+            runSpacing: 8.0.h,
+            children: listData.map(
+              (item) {
+                return buildItem(
+                  item: item,
+                );
+              },
+            ).toList()
+              ..insert(
+                0,
+                buildItem(),
+              ),
           ),
         ],
       ),
     );
   }
-}
 
-List<CategoryItem> items = [
-  CategoryItem(color: Colors.orange, title: '12412'),
-  CategoryItem(color: Colors.cyan, title: '23535'),
-  CategoryItem(color: Colors.red, title: '567658'),
-  CategoryItem(color: Colors.orange, title: '12412'),
-  CategoryItem(color: Colors.cyan, title: '23535'),
-  CategoryItem(color: Colors.red, title: '567658'),
-  CategoryItem(color: Colors.orange, title: '12412'),
-  CategoryItem(color: Colors.cyan, title: '23535'),
-  CategoryItem(color: Colors.red, title: '567658'),
-];
+  Widget buildItem({
+    CategoryEntity? item,
+  }) {
+    return InkWell(
+      onTap: () {
+        if (item == null) {
+          // Navigate to add category screen
+        } else {
+          onSelected(item);
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.all(8.0).r,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10).r,
+          border: Border.all(
+            color: item != null ? Color(item.color) : AppColors.border,
+          ),
+          color: item == selectedCategory ? Color(item!.color) : Colors.white,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (item == null) ...[
+              SvgPicture.asset(
+                AppVectors.icPlus,
+                width: 16,
+                height: 16,
+                colorFilter: const ColorFilter.mode(
+                  Colors.grey,
+                  BlendMode.srcIn,
+                ),
+              ),
+              SizedBox(width: 8.w),
+            ],
+            Text(
+              item?.title ?? 'Add Category',
+              style: TextStyle(
+                color: item != null
+                    ? item != selectedCategory
+                        ? Color(item.color)
+                        : Colors.white
+                    : AppColors.border,
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

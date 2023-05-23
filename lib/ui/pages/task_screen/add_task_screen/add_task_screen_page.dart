@@ -7,9 +7,11 @@ import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/models/entities/category/category_entity.dart';
 import 'package:tasky/ui/pages/task_screen/add_task_screen/widgets/add_task_category_list.dart';
 import 'package:tasky/ui/pages/task_screen/add_task_screen/widgets/add_task_date_picker.dart';
 import 'package:tasky/ui/pages/task_screen/add_task_screen/widgets/add_task_duration_picker.dart';
+import 'package:tasky/ui/pages/task_screen/add_task_screen/widgets/add_task_upload_documents.dart';
 import 'package:tasky/ui/pages/task_screen/add_task_screen/widgets/note_text_field.dart';
 import 'package:tasky/ui/pages/task_screen/add_task_screen/widgets/add_task_title_text_form_field.dart';
 import 'package:tasky/ui/widgets/app_task_page.dart';
@@ -84,13 +86,16 @@ class _AddTaskScreenChildPageState extends State<AddTaskScreenChildPage> {
 
   Widget _buildBodyWidget() {
     return BlocBuilder<AddTaskScreenCubit, AddTaskScreenState>(
+      buildWhen: (previous, current) =>
+          previous.autoValidateMode != current.autoValidateMode ||
+          previous.date != current.date,
       builder: (context, state) {
         return Form(
           key: _formKey,
           autovalidateMode: state.autoValidateMode,
           child: AppTaskPage(
             headerWidget: buildFormAddTaskHeader(dateHintText: state.date),
-            bodyWidget: buildFormAddTaskBody(state.autoValidateMode),
+            bodyWidget: buildFormAddTaskBody(),
             bodyHeight: 564.h,
           ),
         );
@@ -99,10 +104,8 @@ class _AddTaskScreenChildPageState extends State<AddTaskScreenChildPage> {
   }
 
   Widget buildFormAddTaskHeader({required String? dateHintText}) {
-    return Container(
+    return Padding(
       padding: const EdgeInsets.all(28).r,
-      width: double.infinity,
-      height: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -126,7 +129,7 @@ class _AddTaskScreenChildPageState extends State<AddTaskScreenChildPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                flex: 4,
+                flex: 3,
                 child: AddTaskTitleTextFormField(
                   controller: titleController,
                   onChanged: (value) {
@@ -151,54 +154,81 @@ class _AddTaskScreenChildPageState extends State<AddTaskScreenChildPage> {
     );
   }
 
-  Widget buildFormAddTaskBody(AutovalidateMode autoValidateMode) {
-    return SizedBox(
-      height: double.infinity,
-      child: Stack(
-        children: [
-          SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(24, 32, 24, 88).r,
-            child: Column(
-              children: [
-                AddTaskDurationPicker(
-                  startTimeOnChange: (value) {
-                    _cubit.changeStartTime(startTime: value ?? '');
-                  },
-                  endTimeOnChange: (value) {
-                    _cubit.changeEndTime(endTime: value ?? '');
-                  },
-                  startTimeController: startTimeController,
-                  endTimeController: endTimeController,
-                ),
-                SizedBox(height: 32.h),
-                NoteTextField(
-                  onChanged: (value) {
-                    _cubit.changeNote(note: value);
-                  },
-                  controller: noteController,
-                ),
-                SizedBox(height: 32.h),
-                const AddTaskCategoryList(),
-              ],
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              color: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              child: AppButton(
-                onPressed: () {},
-                title: S.current.done,
-                height: 56.h,
-                textStyle: AppTextStyle.whiteS18Bold,
-                backgroundColor: AppColors.addTaskBackgroundColor,
-                cornerRadius: 15.r,
+  Widget buildFormAddTaskBody() {
+    return BlocBuilder<AddTaskScreenCubit, AddTaskScreenState>(
+      builder: (context, state) {
+        return Stack(
+          children: [
+            SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24,
+                vertical: 32,
+              ).r,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AddTaskDurationPicker(
+                    startTimeOnChange: (value) {
+                      _cubit.changeStartTime(startTime: value ?? '');
+                    },
+                    endTimeOnChange: (value) {
+                      _cubit.changeEndTime(endTime: value ?? '');
+                    },
+                    startTimeController: startTimeController,
+                    endTimeController: endTimeController,
+                  ),
+                  SizedBox(height: 32.h),
+                  NoteTextField(
+                    onChanged: (value) {
+                      _cubit.changeNote(note: value);
+                    },
+                    controller: noteController,
+                  ),
+                  SizedBox(height: 32.h),
+                  AddTaskCategoryList(
+                    listData: state.categoryList ?? [],
+                    onSelected: (value) {
+                      _cubit.changeCategory(category: value);
+                    },
+                    selectedCategory: state.category ??
+                        CategoryEntity(
+                          title: '',
+                          color: 0,
+                        ),
+                  ),
+                  SizedBox(height: 32.h),
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: AddTaskUploadDocuments(
+                      documentList: state.documentList ?? [],
+                      onDelete: (value) {
+                        _cubit.changeDocumentList(documentList: value);
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 88.h),
+                ],
               ),
             ),
-          )
-        ],
-      ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                color: Colors.white,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16).r,
+                child: AppButton(
+                  onPressed: () {},
+                  title: S.current.done,
+                  height: 56.h,
+                  textStyle: AppTextStyle.whiteS18Bold,
+                  backgroundColor: AppColors.addTaskBackgroundColor,
+                  cornerRadius: 15.r,
+                ),
+              ),
+            )
+          ],
+        );
+      },
     );
   }
 

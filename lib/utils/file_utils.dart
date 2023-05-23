@@ -8,4 +8,8 @@ class FileUtils {
     double sizeInMb = sizeInBytes / (1024 * 1024);
     return sizeInMb;
   }
+
+  static String getDocumentName(String document) {
+    return document.split('/').last;
+  }
 }

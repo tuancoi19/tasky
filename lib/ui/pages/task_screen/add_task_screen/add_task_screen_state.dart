@@ -8,6 +8,9 @@ class AddTaskScreenState extends Equatable {
   final String? endTime;
   final String? date;
   final String? note;
+  final List<CategoryEntity>? categoryList;
+  final CategoryEntity? category;
+  final List<String>? documentList;
 
   const AddTaskScreenState({
     this.loadDataStatus = LoadStatus.initial,
@@ -17,6 +20,9 @@ class AddTaskScreenState extends Equatable {
     this.endTime,
     this.date,
     this.note,
+    this.categoryList,
+    this.category,
+    this.documentList,
   });
 
   @override
@@ -28,6 +34,9 @@ class AddTaskScreenState extends Equatable {
         endTime,
         date,
         note,
+        categoryList,
+        category,
+        documentList,
       ];
 
   AddTaskScreenState copyWith({
@@ -38,6 +47,9 @@ class AddTaskScreenState extends Equatable {
     String? endTime,
     String? date,
     String? note,
+    List<CategoryEntity>? categoryList,
+    CategoryEntity? category,
+    List<String>? documentList,
   }) {
     return AddTaskScreenState(
       loadDataStatus: loadDataStatus ?? this.loadDataStatus,
@@ -47,6 +59,9 @@ class AddTaskScreenState extends Equatable {
       endTime: endTime ?? this.endTime,
       date: date ?? this.date,
       note: note ?? this.note,
+      categoryList: categoryList ?? this.categoryList,
+      category: category ?? this.category,
+      documentList: documentList ?? this.documentList,
     );
   }
 }
