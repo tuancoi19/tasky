@@ -1,6 +1,6 @@
-part of 'add_task_screen_cubit.dart';
+part of 'task_screen_cubit.dart';
 
-class AddTaskScreenState extends Equatable {
+class TaskScreenState extends Equatable {
   final LoadStatus loadDataStatus;
   final String? title;
   final AutovalidateMode autoValidateMode;
@@ -11,8 +11,9 @@ class AddTaskScreenState extends Equatable {
   final List<CategoryEntity>? categoryList;
   final CategoryEntity? category;
   final List<String>? documentList;
+  final Color themeColor;
 
-  const AddTaskScreenState({
+  const TaskScreenState({
     this.loadDataStatus = LoadStatus.initial,
     this.title,
     this.autoValidateMode = AutovalidateMode.disabled,
@@ -23,6 +24,7 @@ class AddTaskScreenState extends Equatable {
     this.categoryList,
     this.category,
     this.documentList,
+    this.themeColor = AppColors.primary,
   });
 
   @override
@@ -37,9 +39,10 @@ class AddTaskScreenState extends Equatable {
         categoryList,
         category,
         documentList,
+        themeColor,
       ];
 
-  AddTaskScreenState copyWith({
+  TaskScreenState copyWith({
     LoadStatus? loadDataStatus,
     String? title,
     AutovalidateMode? autoValidateMode,
@@ -50,8 +53,9 @@ class AddTaskScreenState extends Equatable {
     List<CategoryEntity>? categoryList,
     CategoryEntity? category,
     List<String>? documentList,
+    Color? themeColor,
   }) {
-    return AddTaskScreenState(
+    return TaskScreenState(
       loadDataStatus: loadDataStatus ?? this.loadDataStatus,
       title: title ?? this.title,
       autoValidateMode: autoValidateMode ?? this.autoValidateMode,
@@ -62,6 +66,7 @@ class AddTaskScreenState extends Equatable {
       categoryList: categoryList ?? this.categoryList,
       category: category ?? this.category,
       documentList: documentList ?? this.documentList,
+      themeColor: themeColor ?? this.themeColor,
     );
   }
 }

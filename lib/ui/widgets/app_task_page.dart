@@ -7,12 +7,14 @@ class AppTaskPage extends StatelessWidget {
   final Widget headerWidget;
   final Widget bodyWidget;
   final double bodyHeight;
+  final Color? headerColor;
 
   const AppTaskPage({
     Key? key,
     required this.headerWidget,
     required this.bodyWidget,
     required this.bodyHeight,
+    this.headerColor,
   }) : super(key: key);
 
   @override
@@ -20,9 +22,9 @@ class AppTaskPage extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          decoration: const BoxDecoration(
-            color: AppColors.addTaskBackgroundColor,
-            image: DecorationImage(
+          decoration: BoxDecoration(
+            color: headerColor ?? AppColors.primary,
+            image: const DecorationImage(
               fit: BoxFit.cover,
               image: AssetImage(
                 AppImages.firstTaskOverlay,

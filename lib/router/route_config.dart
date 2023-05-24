@@ -5,7 +5,7 @@ import 'package:tasky/ui/pages/home_screen/home_screen_page.dart';
 import 'package:tasky/ui/pages/edit_user_profile/edit_user_profile_page.dart';
 import 'package:tasky/ui/pages/onboarding/onboarding_page.dart';
 import 'package:tasky/ui/pages/splash/splash_page.dart';
-import 'package:tasky/ui/pages/task_screen/add_task_screen/add_task_screen_page.dart';
+import 'package:tasky/ui/pages/task_screen/task_screen_page.dart';
 import 'package:tasky/ui/pages/welcome/welcome_page.dart';
 
 class RouteConfig {
@@ -58,7 +58,7 @@ class RouteConfig {
     ),
     GetPage(
       name: addTaskScreen,
-      page: () => const AddTaskScreenPage(),
+      page: () => const TaskScreenPage(),
     ),
   ];
 }

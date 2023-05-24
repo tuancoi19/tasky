@@ -41,14 +41,26 @@ class AppConfigs {
   ///Max file
   static const maxAttachFile = 5;
 
-  static const List<String> listImageFileType = ['PNG', 'JPEG', 'JPG'];
+  static const List<String> listImageFileType = [
+    'PNG',
+    'png',
+    'JPEG',
+    'jpeg',
+    'JPG',
+    'jpg',
+  ];
 
   static const List<String> listTextFileType = [
     'DOC',
+    'doc',
     'XLS',
+    'xls',
     'DOCX',
+    'docx',
     'XLSX',
-    'PDF'
+    'xlsx',
+    'PDF',
+    'pdf',
   ];
 
   static final authTabList = [

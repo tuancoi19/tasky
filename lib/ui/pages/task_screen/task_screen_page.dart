@@ -3,34 +3,33 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/models/entities/category/category_entity.dart';
-import 'package:tasky/ui/pages/task_screen/add_task_screen/widgets/add_task_category_list.dart';
-import 'package:tasky/ui/pages/task_screen/add_task_screen/widgets/add_task_date_picker.dart';
-import 'package:tasky/ui/pages/task_screen/add_task_screen/widgets/add_task_duration_picker.dart';
-import 'package:tasky/ui/pages/task_screen/add_task_screen/widgets/add_task_upload_documents.dart';
-import 'package:tasky/ui/pages/task_screen/add_task_screen/widgets/note_text_field.dart';
-import 'package:tasky/ui/pages/task_screen/add_task_screen/widgets/add_task_title_text_form_field.dart';
+import 'package:tasky/ui/pages/task_screen/widgets/task_category_list.dart';
+import 'package:tasky/ui/pages/task_screen/widgets/task_date_picker.dart';
+import 'package:tasky/ui/pages/task_screen/widgets/task_duration_picker.dart';
+import 'package:tasky/ui/pages/task_screen/widgets/task_title_text_form_field.dart';
+import 'package:tasky/ui/pages/task_screen/widgets/task_upload_documents.dart';
+import 'package:tasky/ui/pages/task_screen/widgets/note_text_field.dart';
 import 'package:tasky/ui/widgets/app_task_page.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
 
-import 'add_task_screen_cubit.dart';
+import 'task_screen_cubit.dart';
 
-// class AddTaskScreenArguments {
+// class TaskScreenArguments {
 //   String param;
 //
-//   AddTaskScreenArguments({
+//   TaskScreenArguments({
 //     required this.param,
 //   });
 // }
 
-class AddTaskScreenPage extends StatelessWidget {
-  // final AddTaskScreenArguments arguments;
+class TaskScreenPage extends StatelessWidget {
+  // final TaskScreenArguments arguments;
 
-  const AddTaskScreenPage({
+  const TaskScreenPage({
     Key? key,
     // required this.arguments,
   }) : super(key: key);
@@ -39,22 +38,22 @@ class AddTaskScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        return AddTaskScreenCubit();
+        return TaskScreenCubit();
       },
-      child: const AddTaskScreenChildPage(),
+      child: const TaskScreenChildPage(),
     );
   }
 }
 
-class AddTaskScreenChildPage extends StatefulWidget {
-  const AddTaskScreenChildPage({Key? key}) : super(key: key);
+class TaskScreenChildPage extends StatefulWidget {
+  const TaskScreenChildPage({Key? key}) : super(key: key);
 
   @override
-  State<AddTaskScreenChildPage> createState() => _AddTaskScreenChildPageState();
+  State<TaskScreenChildPage> createState() => _TaskScreenChildPageState();
 }
 
-class _AddTaskScreenChildPageState extends State<AddTaskScreenChildPage> {
-  late final AddTaskScreenCubit _cubit;
+class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
+  late final TaskScreenCubit _cubit;
   late TextEditingController titleController;
   late TextEditingController startTimeController;
   late TextEditingController endTimeController;
@@ -85,10 +84,7 @@ class _AddTaskScreenChildPageState extends State<AddTaskScreenChildPage> {
   }
 
   Widget _buildBodyWidget() {
-    return BlocBuilder<AddTaskScreenCubit, AddTaskScreenState>(
-      buildWhen: (previous, current) =>
-          previous.autoValidateMode != current.autoValidateMode ||
-          previous.date != current.date,
+    return BlocBuilder<TaskScreenCubit, TaskScreenState>(
       builder: (context, state) {
         return Form(
           key: _formKey,
@@ -97,6 +93,7 @@ class _AddTaskScreenChildPageState extends State<AddTaskScreenChildPage> {
             headerWidget: buildFormAddTaskHeader(dateHintText: state.date),
             bodyWidget: buildFormAddTaskBody(),
             bodyHeight: 564.h,
+            headerColor: state.themeColor,
           ),
         );
       },
@@ -130,7 +127,7 @@ class _AddTaskScreenChildPageState extends State<AddTaskScreenChildPage> {
             children: [
               Expanded(
                 flex: 3,
-                child: AddTaskTitleTextFormField(
+                child: TaskTitleTextFormField(
                   controller: titleController,
                   onChanged: (value) {
                     _cubit.changeTitle(title: value);
@@ -139,7 +136,7 @@ class _AddTaskScreenChildPageState extends State<AddTaskScreenChildPage> {
               ),
               Expanded(
                 flex: 1,
-                child: AddTaskDatePicker(
+                child: TaskDatePicker(
                   controller: dateController,
                   whenComplete: (value) {
                     _cubit.changeDate(date: value);
@@ -155,7 +152,7 @@ class _AddTaskScreenChildPageState extends State<AddTaskScreenChildPage> {
   }
 
   Widget buildFormAddTaskBody() {
-    return BlocBuilder<AddTaskScreenCubit, AddTaskScreenState>(
+    return BlocBuilder<TaskScreenCubit, TaskScreenState>(
       builder: (context, state) {
         return Stack(
           children: [
@@ -167,7 +164,7 @@ class _AddTaskScreenChildPageState extends State<AddTaskScreenChildPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  AddTaskDurationPicker(
+                  TaskDurationPicker(
                     startTimeOnChange: (value) {
                       _cubit.changeStartTime(startTime: value ?? '');
                     },
@@ -176,6 +173,7 @@ class _AddTaskScreenChildPageState extends State<AddTaskScreenChildPage> {
                     },
                     startTimeController: startTimeController,
                     endTimeController: endTimeController,
+                    color: state.themeColor,
                   ),
                   SizedBox(height: 32.h),
                   NoteTextField(
@@ -183,9 +181,10 @@ class _AddTaskScreenChildPageState extends State<AddTaskScreenChildPage> {
                       _cubit.changeNote(note: value);
                     },
                     controller: noteController,
+                    color: state.themeColor,
                   ),
                   SizedBox(height: 32.h),
-                  AddTaskCategoryList(
+                  TaskCategoryList(
                     listData: state.categoryList ?? [],
                     onSelected: (value) {
                       _cubit.changeCategory(category: value);
@@ -199,11 +198,18 @@ class _AddTaskScreenChildPageState extends State<AddTaskScreenChildPage> {
                   SizedBox(height: 32.h),
                   Flexible(
                     fit: FlexFit.loose,
-                    child: AddTaskUploadDocuments(
+                    child: TaskUploadDocuments(
                       documentList: state.documentList ?? [],
                       onDelete: (value) {
                         _cubit.changeDocumentList(documentList: value);
                       },
+                      sendImage: (value) {
+                        _cubit.sendImage(file: value);
+                      },
+                      sendTextFile: (value) {
+                        _cubit.sendTextFile(file: value);
+                      },
+                      buttonColor: state.themeColor,
                     ),
                   ),
                   SizedBox(height: 88.h),
@@ -221,7 +227,7 @@ class _AddTaskScreenChildPageState extends State<AddTaskScreenChildPage> {
                   title: S.current.done,
                   height: 56.h,
                   textStyle: AppTextStyle.whiteS18Bold,
-                  backgroundColor: AppColors.addTaskBackgroundColor,
+                  backgroundColor: state.themeColor,
                   cornerRadius: 15.r,
                 ),
               ),

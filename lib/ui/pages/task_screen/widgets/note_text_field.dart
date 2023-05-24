@@ -7,11 +7,13 @@ import 'package:tasky/generated/l10n.dart';
 class NoteTextField extends StatelessWidget {
   final Function(String) onChanged;
   final TextEditingController controller;
+  final Color color;
 
   const NoteTextField({
     Key? key,
     required this.onChanged,
     required this.controller,
+    required this.color,
   }) : super(key: key);
 
   @override
@@ -43,8 +45,8 @@ class NoteTextField extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10).r,
-                borderSide: const BorderSide(
-                  color: AppColors.primary,
+                borderSide: BorderSide(
+                  color: color,
                 ),
               ),
               disabledBorder: InputBorder.none,
@@ -54,7 +56,7 @@ class NoteTextField extends StatelessWidget {
               isDense: true,
               filled: true,
             ),
-            cursorColor: AppColors.primary,
+            cursorColor: color,
           ),
         ),
       ],

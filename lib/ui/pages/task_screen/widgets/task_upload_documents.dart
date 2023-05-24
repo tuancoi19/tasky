@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,17 +8,25 @@ import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/configs/app_configs.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/ui/commons/app_bottom_sheet.dart';
+import 'package:tasky/ui/pages/task_screen/widgets/task_upload_document_options.dart';
 import 'package:tasky/ui/widgets/app_title_with_add_button.dart';
 import 'package:tasky/utils/file_utils.dart';
 
-class AddTaskUploadDocuments extends StatelessWidget {
+class TaskUploadDocuments extends StatelessWidget {
   final List<String> documentList;
   final Function(List<String>) onDelete;
+  final Function(File) sendImage;
+  final Function(File) sendTextFile;
+  final Color buttonColor;
 
-  const AddTaskUploadDocuments({
+  const TaskUploadDocuments({
     Key? key,
     required this.documentList,
     required this.onDelete,
+    required this.sendImage,
+    required this.sendTextFile,
+    required this.buttonColor,
   }) : super(key: key);
 
   @override
@@ -25,9 +35,17 @@ class AddTaskUploadDocuments extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         AppTitleWithAddButton(
-          onTap: () {},
+          onTap: () {
+            AppBottomSheet.show(
+              TaskUploadDocumentOptions(
+                sendImage: sendImage,
+                sendTextFile: sendTextFile,
+              ),
+            );
+          },
+          color: buttonColor,
           titleWidget: Text(
-            S.current.category,
+            S.current.documents,
             style: AppTextStyle.blackS15W500,
           ),
         ),
@@ -95,7 +113,7 @@ class AddTaskUploadDocuments extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  '${splitDocumentName(document).last} file',
+                  '${splitDocumentName(document).last.toUpperCase()} file',
                   style: AppTextStyle.blackO50S13W400,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

@@ -1,13 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/models/entities/category/category_entity.dart';
 import 'package:tasky/models/enums/load_status.dart';
 
-part 'add_task_screen_state.dart';
+part 'task_screen_state.dart';
 
-class AddTaskScreenCubit extends Cubit<AddTaskScreenState> {
-  AddTaskScreenCubit() : super(const AddTaskScreenState());
+class TaskScreenCubit extends Cubit<TaskScreenState> {
+  TaskScreenCubit() : super(const TaskScreenState());
 
   Future<void> loadInitialData() async {
     emit(state.copyWith(loadDataStatus: LoadStatus.initial));
@@ -65,9 +68,26 @@ class AddTaskScreenCubit extends Cubit<AddTaskScreenState> {
 
   void changeCategory({required CategoryEntity category}) {
     emit(state.copyWith(category: category));
+    changeThemeColor(colorCode: category.color);
   }
 
   void changeDocumentList({required List<String> documentList}) {
     emit(state.copyWith(documentList: documentList));
+  }
+
+  void sendImage({required File file}) {
+    final List<String> addedList = [...?state.documentList];
+    addedList.add(file.uri.pathSegments.last);
+    changeDocumentList(documentList: addedList);
+  }
+
+  void sendTextFile({required File file}) {
+    final List<String> addedList = [...?state.documentList];
+    addedList.add(file.uri.pathSegments.last);
+    changeDocumentList(documentList: addedList);
+  }
+
+  void changeThemeColor({required int colorCode}) {
+    emit(state.copyWith(themeColor: Color(colorCode)));
   }
 }

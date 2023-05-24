@@ -3,13 +3,13 @@ import 'package:intl/intl.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/ui/commons/app_date_time_picker.dart';
 
-class AddTaskDatePicker extends StatelessWidget {
+class TaskDatePicker extends StatelessWidget {
   final TextEditingController controller;
   final Function(String) whenComplete;
   final String? hintText;
   final DateFormat _dateFormat = DateFormat('dd MMM, yyyy');
 
-  AddTaskDatePicker({
+  TaskDatePicker({
     Key? key,
     required this.controller,
     required this.whenComplete,
@@ -35,9 +35,10 @@ class AddTaskDatePicker extends StatelessWidget {
         }
       },
       decoration: InputDecoration(
-          hintText: hintText ?? _dateFormat.format(DateTime.now()),
-          hintStyle: AppTextStyle.whiteO60S14W500,
-          border: InputBorder.none),
+        hintText: hintText ?? _dateFormat.format(DateTime.now()),
+        hintStyle: AppTextStyle.whiteO60S14W500,
+        border: InputBorder.none,
+      ),
     );
   }
 }

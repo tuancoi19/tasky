@@ -7,12 +7,12 @@ import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/models/entities/category/category_entity.dart';
 
-class AddTaskCategoryList extends StatelessWidget {
+class TaskCategoryList extends StatelessWidget {
   final List<CategoryEntity> listData;
   final Function(CategoryEntity) onSelected;
   final CategoryEntity selectedCategory;
 
-  const AddTaskCategoryList({
+  const TaskCategoryList({
     super.key,
     required this.listData,
     required this.onSelected,

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
 
-class AddTaskTitleTextFormField extends StatelessWidget {
+class TaskTitleTextFormField extends StatelessWidget {
   final TextEditingController controller;
   final Function(String) onChanged;
 
-  const AddTaskTitleTextFormField({
+  const TaskTitleTextFormField({
     Key? key,
     required this.controller,
     required this.onChanged,

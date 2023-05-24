@@ -7,10 +7,12 @@ import 'package:tasky/ui/widgets/buttons/app_icon_button.dart';
 
 class HomeAddButton extends StatelessWidget {
   final Function() onTap;
+  final Color? color;
 
   const HomeAddButton({
     Key? key,
     required this.onTap,
+    this.color,
   }) : super(key: key);
 
   @override
@@ -47,7 +49,7 @@ class HomeAddButton extends StatelessWidget {
               height: 16.h,
             ),
             cornerRadius: 10,
-            backgroundColor: AppColors.primary,
+            backgroundColor: color ?? AppColors.primary,
           ),
         ],
       ),

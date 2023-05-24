@@ -68,13 +68,11 @@
   "activity": "Activity",
   "app_settings": "App Settings",
   "logout": "Logout",
-  "vip_user": "VIP User",
   "general": "General",
   "notification": "Notification",
   "become_an_vip_user": "Become An VIP User",
   "help_center": "Help Center",
   "about_us": "About Us",
-  "privacy": "Privacy",
   "upload_photo": "Upload photo",
   "take_photo": "Take a photo",
   "choose_from_library": "Choose from library",
@@ -86,7 +84,6 @@
   "first_name": "First Name",
   "enter_your_last_name": "Enter your last name",
   "enter_your_first_name": "Enter your first name",
-  "done": "Done",
   "vip_user": "VIP User",
   "display_name": "Display Name",
   "enter_your_display_name": "Enter your display name",
@@ -107,5 +104,10 @@
   "today_tasks": "Today's tasks",
   "categories": "Categories",
   "please_select_your_date": "Please select your date",
-  "category": "Category"
+  "category": "Category",
+  "choose_from_gallery": "Choose from gallery",
+  "upload_image": "Upload image",
+  "upload_file": "Upload file",
+  "please_select_your_start_time": "Please select your start time",
+  "please_select_your_end_time": "Please select your end time"
 }
