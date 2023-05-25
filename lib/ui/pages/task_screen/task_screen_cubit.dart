@@ -1,16 +1,24 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_colors.dart';
+import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/models/entities/category/category_entity.dart';
+import 'package:tasky/models/entities/task/task_entity.dart';
 import 'package:tasky/models/enums/load_status.dart';
 
 part 'task_screen_state.dart';
 
 class TaskScreenCubit extends Cubit<TaskScreenState> {
-  TaskScreenCubit() : super(const TaskScreenState());
+  final AppCubit appCubit;
+
+  TaskScreenCubit({required this.appCubit}) : super(const TaskScreenState());
 
   Future<void> loadInitialData() async {
     emit(state.copyWith(loadDataStatus: LoadStatus.initial));
@@ -42,24 +50,36 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
     }
   }
 
-  void changeTitle({required String title}) {
+  Future<void> changeTitle({required String title}) async {
     emit(state.copyWith(title: title));
+    if (title.length == 50) {
+      await Fluttertoast.showToast(
+        msg: S.current.please_do_not_enter_more_than_characters(50),
+        toastLength: Toast.LENGTH_LONG,
+      );
+    }
   }
 
-  void changeStartTime({required String startTime}) {
+  void changeStartTime({required TimeOfDay startTime}) {
     emit(state.copyWith(startTime: startTime));
   }
 
-  void changeEndTime({required String endTime}) {
+  void changeEndTime({required TimeOfDay endTime}) {
     emit(state.copyWith(endTime: endTime));
   }
 
-  void changeDate({required String date}) {
+  void changeDate({required DateTime date}) {
     emit(state.copyWith(date: date));
   }
 
-  void changeNote({required String note}) {
+  Future<void> changeNote({required String note}) async {
     emit(state.copyWith(note: note));
+    if (note.length == 1000) {
+      await Fluttertoast.showToast(
+        msg: S.current.please_do_not_enter_more_than_characters(1000),
+        toastLength: Toast.LENGTH_LONG,
+      );
+    }
   }
 
   void changeCategoryList({required List<CategoryEntity> categoryList}) {
@@ -89,5 +109,33 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
 
   void changeThemeColor({required int colorCode}) {
     emit(state.copyWith(themeColor: Color(colorCode)));
+  }
+
+  void setAutoValidateMode({required AutovalidateMode autoValidateMode}) {
+    emit(state.copyWith(autoValidateMode: autoValidateMode));
+  }
+
+  void addTaskToFirebase() {
+    emit(state.copyWith(isLoading: true));
+    try {
+      final TaskEntity task = TaskEntity(
+        title: state.title ?? '',
+        note: state.note ?? '',
+        documents: state.documentList ?? [],
+        date: state.date.toString(),
+        start: state.startTime.toString(),
+        end: state.endTime.toString(),
+      );
+
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(appCubit.currentUser?.uid)
+          .set({
+        'task_list': FieldValue.arrayUnion([task.toJson()])
+      });
+    } catch (e) {
+      print(e);
+    }
+    emit(state.copyWith(isLoading: false));
   }
 }

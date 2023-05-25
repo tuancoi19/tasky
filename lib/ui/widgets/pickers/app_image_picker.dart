@@ -14,21 +14,21 @@ import 'package:tasky/utils/logger.dart';
 import 'package:tasky/utils/os_utils.dart';
 import 'package:tasky/utils/utils.dart';
 
-class SelectUploadImage extends StatefulWidget {
+class AppImagePicker extends StatefulWidget {
   final Function(File)? onSubmitImage;
   final Function? onErrorImage;
 
-  const SelectUploadImage({
+  const AppImagePicker({
     Key? key,
     this.onSubmitImage,
     this.onErrorImage,
   }) : super(key: key);
 
   @override
-  State<SelectUploadImage> createState() => _SelectUploadImageState();
+  State<AppImagePicker> createState() => _AppImagePickerState();
 }
 
-class _SelectUploadImageState extends State<SelectUploadImage> {
+class _AppImagePickerState extends State<AppImagePicker> {
   late final File _image;
   final picker = ImagePicker();
 

@@ -45,7 +45,7 @@ class TaskUploadDocumentOptions extends StatelessWidget {
                     ),
                   ),
                   builder: (BuildContext context) {
-                    return SelectUploadImage(
+                    return AppImagePicker(
                       onSubmitImage: sendImage,
                     );
                   },

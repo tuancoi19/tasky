@@ -109,5 +109,8 @@
   "upload_image": "Upload image",
   "upload_file": "Upload file",
   "please_select_your_start_time": "Please select your start time",
-  "please_select_your_end_time": "Please select your end time"
+  "please_select_your_end_time": "Please select your end time",
+  "enter_your_task_title": "Enter your Task title",
+  "enter_your_task_note": "Enter your Task note",
+  "please_do_not_enter_more_than_characters": "Please do not enter more than {length} characters"
 }

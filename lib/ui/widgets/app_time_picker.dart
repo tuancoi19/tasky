@@ -1,17 +1,18 @@
-import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/configs/app_configs.dart';
+import 'package:tasky/ui/commons/app_date_time_picker.dart';
 
 class AppTimePicker extends StatelessWidget {
   final TextEditingController controller;
   final String title;
-  final Function(String?) onChange;
+  final Function(TimeOfDay) onChange;
   final Color? borderColor;
   final String? calendarTitle;
+  final TimeOfDay? hintTime;
 
   const AppTimePicker({
     Key? key,
@@ -20,6 +21,7 @@ class AppTimePicker extends StatelessWidget {
     required this.onChange,
     this.borderColor,
     this.calendarTitle,
+    this.hintTime,
   }) : super(key: key);
 
   @override
@@ -34,13 +36,21 @@ class AppTimePicker extends StatelessWidget {
         SizedBox(height: 20.h),
         SizedBox(
           height: 56.h,
-          child: DateTimePicker(
-            type: DateTimePickerType.time,
-            locale: AppConfigs.defaultLocal,
-            onChanged: onChange,
+          child: TextField(
+            readOnly: true,
+            onTap: () async {
+              final result = await AppDateTimePicker.selectTime(
+                context,
+                initialDate: hintTime,
+                themeColor: borderColor,
+                titleText: calendarTitle ?? '',
+              );
+              if (result != null) {
+                onChange(result);
+              }
+            },
             controller: controller,
             textAlign: TextAlign.center,
-            calendarTitle: calendarTitle,
             style: AppTextStyle.blackO40S14W400,
             decoration: InputDecoration(
               contentPadding:
@@ -70,17 +80,15 @@ class AppTimePicker extends StatelessWidget {
               ),
               fillColor: AppColors.backgroundBackButtonColor,
               hintStyle: AppTextStyle.blackO40S14W400,
-              hintText: DateFormat(AppConfigs.timeDisplayFormat)
-                  .format(DateTime.now()),
+              hintText: DateFormat(AppConfigs.timeDisplayFormat).format(
+                DateTime.now().copyWith(
+                  hour: hintTime?.hour,
+                  minute: hintTime?.minute,
+                ),
+              ),
               isDense: true,
               filled: true,
             ),
-            //TODO
-            // validator: (val) {
-            //   setState(() => {});
-            //   return null;
-            // },
-            onSaved: (val) => onChange(val),
           ),
         ),
       ],

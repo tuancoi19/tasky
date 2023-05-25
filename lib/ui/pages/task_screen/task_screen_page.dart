@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/generated/l10n.dart';
@@ -12,7 +13,7 @@ import 'package:tasky/ui/pages/task_screen/widgets/task_date_picker.dart';
 import 'package:tasky/ui/pages/task_screen/widgets/task_duration_picker.dart';
 import 'package:tasky/ui/pages/task_screen/widgets/task_title_text_form_field.dart';
 import 'package:tasky/ui/pages/task_screen/widgets/task_upload_documents.dart';
-import 'package:tasky/ui/pages/task_screen/widgets/note_text_field.dart';
+import 'package:tasky/ui/pages/task_screen/widgets/task_take_note_text_field.dart';
 import 'package:tasky/ui/widgets/app_task_page.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
 
@@ -38,7 +39,8 @@ class TaskScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        return TaskScreenCubit();
+        final AppCubit appCubit = BlocProvider.of<AppCubit>(context);
+        return TaskScreenCubit(appCubit: appCubit);
       },
       child: const TaskScreenChildPage(),
     );
@@ -90,7 +92,10 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
           key: _formKey,
           autovalidateMode: state.autoValidateMode,
           child: AppTaskPage(
-            headerWidget: buildFormAddTaskHeader(dateHintText: state.date),
+            headerWidget: buildFormAddTaskHeader(
+              dateHintText: state.date,
+              themeColor: state.themeColor,
+            ),
             bodyWidget: buildFormAddTaskBody(),
             bodyHeight: 564.h,
             headerColor: state.themeColor,
@@ -100,7 +105,10 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
     );
   }
 
-  Widget buildFormAddTaskHeader({required String? dateHintText}) {
+  Widget buildFormAddTaskHeader({
+    required DateTime? dateHintText,
+    required Color themeColor,
+  }) {
     return Padding(
       padding: const EdgeInsets.all(28).r,
       child: Column(
@@ -129,8 +137,8 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
                 flex: 3,
                 child: TaskTitleTextFormField(
                   controller: titleController,
-                  onChanged: (value) {
-                    _cubit.changeTitle(title: value);
+                  onChanged: (value) async {
+                    await _cubit.changeTitle(title: value);
                   },
                 ),
               ),
@@ -141,7 +149,8 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
                   whenComplete: (value) {
                     _cubit.changeDate(date: value);
                   },
-                  hintText: dateHintText,
+                  hintDate: dateHintText,
+                  themeColor: themeColor,
                 ),
               ),
             ],
@@ -166,19 +175,21 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
                 children: [
                   TaskDurationPicker(
                     startTimeOnChange: (value) {
-                      _cubit.changeStartTime(startTime: value ?? '');
+                      _cubit.changeStartTime(startTime: value);
                     },
                     endTimeOnChange: (value) {
-                      _cubit.changeEndTime(endTime: value ?? '');
+                      _cubit.changeEndTime(endTime: value);
                     },
                     startTimeController: startTimeController,
                     endTimeController: endTimeController,
                     color: state.themeColor,
+                    hintStartTime: state.startTime,
+                    hintEndTime: state.endTime,
                   ),
                   SizedBox(height: 32.h),
-                  NoteTextField(
-                    onChanged: (value) {
-                      _cubit.changeNote(note: value);
+                  TaskTakeNoteTextField(
+                    onChanged: (value) async {
+                      await _cubit.changeNote(note: value);
                     },
                     controller: noteController,
                     color: state.themeColor,
@@ -223,7 +234,15 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 16).r,
                 child: AppButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    _cubit.setAutoValidateMode(
+                      autoValidateMode: AutovalidateMode.always,
+                    );
+                    if (_formKey.currentState!.validate()) {
+                      _cubit.addTaskToFirebase();
+                    }
+                  },
+                  isLoading: state.isLoading,
                   title: S.current.done,
                   height: 56.h,
                   textStyle: AppTextStyle.whiteS18Bold,

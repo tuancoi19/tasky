@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/utils/utils.dart';
 
 class TaskTitleTextFormField extends StatelessWidget {
   final TextEditingController controller;
@@ -16,14 +17,22 @@ class TaskTitleTextFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      maxLines: 3,
+      maxLines: 2,
       maxLength: 50,
+      validator: (value) {
+        return Utils.emptyValidator(
+          value ?? '',
+          message: S.current.enter_your_task_title,
+        );
+      },
       style: AppTextStyle.whiteS23W500,
       onChanged: onChanged,
       decoration: InputDecoration(
         hintText: S.current.type_your_title,
         hintStyle: AppTextStyle.whiteO90S23W500,
         filled: true,
+        errorStyle: const TextStyle(color: Colors.white),
+        enabledBorder: InputBorder.none,
         fillColor: Colors.transparent,
         border: InputBorder.none,
         counterText: '',
