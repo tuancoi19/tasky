@@ -32,23 +32,30 @@ class HomeScreenDrawer extends StatelessWidget {
     return Container(
       width: double.infinity,
       color: AppColors.drawerBackgroundColor,
-      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 64).r,
+      padding: const EdgeInsets.symmetric(vertical: 64).r,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          InkWell(
-            onTap: onTap,
-            child: SvgPicture.asset(
-              AppVectors.icBackCircle,
-              width: 36.w,
-              height: 36.h,
+          Padding(
+            padding: const EdgeInsets.only(left: 28).r,
+            child: InkWell(
+              onTap: onTap,
+              child: SvgPicture.asset(
+                AppVectors.icBackCircle,
+                width: 36.h,
+                height: 36.h,
+              ),
             ),
           ),
           SizedBox(height: 64.h),
-          buildRowInfo(),
+          Padding(
+            padding: const EdgeInsets.only(right: 28).r,
+            child: buildColumnInfo(),
+          ),
           SizedBox(height: 64.h),
           Expanded(
             child: ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 28).r,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: listOptions().length,
@@ -63,7 +70,7 @@ class HomeScreenDrawer extends StatelessWidget {
     );
   }
 
-  Widget buildRowInfo() {
+  Widget buildColumnInfo() {
     return InkWell(
       onTap: () {
         Get.toNamed(
@@ -71,49 +78,43 @@ class HomeScreenDrawer extends StatelessWidget {
           arguments: EditUserProfileArguments(fromSignUp: false),
         );
       },
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(7).r,
-            child: Image.asset(
-              AppImages.avatarTest,
-              fit: BoxFit.cover,
-              width: 68.h,
-              height: 68.h,
-            ),
-          ),
-          SizedBox(width: 20.w),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Loren Ipsum',
-                style: AppTextStyle.whiteS16W600,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
+      child: SizedBox(
+        width: double.infinity,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(7).r,
+              child: Image.asset(
+                AppImages.avatarTest,
+                fit: BoxFit.cover,
+                width: 68.h,
+                height: 68.h,
               ),
-              Text(
-                'Loren Ipsum',
-                style: AppTextStyle.whiteO80S13W400,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
-            ],
-          ),
-          SizedBox(width: 20.w),
-          SvgPicture.asset(
-            AppVectors.icEnter,
-            width: 24.h,
-            height: 24.h,
-            colorFilter: ColorFilter.mode(
-              Colors.white.withOpacity(0.8),
-              BlendMode.srcIn,
             ),
-          )
-        ],
+            SizedBox(height: 20.h),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 28).r,
+              child: Column(
+                children: [
+                  Text(
+                    'Loren Ipsum Loren Ipsum Loren Ipsum Loren Ipsum Loren Ipsum Loren Ipsum ',
+                    style: AppTextStyle.whiteS16W600,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                  Text(
+                    'Loren Ipsum',
+                    style: AppTextStyle.whiteO80S13W400,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

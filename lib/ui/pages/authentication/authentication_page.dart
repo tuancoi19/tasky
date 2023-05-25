@@ -5,7 +5,7 @@ import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/configs/app_configs.dart';
 import 'package:tasky/models/enums/load_status.dart';
-import 'package:tasky/ui/commons/content_laoding_indicator.dart';
+import 'package:tasky/ui/commons/content_loading_indicator.dart';
 import 'package:tasky/ui/pages/authentication/authentication_cubit.dart';
 
 class AuthenticationPage extends StatelessWidget {

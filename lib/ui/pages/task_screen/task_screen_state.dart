@@ -1,6 +1,6 @@
-part of 'task_information_cubit.dart';
+part of 'task_screen_cubit.dart';
 
-class TaskInformationState extends Equatable {
+class TaskScreenState extends Equatable {
   final LoadStatus loadDataStatus;
   final String? title;
   final AutovalidateMode autoValidateMode;
@@ -8,8 +8,12 @@ class TaskInformationState extends Equatable {
   final String? endTime;
   final String? date;
   final String? note;
+  final List<CategoryEntity>? categoryList;
+  final CategoryEntity? category;
+  final List<String>? documentList;
+  final Color themeColor;
 
-  const TaskInformationState({
+  const TaskScreenState({
     this.loadDataStatus = LoadStatus.initial,
     this.title,
     this.autoValidateMode = AutovalidateMode.disabled,
@@ -17,6 +21,10 @@ class TaskInformationState extends Equatable {
     this.endTime,
     this.date,
     this.note,
+    this.categoryList,
+    this.category,
+    this.documentList,
+    this.themeColor = AppColors.primary,
   });
 
   @override
@@ -28,9 +36,13 @@ class TaskInformationState extends Equatable {
         endTime,
         date,
         note,
+        categoryList,
+        category,
+        documentList,
+        themeColor,
       ];
 
-  TaskInformationState copyWith({
+  TaskScreenState copyWith({
     LoadStatus? loadDataStatus,
     String? title,
     AutovalidateMode? autoValidateMode,
@@ -38,8 +50,12 @@ class TaskInformationState extends Equatable {
     String? endTime,
     String? date,
     String? note,
+    List<CategoryEntity>? categoryList,
+    CategoryEntity? category,
+    List<String>? documentList,
+    Color? themeColor,
   }) {
-    return TaskInformationState(
+    return TaskScreenState(
       loadDataStatus: loadDataStatus ?? this.loadDataStatus,
       title: title ?? this.title,
       autoValidateMode: autoValidateMode ?? this.autoValidateMode,
@@ -47,6 +63,10 @@ class TaskInformationState extends Equatable {
       endTime: endTime ?? this.endTime,
       date: date ?? this.date,
       note: note ?? this.note,
+      categoryList: categoryList ?? this.categoryList,
+      category: category ?? this.category,
+      documentList: documentList ?? this.documentList,
+      themeColor: themeColor ?? this.themeColor,
     );
   }
 }

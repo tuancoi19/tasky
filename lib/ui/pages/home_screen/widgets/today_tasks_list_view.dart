@@ -35,7 +35,7 @@ class TodayTasksListView extends StatelessWidget {
       onTap: onTap.call(),
       child: Container(
         height: 76.h,
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16).r,
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 4).r,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

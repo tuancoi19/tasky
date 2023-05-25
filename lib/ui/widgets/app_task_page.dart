@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_images.dart';
 
 class AppTaskPage extends StatelessWidget {
   final Widget headerWidget;
   final Widget bodyWidget;
   final double bodyHeight;
+  final Color? headerColor;
 
   const AppTaskPage({
     Key? key,
     required this.headerWidget,
     required this.bodyWidget,
     required this.bodyHeight,
+    this.headerColor,
   }) : super(key: key);
 
   @override
@@ -19,11 +22,12 @@ class AppTaskPage extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
+          decoration: BoxDecoration(
+            color: headerColor ?? AppColors.primary,
+            image: const DecorationImage(
               fit: BoxFit.cover,
               image: AssetImage(
-                AppImages.bgDetailBlueTask,
+                AppImages.firstTaskOverlay,
               ),
               alignment: Alignment.topCenter,
             ),

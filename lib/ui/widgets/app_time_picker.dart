@@ -10,12 +10,16 @@ class AppTimePicker extends StatelessWidget {
   final TextEditingController controller;
   final String title;
   final Function(String?) onChange;
+  final Color? borderColor;
+  final String? calendarTitle;
 
   const AppTimePicker({
     Key? key,
     required this.controller,
     required this.title,
     required this.onChange,
+    this.borderColor,
+    this.calendarTitle,
   }) : super(key: key);
 
   @override
@@ -36,6 +40,8 @@ class AppTimePicker extends StatelessWidget {
             onChanged: onChange,
             controller: controller,
             textAlign: TextAlign.center,
+            calendarTitle: calendarTitle,
+            style: AppTextStyle.blackO40S14W400,
             decoration: InputDecoration(
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 16).r,
@@ -45,8 +51,8 @@ class AppTimePicker extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10).r,
-                borderSide: const BorderSide(
-                  color: AppColors.primary,
+                borderSide: BorderSide(
+                  color: borderColor ?? AppColors.primary,
                 ),
               ),
               disabledBorder: InputBorder.none,
@@ -69,7 +75,6 @@ class AppTimePicker extends StatelessWidget {
               isDense: true,
               filled: true,
             ),
-
             //TODO
             // validator: (val) {
             //   setState(() => {});

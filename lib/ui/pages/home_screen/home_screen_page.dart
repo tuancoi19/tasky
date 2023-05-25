@@ -3,15 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_zoom_drawer/config.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:get/get.dart';
 import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_colors.dart';
-import 'package:tasky/common/app_text_styles.dart';
-import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/router/route_config.dart';
+import 'package:tasky/ui/pages/home_screen/widgets/category_title.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/hello_text.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/home_app_bar.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/category_list_view.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/today_tasks_list_view.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/home_screen_drawer.dart';
+import 'package:tasky/ui/pages/home_screen/widgets/today_tasks_title.dart';
 
 import 'home_screen_cubit.dart';
 
@@ -112,35 +114,18 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
             SizedBox(height: 24.h),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24).r,
-              child: Text(
-                S.current.categories,
-                style: AppTextStyle.blackS15W500,
-              ),
+              child: CategoryTitle(onTap: () {}),
             ),
             const CategoryListView(),
             Padding(
-              padding: const EdgeInsets.only(left: 24).r,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    S.current.today_tasks,
-                    style: AppTextStyle.blackS15W500,
-                    maxLines: 1,
-                  ),
-                  SizedBox(height: 12.h),
-                  SizedBox(
-                    width: 60.w,
-                    child: const Divider(
-                      color: AppColors.primary,
-                      thickness: 3,
-                      height: 0,
-                    ),
-                  ),
-                ],
+              padding: const EdgeInsets.symmetric(horizontal: 24).r,
+              child: TodayTasksTitle(
+                onTap: () {
+                  Get.toNamed(RouteConfig.addTaskScreen);
+                },
               ),
             ),
+            SizedBox(height: 12.h),
             const Expanded(
               child: TodayTasksListView(),
             ),

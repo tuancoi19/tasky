@@ -86,13 +86,10 @@
   "first_name": "Tên",
   "enter_your_last_name": "Nhập họ của bạn",
   "enter_your_first_name": "Nhập tên của bạn",
-  "done": "Xong",
-  "vip_user": "Người dùng VIP",
   "display_name": "Tên Hiển Thị",
   "enter_your_display_name": "Nhập tên hiển thị của bạn",
   "username": "Tên Đăng Nhập",
   "enter_your_username": "Nhập tên đăng nhập của bạn",
-  "privacy": "Bảo Mật",
   "type_your_title": "Nhập Tiêu đề của bạn",
   "description": "Mô tả",
   "documents": "Các tài liệu",
@@ -105,5 +102,12 @@
   "take_note": "Viết ghi chú",
   "done": "Xong",
   "today_tasks": "Các tác vụ hôm nay",
-  "categories": "Các danh mục"
+  "categories": "Các danh mục",
+  "please_select_your_date": "Hãy chọn ngày mong muốn",
+  "category": "Danh mục",
+  "choose_from_gallery": "Chọn từ thư viện",
+  "upload_image": "Tải ảnh lên",
+  "upload_file": "Tải tài liệu lên",
+  "please_select_your_start_time": "Hãy chọn thời gian bắt đầu",
+  "please_select_your_end_time": "Hãy chọn thời gian kết thúc"
 }
