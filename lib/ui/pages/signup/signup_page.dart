@@ -23,7 +23,7 @@ class SignupPage extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         final AuthenticationCubit authenticationCubit =
-            BlocProvider.of<AuthenticationCubit>(context);
+        BlocProvider.of<AuthenticationCubit>(context);
         final AppCubit appCubit = BlocProvider.of<AppCubit>(context);
         return SignupCubit(
             authenticationCubit: authenticationCubit, appCubit: appCubit);
@@ -44,6 +44,7 @@ class _SignInChildPageState extends State<SignInChildPage> {
   late final SignupCubit _cubit;
   late TextEditingController confirmPasswordTextController;
   late TextEditingController emailTextController;
+  late TextEditingController userNameTextController;
   late TextEditingController passwordTextController;
   late ObscureTextController obscurePasswordController;
   final _formKey = GlobalKey<FormState>();
@@ -54,6 +55,7 @@ class _SignInChildPageState extends State<SignInChildPage> {
     _cubit = BlocProvider.of(context);
     confirmPasswordTextController = TextEditingController();
     emailTextController = TextEditingController();
+    userNameTextController = TextEditingController();
     passwordTextController = TextEditingController();
     obscurePasswordController = ObscureTextController();
   }
@@ -76,18 +78,25 @@ class _SignInChildPageState extends State<SignInChildPage> {
         children: [
           buildForm(),
           SizedBox(height: 44.h),
-          AppButton(
-            onPressed: () async {
-              await _cubit.signUp(
-                mail: emailTextController.text,
-                password: passwordTextController.text,
+
+          ///TODO : Xử lý disable button
+          BlocBuilder<SignupCubit, SignupState>(
+            builder: (context, state) {
+              return AppButton(
+                onPressed: () async {
+                  await _cubit.signUp(
+                    userName: state.userName ?? '',
+                    mail: state.email ?? '',
+                    password: state.password ?? '',
+                  );
+                },
+                height: 56.h,
+                title: S.current.sign_up,
+                cornerRadius: 15.r,
+                textStyle: AppTextStyle.whiteS18Bold,
+                backgroundColor: AppColors.primary,
               );
             },
-            height: 56.h,
-            title: S.current.sign_up,
-            cornerRadius: 15.r,
-            textStyle: AppTextStyle.whiteS18Bold,
-            backgroundColor: AppColors.primary,
           ),
         ],
       ),
@@ -97,7 +106,7 @@ class _SignInChildPageState extends State<SignInChildPage> {
   Widget buildForm() {
     return BlocBuilder<SignupCubit, SignupState>(
         buildWhen: (previous, current) =>
-            previous.autoValidateMode != current.autoValidateMode,
+        previous.autoValidateMode != current.autoValidateMode,
         builder: (context, state) {
           return Form(
             key: _formKey,
@@ -106,6 +115,18 @@ class _SignInChildPageState extends State<SignInChildPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 AppInput(
+                  textEditingController: userNameTextController,
+                  labelText: S.current.username,
+                  hintText: S.current.enter_your_username,
+                  borderRadius: 10,
+                  autoTrim: true,
+                  autoValidateMode: state.autoValidateMode,
+                  onChanged: (value) {
+                    _cubit.changeUsername(userName: value);
+                  },
+                ),
+                SizedBox(height: 24.h),
+                AppInput(
                   textEditingController: emailTextController,
                   labelText: S.current.email,
                   hintText: S.current.enter_your_email,
@@ -113,7 +134,7 @@ class _SignInChildPageState extends State<SignInChildPage> {
                   autoTrim: true,
                   autoValidateMode: state.autoValidateMode,
                   onChanged: (value) {
-                    _cubit.changeUsernameOrEmail(usernameOrEmail: value);
+                    _cubit.changeEmail(email: value);
                   },
                 ),
                 SizedBox(height: 24.h),
@@ -126,10 +147,9 @@ class _SignInChildPageState extends State<SignInChildPage> {
                   autoTrim: true,
                   autoValidateMode: state.autoValidateMode,
                   onChanged: (value) {
-                    _cubit.changeEmail(email: value);
+                    _cubit.changePassword(password: value);
                   },
                 ),
-                SizedBox(height: 24.h),
                 AppPasswordInput(
                   borderRadius: 10,
                   labelText: S.current.confirm_password,

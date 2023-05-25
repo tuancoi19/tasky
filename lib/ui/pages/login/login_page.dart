@@ -49,7 +49,7 @@ class LoginChildPage extends StatefulWidget {
 
 class _LoginChildPageState extends State<LoginChildPage> {
   late final LoginCubit _cubit;
-  late TextEditingController usernameOrEmailTextController;
+  late TextEditingController emailTextController;
   late TextEditingController passwordTextController;
   late ObscureTextController obscurePasswordController;
   final _formKey = GlobalKey<FormState>();
@@ -58,7 +58,7 @@ class _LoginChildPageState extends State<LoginChildPage> {
   void initState() {
     super.initState();
     _cubit = BlocProvider.of(context);
-    usernameOrEmailTextController = TextEditingController();
+    emailTextController = TextEditingController();
     passwordTextController = TextEditingController();
     obscurePasswordController = ObscureTextController();
   }
@@ -66,9 +66,7 @@ class _LoginChildPageState extends State<LoginChildPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: _buildBodyWidget(),
-      ),
+      body: _buildBodyWidget(),
     );
   }
 
@@ -80,7 +78,6 @@ class _LoginChildPageState extends State<LoginChildPage> {
         padding: const EdgeInsets.symmetric(vertical: 45, horizontal: 24).r,
         children: [
           buildForm(),
-          SizedBox(height: 32.h),
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(
@@ -135,14 +132,14 @@ class _LoginChildPageState extends State<LoginChildPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               AppInput(
-                textEditingController: usernameOrEmailTextController,
+                textEditingController: emailTextController,
                 labelText: S.current.email,
                 hintText: S.current.enter_your_email,
                 borderRadius: 10,
                 autoTrim: true,
                 autoValidateMode: state.autoValidateMode,
                 onChanged: (value) {
-                  _cubit.changeUsernameOrEmail(usernameOrEmail: value);
+                  _cubit.changeEmail(email: value);
                 },
               ),
               SizedBox(height: 24.h),
@@ -171,7 +168,7 @@ class _LoginChildPageState extends State<LoginChildPage> {
   @override
   void dispose() {
     _cubit.close();
-    usernameOrEmailTextController.dispose();
+    emailTextController.dispose();
     passwordTextController.dispose();
     obscurePasswordController.dispose();
     super.dispose();
@@ -180,45 +177,9 @@ class _LoginChildPageState extends State<LoginChildPage> {
   Future<void> _logIn() async {
     FocusScope.of(context).unfocus();
     _cubit.login(
-      mail: usernameOrEmailTextController.text,
+      mail: emailTextController.text,
       password: passwordTextController.text,
-      onLoginSuccessful: () {
-        //save Token noti and push
-        Get.offAllNamed(RouteConfig.homeScreen);
-      },
-      onLoginFailed: (error) {
-        AppDialog.showCustomDialog(
-          content: Padding(
-            padding: const EdgeInsets.all(16).r,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  S.current.login_failed,
-                  style: AppTextStyle.secondaryBlackO80S21W600,
-                ),
-                SizedBox(height: 8.h),
-                Text(
-                  error,
-                  style: AppTextStyle.grayO40S15W400,
-                ),
-                SizedBox(height: 32.h),
-                AppButton(
-                  height: 56.h,
-                  title: S.current.close,
-                  cornerRadius: 15.r,
-                  textStyle: AppTextStyle.whiteS18Bold,
-                  backgroundColor: AppColors.primary,
-                  onPressed: () {
-                    Get.back(closeOverlays: true);
-                  },
-                )
-              ],
-            ),
-          ),
-        );
-      },
+
     );
   }
 
