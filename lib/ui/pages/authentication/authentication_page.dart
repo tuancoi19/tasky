@@ -28,6 +28,7 @@ class AuthenticationPage extends StatelessWidget {
                 child: Scaffold(
                   appBar: buildAppBar(context),
                   body: SafeArea(
+                    bottom: false,
                     child: _buildBodyWidget(),
                   ),
                 ),

@@ -92,6 +92,7 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
           },
         ),
         body: SafeArea(
+          bottom: false,
           child: _buildBodyWidget(),
         ),
       ),

@@ -23,11 +23,13 @@ class SignupCubit extends Cubit<SignupState> {
   Future<void> signUp({
     required String mail,
     required String password,
+    required String userName,
   }) async {
     authenticationCubit.setLoading(LoadStatus.loading);
     User? user = await appCubit.createUserWithEmailAndPassword(
         mail: mail, password: password);
     if (user != null) {
+      await appCubit.saveUserToFirebase(user: user, userName: userName);
       final token = await user.getIdToken();
       final AppUser appUser = AppUser(
         avatarUrl: user.photoURL ?? '',
@@ -36,7 +38,7 @@ class SignupCubit extends Cubit<SignupState> {
         isUserLoggedIn: true,
         userId: user.uid,
       );
-      appCubit.saveSession(
+      await appCubit.saveSession(
         currentAppUser: appUser,
         refreshToken: user.refreshToken ?? '',
         token: token,
@@ -48,18 +50,18 @@ class SignupCubit extends Cubit<SignupState> {
     }
   }
 
-  void changeUsernameOrEmail({required String usernameOrEmail}) {
-    emit(
-      state.copyWith(
-        usernameOrEmail: usernameOrEmail,
-      ),
-    );
-  }
-
   void changeEmail({required String email}) {
     emit(
       state.copyWith(
         email: email,
+      ),
+    );
+  }
+
+  void changeUsername({required String userName}) {
+    emit(
+      state.copyWith(
+        userName: userName,
       ),
     );
   }
