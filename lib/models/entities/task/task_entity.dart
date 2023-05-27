@@ -3,7 +3,7 @@ import 'package:tasky/models/entities/category/category_entity.dart';
 
 part 'task_entity.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class TaskEntity {
   @JsonKey()
   String title;
@@ -20,8 +20,8 @@ class TaskEntity {
   @JsonKey()
   String end;
 
-  // @JsonKey()
-  // CategoryEntity category;
+  @JsonKey()
+  CategoryEntity category;
 
   @JsonKey()
   List<String?> documents;
@@ -29,7 +29,7 @@ class TaskEntity {
   TaskEntity({
     required this.title,
     required this.note,
-    // required this.category,
+    required this.category,
     required this.documents,
     required this.date,
     required this.start,

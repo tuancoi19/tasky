@@ -7,8 +7,7 @@ import 'package:tasky/ui/widgets/app_time_picker.dart';
 class TaskDurationPicker extends StatelessWidget {
   final Function(TimeOfDay) startTimeOnChange;
   final Function(TimeOfDay) endTimeOnChange;
-  final TextEditingController startTimeController;
-  final TextEditingController endTimeController;
+
   final Color? color;
   final TimeOfDay? hintStartTime;
   final TimeOfDay? hintEndTime;
@@ -17,8 +16,6 @@ class TaskDurationPicker extends StatelessWidget {
     Key? key,
     required this.startTimeOnChange,
     required this.endTimeOnChange,
-    required this.startTimeController,
-    required this.endTimeController,
     this.color,
     this.hintStartTime,
     this.hintEndTime,
@@ -33,7 +30,6 @@ class TaskDurationPicker extends StatelessWidget {
           child: AppTimePicker(
             title: S.current.start_time,
             onChange: startTimeOnChange,
-            controller: startTimeController,
             borderColor: color,
             calendarTitle: S.current.please_select_your_start_time,
             hintTime: hintStartTime,
@@ -52,7 +48,6 @@ class TaskDurationPicker extends StatelessWidget {
           child: AppTimePicker(
             title: S.current.end_time,
             onChange: endTimeOnChange,
-            controller: endTimeController,
             borderColor: color,
             calendarTitle: S.current.please_select_your_end_time,
             hintTime: hintEndTime,

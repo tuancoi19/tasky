@@ -8,7 +8,7 @@ class CategoryEntity {
   String title;
 
   @JsonKey()
-  int color;
+  String color;
 
   CategoryEntity({required this.title, required this.color});
 
@@ -16,4 +16,8 @@ class CategoryEntity {
       _$CategoryEntityFromJson(json);
 
   Map<String, dynamic> toJson() => _$CategoryEntityToJson(this);
+
+  int get colorHex {
+    return int.parse(color, radix: 16);
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/configs/app_configs.dart';
 import 'package:tasky/generated/l10n.dart';
@@ -62,5 +63,17 @@ class AppDateTimePicker {
       },
     );
     return picked;
+  }
+
+  static String convertTimeOfDayToString(TimeOfDay timeOfDay) {
+    final DateTime date = DateTime.now().copyWith(
+      hour: timeOfDay.hour,
+      minute: timeOfDay.minute,
+    );
+    return DateFormat(AppConfigs.timeDisplayFormat).format(date);
+  }
+
+  static String convertDateTimeToString(DateTime dateTime) {
+    return DateFormat(AppConfigs.dateDisplayFormat).format(dateTime);
   }
 }

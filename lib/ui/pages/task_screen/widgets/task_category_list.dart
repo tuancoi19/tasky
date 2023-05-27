@@ -67,9 +67,10 @@ class TaskCategoryList extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10).r,
           border: Border.all(
-            color: item != null ? Color(item.color) : AppColors.border,
+            color: item != null ? Color(item.colorHex) : AppColors.border,
           ),
-          color: item == selectedCategory ? Color(item!.color) : Colors.white,
+          color:
+              item == selectedCategory ? Color(item!.colorHex) : Colors.white,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -91,7 +92,7 @@ class TaskCategoryList extends StatelessWidget {
               style: TextStyle(
                 color: item != null
                     ? item != selectedCategory
-                        ? Color(item.color)
+                        ? Color(item.colorHex)
                         : Colors.white
                     : AppColors.border,
                 fontSize: 14.sp,

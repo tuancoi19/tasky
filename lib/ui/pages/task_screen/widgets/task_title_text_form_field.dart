@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/utils/utils.dart';
@@ -25,6 +26,7 @@ class TaskTitleTextFormField extends StatelessWidget {
           message: S.current.enter_your_task_title,
         );
       },
+      textInputAction: TextInputAction.done,
       style: AppTextStyle.whiteS23W500,
       onChanged: onChanged,
       decoration: InputDecoration(
@@ -37,6 +39,11 @@ class TaskTitleTextFormField extends StatelessWidget {
         border: InputBorder.none,
         counterText: '',
       ),
+      inputFormatters: [
+        FilteringTextInputFormatter.deny(
+          RegExp('[\n]'), // Loại bỏ ký tự xuống dòng
+        ),
+      ],
       cursorColor: Colors.white,
     );
   }

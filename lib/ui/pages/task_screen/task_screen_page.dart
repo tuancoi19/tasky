@@ -57,9 +57,6 @@ class TaskScreenChildPage extends StatefulWidget {
 class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
   late final TaskScreenCubit _cubit;
   late TextEditingController titleController;
-  late TextEditingController startTimeController;
-  late TextEditingController endTimeController;
-  late TextEditingController dateController;
   late TextEditingController noteController;
   final _formKey = GlobalKey<FormState>();
 
@@ -69,9 +66,6 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
     _cubit = BlocProvider.of(context);
     _cubit.loadInitialData();
     titleController = TextEditingController();
-    startTimeController = TextEditingController();
-    endTimeController = TextEditingController();
-    dateController = TextEditingController();
     noteController = TextEditingController();
   }
 
@@ -145,7 +139,6 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
               Expanded(
                 flex: 1,
                 child: TaskDatePicker(
-                  controller: dateController,
                   whenComplete: (value) {
                     _cubit.changeDate(date: value);
                   },
@@ -180,8 +173,6 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
                     endTimeOnChange: (value) {
                       _cubit.changeEndTime(endTime: value);
                     },
-                    startTimeController: startTimeController,
-                    endTimeController: endTimeController,
                     color: state.themeColor,
                     hintStartTime: state.startTime,
                     hintEndTime: state.endTime,
@@ -203,7 +194,7 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
                     selectedCategory: state.category ??
                         CategoryEntity(
                           title: '',
-                          color: 0,
+                          color: '',
                         ),
                   ),
                   SizedBox(height: 32.h),
