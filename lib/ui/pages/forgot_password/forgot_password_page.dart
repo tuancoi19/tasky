@@ -169,18 +169,18 @@ class _ForgotPasswordChildPageState extends State<ForgotPasswordChildPage> {
     FocusScope.of(context).unfocus();
   }
 
-  void _verify() {
-    // if (!validateAndSave) {
-    //   _cubit.onValidateForm();
-    // } else {
-    //   // _cubit.verify();
-    // }
-    Get.back(closeOverlays: true);
-    AppDialog.showCustomDialog(
-      content: const ResetPasswordPage(),
-    );
-    FocusScope.of(context).unfocus();
-  }
+  // void _verify() {
+  //   // if (!validateAndSave) {
+  //   //   _cubit.onValidateForm();
+  //   // } else {
+  //   //   // _cubit.verify();
+  //   // }
+  //   Get.back(closeOverlays: true);
+  //   AppDialog.showCustomDialog(
+  //     content: const ResetPasswordPage(),
+  //   );
+  //   FocusScope.of(context).unfocus();
+  // }
 
   bool get validateAndSave {
     final form = _formKey.currentState ?? FormState();

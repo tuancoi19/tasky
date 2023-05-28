@@ -43,7 +43,7 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  requestSendEmail ?? '',
+                  requestSendEmail,
                   style: AppTextStyle.secondaryBlackO80S21W600,
                 ),
                 SizedBox(height: 32.h),

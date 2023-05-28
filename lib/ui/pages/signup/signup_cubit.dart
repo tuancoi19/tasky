@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get/get.dart';
 import 'package:tasky/blocs/app_cubit.dart';
-import 'package:tasky/models/entities/user/app_user.dart';
 import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/pages/authentication/authentication_cubit.dart';
@@ -30,19 +29,6 @@ class SignupCubit extends Cubit<SignupState> {
         mail: mail, password: password);
     if (user != null) {
       await appCubit.saveUserToFirebase(user: user, userName: userName);
-      final token = await user.getIdToken();
-      final AppUser appUser = AppUser(
-        avatarUrl: user.photoURL ?? '',
-        fcmToken: token,
-        fullName: user.displayName ?? '',
-        isUserLoggedIn: true,
-        userId: user.uid,
-      );
-      await appCubit.saveSession(
-        currentAppUser: appUser,
-        refreshToken: user.refreshToken ?? '',
-        token: token,
-      );
       authenticationCubit.setLoading(LoadStatus.success);
       Get.offAllNamed(RouteConfig.homeScreen);
     } else {

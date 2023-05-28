@@ -103,46 +103,51 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
   }
 
   Widget _buildBodyWidget() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12).r,
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24).r,
-              child: const HelloText(),
+    return BlocBuilder<AppCubit, AppState>(
+      buildWhen: (previous, current) => previous.user != current.user,
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12).r,
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24).r,
+                  child: HelloText(title: state.user?.userName ?? ''),
+                ),
+                SizedBox(height: 24.h),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24).r,
+                  child: CategoryTitle(
+                    onTap: () {
+                      AppDialog.showCustomDialog(
+                        content: CategoryPage(
+                          arguments: CategoryArguments(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const CategoryListView(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24).r,
+                  child: TodayTasksTitle(
+                    onTap: () {
+                      Get.toNamed(RouteConfig.addTaskScreen);
+                    },
+                  ),
+                ),
+                SizedBox(height: 12.h),
+                const Expanded(
+                  child: TodayTasksListView(),
+                ),
+              ],
             ),
-            SizedBox(height: 24.h),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24).r,
-              child: CategoryTitle(
-                onTap: () {
-                  AppDialog.showCustomDialog(
-                    content: CategoryPage(
-                      arguments: CategoryArguments(),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const CategoryListView(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24).r,
-              child: TodayTasksTitle(
-                onTap: () {
-                  Get.toNamed(RouteConfig.addTaskScreen);
-                },
-              ),
-            ),
-            SizedBox(height: 12.h),
-            const Expanded(
-              child: TodayTasksListView(),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 

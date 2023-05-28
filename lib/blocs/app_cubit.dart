@@ -11,7 +11,7 @@ import 'package:tasky/database/secure_storage_helper.dart';
 import 'package:tasky/database/share_preferences_helper.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/models/entities/token_entity.dart';
-import 'package:tasky/models/entities/user/app_user.dart';
+import 'package:tasky/models/entities/user/user_entity.dart';
 import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/commons/app_dialog.dart';
@@ -30,7 +30,7 @@ class AppCubit extends Cubit<AppState> {
 
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
-  Future<User?> logInWithEmailAndPassword({
+  Future<UserEntity?> logInWithEmailAndPassword({
     required String mail,
     required String password,
   }) async {
@@ -40,7 +40,28 @@ class AppCubit extends Cubit<AppState> {
         email: mail,
         password: password,
       );
-      return credential.user;
+      UserEntity? newUser = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(credential.user?.uid)
+          .get()
+          .then(
+        (DocumentSnapshot doc) {
+          final data = doc.data() as Map<String, dynamic>;
+          return UserEntity.fromJson(data);
+        },
+        onError: (e) => print("Error getting document: $e"),
+      );
+      if (newUser != null) {
+        final token = await credential.user?.getIdToken();
+        newUser.fcmToken = token;
+        newUser.userId = credential.user?.uid ?? '';
+        await saveSession(
+          refreshToken: credential.user?.refreshToken ?? '',
+          token: token,
+        );
+      }
+
+      return newUser;
     } on FirebaseAuthException catch (e) {
       AppDialog.showCustomDialog(
         content: Padding(
@@ -72,6 +93,10 @@ class AppCubit extends Cubit<AppState> {
       print(e);
     }
     return null;
+  }
+
+  void setUser(UserEntity user) {
+    emit(state.copyWith(user: user));
   }
 
   Future<User?> createUserWithEmailAndPassword({
@@ -127,17 +152,18 @@ class AppCubit extends Cubit<AppState> {
     required User user,
     required String userName,
   }) async {
-    final newUser = {
-      'user_name': userName,
-      'email': user.email,
-      'create_at': user.metadata.creationTime,
-    };
+    UserEntity newUser = UserEntity(
+      userName: userName,
+      email: user.email,
+      createAt: user.metadata.creationTime,
+    );
     try {
-      await userCollection.doc(user.uid).set(newUser).catchError((e) {
-        logger.e('❌❌ ERROR : Save new user to firebase - ${e}');
+      await userCollection.doc(user.uid).set(newUser.toJson()).catchError((e) {
+        logger.e('❌❌ ERROR : Save new user to firebase - $e');
       });
+      emit(state.copyWith(user: newUser));
     } catch (e) {
-      logger.e('❌❌ ERROR : Save new user to firebase - ${e}');
+      logger.e('❌❌ ERROR : Save new user to firebase - $e');
     }
   }
 
@@ -160,19 +186,23 @@ class AppCubit extends Cubit<AppState> {
     emit(state.copyWith(fetchProfileStatus: LoadStatus.loading));
   }
 
-  void updateProfile(AppUser user) {
+  void updateProfile(UserEntity user) {
     emit(state.copyWith(user: user));
   }
 
   Future<bool> saveSession({
     String? token,
     String refreshToken = '',
-    AppUser? currentAppUser,
+    // UserEntity? currentUserEntity,
   }) async {
     await _saveToSecureStorage(token: token ?? '', refreshToken: refreshToken);
-    await _saveToSharedPreferences(currentAppUser);
+    // await _saveToSharedPreferences(currentUserEntity);
 
     return true;
+  }
+
+  void setCurrentUser(UserEntity user) {
+    emit(state.copyWith(user: user));
   }
 
   Future<void> _saveToSecureStorage(
@@ -185,14 +215,14 @@ class AppCubit extends Cubit<AppState> {
     secureStorageHelper.saveToken(tokenEntity);
   }
 
-  Future<void> _saveToSharedPreferences(
-    AppUser? currentAppUser,
-  ) async {
-    final sharedPreferencesHelper = SharedPreferencesHelper();
-    await sharedPreferencesHelper.setAppUser(
-      currentAppUser: currentAppUser,
-    );
-  }
+  // Future<void> _saveToSharedPreferences(
+  //   UserEntity? currentUserEntity,
+  // ) async {
+  //   final sharedPreferencesHelper = SharedPreferencesHelper();
+  //   await sharedPreferencesHelper.setUserEntity(
+  //     currentUserEntity: currentUserEntity,
+  //   );
+  // }
 
   ///Sign Out
 // void signOut() async {
