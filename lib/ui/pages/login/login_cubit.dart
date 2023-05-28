@@ -8,7 +8,7 @@ import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
-import 'package:tasky/models/entities/user/app_user.dart';
+import 'package:tasky/models/entities/user/user_entity.dart';
 import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/commons/app_dialog.dart';
@@ -32,27 +32,17 @@ class LoginCubit extends Cubit<LoginState> {
   }) async {
     authenticationCubit.setLoading(LoadStatus.loading);
     try {
-      final User? user =  await appCubit.logInWithEmailAndPassword(mail: mail, password: password);
+      final UserEntity? user = await appCubit.logInWithEmailAndPassword(
+          mail: mail, password: password);
       if (user == null) {
         authenticationCubit.setLoading(LoadStatus.failure);
         return;
+      } else {
+        appCubit.setUser(user);
+        print('********* ${user.userName}');
+        authenticationCubit.setLoading(LoadStatus.success);
+        Get.offAllNamed(RouteConfig.homeScreen);
       }
-      final token = await user.getIdToken();
-
-      final appUser = AppUser(
-        avatarUrl: user.photoURL ?? '',
-        fcmToken: token,
-        fullName: user.displayName ?? '',
-        isUserLoggedIn: true,
-        userId: user.uid,
-      );
-      await appCubit.saveSession(
-        currentAppUser: appUser,
-        refreshToken: user.refreshToken ?? '',
-        token: token,
-      );
-      authenticationCubit.setLoading(LoadStatus.success);
-      Get.offAllNamed(RouteConfig.homeScreen);
     } on FirebaseAuthException catch (e) {
       logger.e(e.message ?? '');
       AppDialog.showCustomDialog(

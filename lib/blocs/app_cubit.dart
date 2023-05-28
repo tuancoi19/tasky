@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,7 +11,7 @@ import 'package:tasky/database/secure_storage_helper.dart';
 import 'package:tasky/database/share_preferences_helper.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/models/entities/token_entity.dart';
-import 'package:tasky/models/entities/user/app_user.dart';
+import 'package:tasky/models/entities/user/user_entity.dart';
 import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/commons/app_dialog.dart';
@@ -32,7 +30,7 @@ class AppCubit extends Cubit<AppState> {
 
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
-  Future<User?> logInWithEmailAndPassword({
+  Future<UserEntity?> logInWithEmailAndPassword({
     required String mail,
     required String password,
   }) async {
@@ -42,7 +40,30 @@ class AppCubit extends Cubit<AppState> {
         email: mail,
         password: password,
       );
-      return credential.user;
+      UserEntity? newUser = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(credential.user?.uid)
+          .get()
+          .then(
+        (DocumentSnapshot doc) {
+          final data = doc.data() as Map<String, dynamic>;
+          print('😍😍😍 ${data['user_name']}');
+          return UserEntity.fromJson(data);
+        },
+        onError: (e) => print("Error getting document: $e"),
+      );
+      if (newUser != null) {
+        final token = await credential.user?.getIdToken();
+        newUser.fcmToken = token;
+        newUser.userId = credential.user?.uid ?? '';
+        await saveSession(
+          refreshToken: credential.user?.refreshToken ?? '',
+          token: token,
+        );
+        // emit(state.copyWith(user: newUser));
+      }
+
+      return newUser;
     } on FirebaseAuthException catch (e) {
       AppDialog.showCustomDialog(
         content: Padding(
@@ -76,6 +97,10 @@ class AppCubit extends Cubit<AppState> {
     return null;
   }
 
+  void setUser(UserEntity user) {
+    emit(state.copyWith(user: user));
+  }
+
   Future<User?> createUserWithEmailAndPassword({
     required String mail,
     required String password,
@@ -90,6 +115,25 @@ class AppCubit extends Cubit<AppState> {
       if (user != null) {
         logger.log('🙍‍🙍‍🙍‍ Login success  =->>>> : $user');
         SharedPreferencesHelper.setSeenIntro(isSeen: true);
+        UserEntity? newUser = await FirebaseFirestore.instance
+            .collection("user")
+            .doc(credential.user?.uid)
+            .get()
+            .then(
+          (DocumentSnapshot doc) {
+            final data = doc.data() as Map<String, dynamic>;
+            return UserEntity.fromJson(data);
+          },
+          onError: (e) => print("Error getting document: $e"),
+        );
+        final token = await credential.user?.getIdToken();
+        newUser?.fcmToken = token;
+        newUser?.userId = credential.user?.uid;
+        await saveSession(
+          refreshToken: credential.user?.refreshToken ?? '',
+          token: token,
+        );
+        emit(state.copyWith(user: newUser));
         return user;
       }
     } on FirebaseAuthException catch (e) {
@@ -136,10 +180,10 @@ class AppCubit extends Cubit<AppState> {
     };
     try {
       await userCollection.doc(user.uid).set(newUser).catchError((e) {
-        logger.e('❌❌ ERROR : Save new user to firebase - ${e}');
+        logger.e('❌❌ ERROR : Save new user to firebase - $e');
       });
     } catch (e) {
-      logger.e('❌❌ ERROR : Save new user to firebase - ${e}');
+      logger.e('❌❌ ERROR : Save new user to firebase - $e');
     }
   }
 
@@ -162,19 +206,23 @@ class AppCubit extends Cubit<AppState> {
     emit(state.copyWith(fetchProfileStatus: LoadStatus.loading));
   }
 
-  void updateProfile(AppUser user) {
+  void updateProfile(UserEntity user) {
     emit(state.copyWith(user: user));
   }
 
   Future<bool> saveSession({
     String? token,
     String refreshToken = '',
-    AppUser? currentAppUser,
+    // UserEntity? currentUserEntity,
   }) async {
     await _saveToSecureStorage(token: token ?? '', refreshToken: refreshToken);
-    await _saveToSharedPreferences(currentAppUser);
+    // await _saveToSharedPreferences(currentUserEntity);
 
     return true;
+  }
+
+  void setCurrentUser(UserEntity user) {
+    emit(state.copyWith(user: user));
   }
 
   Future<void> _saveToSecureStorage(
@@ -188,11 +236,11 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<void> _saveToSharedPreferences(
-    AppUser? currentAppUser,
+    UserEntity? currentUserEntity,
   ) async {
     final sharedPreferencesHelper = SharedPreferencesHelper();
-    await sharedPreferencesHelper.setAppUser(
-      currentAppUser: currentAppUser,
+    await sharedPreferencesHelper.setUserEntity(
+      currentUserEntity: currentUserEntity,
     );
   }
 

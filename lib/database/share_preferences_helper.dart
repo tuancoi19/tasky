@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tasky/models/entities/user/app_user.dart';
+import 'package:tasky/models/entities/user/user_entity.dart';
 import 'package:tasky/utils/logger.dart';
 
 class SharedPreferencesHelper {
   static const _introKey = '_introKey';
-  static const _keyAppUser = 'app_user';
+  static const _keyUser = 'app_user';
   static const _authKey = '_authKey';
 
   //Get authKey
@@ -48,43 +48,42 @@ class SharedPreferencesHelper {
     await prefs.setBool(_introKey, isSeen ?? true);
   }
 
-  Future<AppUser> setLoggedInAt({
+  Future<UserEntity> setLoggedInAt({
     DateTime? loggedInAt,
   }) async {
-    final newAppUser = (await loadAppUser()).copyWith(
-      loggedInAt: loggedInAt,
-    );
-    await _updateAppUser(newAppUser);
-    return newAppUser;
+    final newUserEntity = await loadUserEntity();
+    newUserEntity.loggedInAt = loggedInAt;
+    await _updateUserEntity(newUserEntity);
+    return newUserEntity;
   }
 
-  Future<AppUser> setAppUser({
-    AppUser? currentAppUser,
+  Future<UserEntity> setUserEntity({
+    UserEntity? currentUserEntity,
   }) async {
-    final baseAppUser = currentAppUser ?? await loadAppUser();
-    final newAppUser = baseAppUser;
-    await _updateAppUser(newAppUser);
-    return newAppUser;
+    final baseUserEntity = currentUserEntity ?? await loadUserEntity();
+    final newUserEntity = baseUserEntity;
+    await _updateUserEntity(newUserEntity);
+    return newUserEntity;
   }
 
-  Future<AppUser> loadAppUser() async {
+  Future<UserEntity> loadUserEntity() async {
     final prefs = await SharedPreferences.getInstance();
-    if (!prefs.containsKey(_keyAppUser)) {
-      return const AppUser();
+    if (!prefs.containsKey(_keyUser)) {
+      return UserEntity();
     }
-    final value = prefs.getString(_keyAppUser);
+    final value = prefs.getString(_keyUser);
     final map = jsonDecode(value!) as Map<String, dynamic>;
-    return AppUser.fromJson(map);
+    return UserEntity.fromJson(map);
   }
 
-  Future<void> _updateAppUser(AppUser appUser) async {
+  Future<void> _updateUserEntity(UserEntity UserEntity) async {
     final prefs = await SharedPreferences.getInstance();
-    final value = jsonEncode(appUser.toJson());
-    await prefs.setString(_keyAppUser, value);
+    final value = jsonEncode(UserEntity.toJson());
+    await prefs.setString(_keyUser, value);
   }
 
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_keyAppUser);
+    await prefs.remove(_keyUser);
   }
 }

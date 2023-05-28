@@ -64,7 +64,6 @@ class _ForgotPasswordChildPageState extends State<ForgotPasswordChildPage> {
   Widget _buildBodyWidget() {
     return BlocBuilder<ForgotPasswordCubit, ForgotPasswordState>(
       buildWhen: (previous, current) =>
-
           previous.autoValidateMode != current.autoValidateMode,
       builder: (context, state) {
         return Padding(
@@ -79,7 +78,7 @@ class _ForgotPasswordChildPageState extends State<ForgotPasswordChildPage> {
               ),
               SizedBox(height: 8.h),
               Text(
-                     S.current.forgot_password_description_1,
+                S.current.forgot_password_description_1,
                 style: AppTextStyle.grayO40S15W400,
               ),
               SizedBox(height: 32.h),
@@ -102,16 +101,13 @@ class _ForgotPasswordChildPageState extends State<ForgotPasswordChildPage> {
       key: _formKey,
       autovalidateMode: autoValidateMode,
       child: AppInput(
-        textEditingController:
-            textEmailController,
+        textEditingController: textEmailController,
         color: AppColors.backgroundTextFieldColor,
         borderRadius: 10,
         autoTrim: true,
         autoValidateMode: autoValidateMode,
-        labelText:
-            S.current.username_or_email,
-        hintText:
-             S.current.enter_your_username_or_email,
+        labelText: S.current.username_or_email,
+        hintText: S.current.enter_your_username_or_email,
         onChanged: (value) {
           _cubit.changEmail(email: value);
         },
@@ -139,7 +135,7 @@ class _ForgotPasswordChildPageState extends State<ForgotPasswordChildPage> {
         ),
         AppIconButton(
           onPressed: () {
-              _forgotPassword();
+            _forgotPassword();
           },
           backgroundColor: AppColors.primary,
           cornerRadius: 10,
@@ -168,8 +164,7 @@ class _ForgotPasswordChildPageState extends State<ForgotPasswordChildPage> {
   }
 
   void _forgotPassword() {
-
-      _cubit.forgotPassword();
+    _cubit.forgotPassword();
 
     FocusScope.of(context).unfocus();
   }

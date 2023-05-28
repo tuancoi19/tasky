@@ -146,8 +146,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
             .collection('users')
             .doc(appCubit.currentUser?.uid)
             .collection('tasks')
-            .doc(appCubit.currentUser?.uid)
-            .set(task.toJson())
+            .add(task.toJson())
             .then((value) {});
       } catch (e) {
         print(e);

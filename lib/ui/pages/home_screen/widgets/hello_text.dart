@@ -4,7 +4,8 @@ import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
 
 class HelloText extends StatelessWidget {
-  const HelloText({Key? key}) : super(key: key);
+  final String title;
+  const HelloText({Key? key, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +21,7 @@ class HelloText extends StatelessWidget {
                 style: AppTextStyle.blackS15W500,
               ),
               TextSpan(
-                /*Thay bằng tên người dùng (khuyến khích fetch vào GlobalData rồi sử dụng cho field này)*/
-                text: 'Jesse',
+                text: title,
                 style: AppTextStyle.primaryS15W500,
               ),
             ],
