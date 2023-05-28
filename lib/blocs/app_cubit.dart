@@ -47,7 +47,6 @@ class AppCubit extends Cubit<AppState> {
           .then(
         (DocumentSnapshot doc) {
           final data = doc.data() as Map<String, dynamic>;
-          print('😍😍😍 ${data['user_name']}');
           return UserEntity.fromJson(data);
         },
         onError: (e) => print("Error getting document: $e"),
@@ -60,7 +59,6 @@ class AppCubit extends Cubit<AppState> {
           refreshToken: credential.user?.refreshToken ?? '',
           token: token,
         );
-        // emit(state.copyWith(user: newUser));
       }
 
       return newUser;
@@ -115,25 +113,6 @@ class AppCubit extends Cubit<AppState> {
       if (user != null) {
         logger.log('🙍‍🙍‍🙍‍ Login success  =->>>> : $user');
         SharedPreferencesHelper.setSeenIntro(isSeen: true);
-        UserEntity? newUser = await FirebaseFirestore.instance
-            .collection("user")
-            .doc(credential.user?.uid)
-            .get()
-            .then(
-          (DocumentSnapshot doc) {
-            final data = doc.data() as Map<String, dynamic>;
-            return UserEntity.fromJson(data);
-          },
-          onError: (e) => print("Error getting document: $e"),
-        );
-        final token = await credential.user?.getIdToken();
-        newUser?.fcmToken = token;
-        newUser?.userId = credential.user?.uid;
-        await saveSession(
-          refreshToken: credential.user?.refreshToken ?? '',
-          token: token,
-        );
-        emit(state.copyWith(user: newUser));
         return user;
       }
     } on FirebaseAuthException catch (e) {
@@ -173,15 +152,16 @@ class AppCubit extends Cubit<AppState> {
     required User user,
     required String userName,
   }) async {
-    final newUser = {
-      'user_name': userName,
-      'email': user.email,
-      'create_at': user.metadata.creationTime,
-    };
+    UserEntity newUser = UserEntity(
+      userName: userName,
+      email: user.email,
+      createAt: user.metadata.creationTime,
+    );
     try {
-      await userCollection.doc(user.uid).set(newUser).catchError((e) {
+      await userCollection.doc(user.uid).set(newUser.toJson()).catchError((e) {
         logger.e('❌❌ ERROR : Save new user to firebase - $e');
       });
+      emit(state.copyWith(user: newUser));
     } catch (e) {
       logger.e('❌❌ ERROR : Save new user to firebase - $e');
     }

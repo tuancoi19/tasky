@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user_entity.g.dart';
@@ -26,6 +27,18 @@ part 'user_entity.g.dart';
 //   }
 // }
 
+class TimestampConverter implements JsonConverter<DateTime, Timestamp> {
+  const TimestampConverter();
+
+  @override
+  DateTime fromJson(Timestamp timestamp) {
+    return timestamp.toDate();
+  }
+
+  @override
+  Timestamp toJson(DateTime date) => Timestamp.fromDate(date);
+}
+
 @JsonSerializable()
 class UserEntity {
   @JsonKey(name: 'user_id')
@@ -41,6 +54,7 @@ class UserEntity {
   String? avatarUrl;
 
   @JsonKey(name: 'logged_in_at')
+  @TimestampConverter()
   DateTime? loggedInAt;
 
   @JsonKey(name: 'is_logged_in')
@@ -50,6 +64,7 @@ class UserEntity {
   String? email;
 
   @JsonKey(name: 'create_at')
+  @TimestampConverter()
   DateTime? createAt;
 
   UserEntity({

@@ -39,7 +39,6 @@ class LoginCubit extends Cubit<LoginState> {
         return;
       } else {
         appCubit.setUser(user);
-        print('********* ${user.userName}');
         authenticationCubit.setLoading(LoadStatus.success);
         Get.offAllNamed(RouteConfig.homeScreen);
       }
