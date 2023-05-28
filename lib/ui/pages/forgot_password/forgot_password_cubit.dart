@@ -69,9 +69,8 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ///TODO UPDATE FILE NGON NGU
                 Text(
-                  'Một email đã được gửi đến hộp thư email của bạn. Vui lòng kiểm tra hộp thư và làm theo hướng dẫn',
+                  S.current.forgot_password_instruction,
                   style: AppTextStyle.secondaryBlackO80S21W600,
                 ),
                 SizedBox(height: 32.h),

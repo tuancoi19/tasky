@@ -122,7 +122,8 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
         (state.endTime ?? TimeOfDay.now()).minute >=
             (state.startTime ?? TimeOfDay.now()).minute;
     if (!checkDuration) {
-    } /* ToDo else if () {} */
+    }
+    /* ToDo else if () {} */
     else if (state.category == null) {
     } else {
       try {
@@ -134,11 +135,9 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
                   state.date ?? DateTime.now())
               .toString(),
           start: AppDateTimePicker.convertTimeOfDayToString(
-                  state.startTime ?? TimeOfDay.now())
-              .toString(),
+              state.startTime ?? TimeOfDay.now()),
           end: AppDateTimePicker.convertTimeOfDayToString(
-                  state.endTime ?? TimeOfDay.now())
-              .toString(),
+              state.endTime ?? TimeOfDay.now()),
           category: state.category ?? CategoryEntity(title: '', color: ''),
         );
 

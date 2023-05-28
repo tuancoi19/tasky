@@ -112,5 +112,10 @@
   "please_select_your_end_time": "Hãy chọn thời gian kết thúc",
   "enter_your_task_title": "Hãy đặt tên cho tác vụ của bạn",
   "enter_your_task_note": "Hãy điền ghi chú cho tác vụ của bạn",
-  "please_do_not_enter_more_than_characters": "Không điền quá {length} kí tự"
+  "please_do_not_enter_more_than_characters": "Không điền quá {length} kí tự",
+  "forgot_password_instruction": "Một email đã được gửi đến hộp thư email của bạn. Vui lòng kiểm tra hộp thư và làm theo hướng dẫn",
+  "category_detail": "Chi tiết Danh mục",
+  "add_new_category": "Thêm Danh mục mới",
+  "enter_your_category_name": "Nhập tên Danh mục của bạn",
+  "category_name": "Tên danh mục"
 }

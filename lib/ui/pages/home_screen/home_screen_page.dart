@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/router/route_config.dart';
+import 'package:tasky/ui/commons/app_dialog.dart';
+import 'package:tasky/ui/pages/category/category_page.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/category_title.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/hello_text.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/home_app_bar.dart';
@@ -86,6 +88,7 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
         },
       ),
       mainScreen: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: HomeAppBar(
           onTap: () {
             _zoomDrawerController.open?.call();
@@ -114,7 +117,15 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
             SizedBox(height: 24.h),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24).r,
-              child: CategoryTitle(onTap: () {}),
+              child: CategoryTitle(
+                onTap: () {
+                  AppDialog.showCustomDialog(
+                    content: CategoryPage(
+                      arguments: CategoryArguments(),
+                    ),
+                  );
+                },
+              ),
             ),
             const CategoryListView(),
             Padding(

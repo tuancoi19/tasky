@@ -112,5 +112,10 @@
   "please_select_your_end_time": "Please select your end time",
   "enter_your_task_title": "Enter your Task title",
   "enter_your_task_note": "Enter your Task note",
-  "please_do_not_enter_more_than_characters": "Please do not enter more than {length} characters"
+  "please_do_not_enter_more_than_characters": "Please do not enter more than {length} characters",
+  "forgot_password_instruction": "A email has been sent to your email inbox. Please check your inbox and follow the instructions.",
+  "category_detail": "Category detail",
+  "add_new_category": "Add new Category",
+  "enter_your_category_name": "Enter your Category name",
+  "category_name": "Category name"
 }

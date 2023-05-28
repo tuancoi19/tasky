@@ -32,7 +32,8 @@ class LoginCubit extends Cubit<LoginState> {
   }) async {
     authenticationCubit.setLoading(LoadStatus.loading);
     try {
-      final User? user =  await appCubit.logInWithEmailAndPassword(mail: mail, password: password);
+      final User? user = await appCubit.logInWithEmailAndPassword(
+          mail: mail, password: password);
       if (user == null) {
         authenticationCubit.setLoading(LoadStatus.failure);
         return;

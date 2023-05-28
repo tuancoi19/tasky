@@ -95,4 +95,12 @@ class AppColors {
   static const Color aboutUsIconColor = Color(0xFF485FD3);
 
   static const Color iconBackgroundColor = Color(0xFFF5F8FF);
+
+  static final List<Color> categoryColorList = [
+    notificationIconColor,
+    becomeVipIconColor,
+    logoutBackgroundColor,
+    helpCenterIconColor,
+    aboutUsIconColor,
+  ];
 }
