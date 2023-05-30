@@ -59,8 +59,8 @@ class AppCubit extends Cubit<AppState> {
           refreshToken: credential.user?.refreshToken ?? '',
           token: token,
         );
+          emit(state.copyWith(user: newUser));
       }
-
       return newUser;
     } on FirebaseAuthException catch (e) {
       AppDialog.showCustomDialog(
@@ -95,13 +95,33 @@ class AppCubit extends Cubit<AppState> {
     return null;
   }
 
-  void setUser(UserEntity user) {
-    emit(state.copyWith(user: user));
+  Future<bool> isSignedIn ()async {
+    final currentUser = _firebaseAuth.currentUser;
+    return currentUser != null;
+  }
+
+  Future<UserEntity?> getUser() async {
+    UserEntity? newUser = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(_firebaseAuth.currentUser?.uid)
+        .get()
+        .then(
+          (DocumentSnapshot doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        return UserEntity.fromJson(data);
+          },
+      onError: (e) => print("Error getting document: $e"),
+    );
+    if(newUser!= null){
+      emit(state.copyWith(user: newUser));
+      return newUser;
+    }
+    return null;
   }
 
   Future<User?> createUserWithEmailAndPassword({
     required String mail,
-    required String password,
+    required String password, required String userName,
   }) async {
     try {
       UserCredential credential =
@@ -112,7 +132,8 @@ class AppCubit extends Cubit<AppState> {
       User? user = credential.user;
       if (user != null) {
         logger.log('🙍‍🙍‍🙍‍ Login success  =->>>> : $user');
-        SharedPreferencesHelper.setSeenIntro(isSeen: true);
+        //save user_name
+        credential.user?.updateDisplayName(userName);
         return user;
       }
     } on FirebaseAuthException catch (e) {

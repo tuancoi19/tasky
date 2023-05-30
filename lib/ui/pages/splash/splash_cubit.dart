@@ -13,16 +13,18 @@ class SplashCubit extends Cubit<SplashState> {
   SplashCubit({required this.appCubit}) : super(const SplashState());
 
   void checkLogin() async {
-    appCubit.authStateChanges.listen((User? user) async {
-      String route;
-      if (user == null) {
-        bool isSeenIntro = await SharedPreferencesHelper.isSeenIntro();
-        route = isSeenIntro ? RouteConfig.authentication : RouteConfig.welcome;
-        SharedPreferencesHelper.setSeenIntro(isSeen: true);
-      } else {
-        route = RouteConfig.homeScreen;
-      }
-      Get.offAllNamed(route);
-    });
+
+    bool isLoggIn = await appCubit.isSignedIn();
+    String route;
+
+    if (isLoggIn) {
+      route = RouteConfig.homeScreen;
+      await appCubit.getUser();
+    } else {
+      bool isSeenIntro = await SharedPreferencesHelper.isSeenIntro();
+      route = isSeenIntro ? RouteConfig.authentication : RouteConfig.welcome;
+      SharedPreferencesHelper.setSeenIntro(isSeen: true);
+    }
+    Get.offAllNamed(route);
   }
 }
