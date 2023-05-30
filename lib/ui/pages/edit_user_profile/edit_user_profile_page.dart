@@ -118,7 +118,7 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
                     onTap: () {
                       AppDialog.showCustomBottomSheet(
                         context,
-                        widget: SelectUploadImage(
+                        widget: AppImagePicker(
                           onSubmitImage: (value) {
                             return _cubit.setImagePath(imagePath: value.path);
                           },

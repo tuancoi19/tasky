@@ -179,7 +179,6 @@ class _LoginChildPageState extends State<LoginChildPage> {
     _cubit.login(
       mail: emailTextController.text,
       password: passwordTextController.text,
-
     );
   }
 

@@ -109,5 +109,8 @@
   "upload_image": "Tải ảnh lên",
   "upload_file": "Tải tài liệu lên",
   "please_select_your_start_time": "Hãy chọn thời gian bắt đầu",
-  "please_select_your_end_time": "Hãy chọn thời gian kết thúc"
+  "please_select_your_end_time": "Hãy chọn thời gian kết thúc",
+  "enter_your_task_title": "Hãy đặt tên cho tác vụ của bạn",
+  "enter_your_task_note": "Hãy điền ghi chú cho tác vụ của bạn",
+  "please_do_not_enter_more_than_characters": "Không điền quá {length} kí tự"
 }

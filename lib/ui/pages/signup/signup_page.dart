@@ -23,7 +23,7 @@ class SignupPage extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         final AuthenticationCubit authenticationCubit =
-        BlocProvider.of<AuthenticationCubit>(context);
+            BlocProvider.of<AuthenticationCubit>(context);
         final AppCubit appCubit = BlocProvider.of<AppCubit>(context);
         return SignupCubit(
             authenticationCubit: authenticationCubit, appCubit: appCubit);
@@ -106,7 +106,7 @@ class _SignInChildPageState extends State<SignInChildPage> {
   Widget buildForm() {
     return BlocBuilder<SignupCubit, SignupState>(
         buildWhen: (previous, current) =>
-        previous.autoValidateMode != current.autoValidateMode,
+            previous.autoValidateMode != current.autoValidateMode,
         builder: (context, state) {
           return Form(
             key: _formKey,

@@ -3,13 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/utils/utils.dart';
 
-class NoteTextField extends StatelessWidget {
+class TaskTakeNoteTextField extends StatelessWidget {
   final Function(String) onChanged;
   final TextEditingController controller;
   final Color color;
 
-  const NoteTextField({
+  const TaskTakeNoteTextField({
     Key? key,
     required this.onChanged,
     required this.controller,
@@ -31,15 +32,26 @@ class NoteTextField extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10).r,
           ),
-          child: TextField(
+          child: TextFormField(
             onChanged: onChanged,
             controller: controller,
             style: AppTextStyle.blackO40S14W400,
             maxLines: 8,
+            maxLength: 1000,
+            validator: (text) {
+              return Utils.emptyValidator(
+                text ?? '',
+                message: S.current.enter_your_task_note,
+              );
+            },
             decoration: InputDecoration(
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 16).r,
               enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10).r,
+                borderSide: BorderSide.none,
+              ),
+              border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10).r,
                 borderSide: BorderSide.none,
               ),

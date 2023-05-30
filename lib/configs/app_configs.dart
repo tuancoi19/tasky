@@ -21,7 +21,7 @@ class AppConfigs {
   ///DateFormat
 
   static const dateAPIFormat = 'dd/MM/yyyy';
-  static const dateDisplayFormat = 'dd/MM/yyyy';
+  static const dateDisplayFormat = 'dd MMM, yyyy';
 
   static const timeDisplayFormat = 'HH:mm';
 

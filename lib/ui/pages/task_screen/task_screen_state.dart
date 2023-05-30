@@ -4,14 +4,15 @@ class TaskScreenState extends Equatable {
   final LoadStatus loadDataStatus;
   final String? title;
   final AutovalidateMode autoValidateMode;
-  final String? startTime;
-  final String? endTime;
-  final String? date;
+  final TimeOfDay? startTime;
+  final TimeOfDay? endTime;
+  final DateTime? date;
   final String? note;
   final List<CategoryEntity>? categoryList;
   final CategoryEntity? category;
   final List<String>? documentList;
   final Color themeColor;
+  final bool isLoading;
 
   const TaskScreenState({
     this.loadDataStatus = LoadStatus.initial,
@@ -25,6 +26,7 @@ class TaskScreenState extends Equatable {
     this.category,
     this.documentList,
     this.themeColor = AppColors.primary,
+    this.isLoading = false,
   });
 
   @override
@@ -40,20 +42,22 @@ class TaskScreenState extends Equatable {
         category,
         documentList,
         themeColor,
+        isLoading,
       ];
 
   TaskScreenState copyWith({
     LoadStatus? loadDataStatus,
     String? title,
     AutovalidateMode? autoValidateMode,
-    String? startTime,
-    String? endTime,
-    String? date,
+    TimeOfDay? startTime,
+    TimeOfDay? endTime,
+    DateTime? date,
     String? note,
     List<CategoryEntity>? categoryList,
     CategoryEntity? category,
     List<String>? documentList,
     Color? themeColor,
+    bool? isLoading,
   }) {
     return TaskScreenState(
       loadDataStatus: loadDataStatus ?? this.loadDataStatus,
@@ -67,6 +71,7 @@ class TaskScreenState extends Equatable {
       category: category ?? this.category,
       documentList: documentList ?? this.documentList,
       themeColor: themeColor ?? this.themeColor,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 }
