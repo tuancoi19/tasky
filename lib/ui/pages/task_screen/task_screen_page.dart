@@ -194,7 +194,7 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
                     selectedCategory: state.category ??
                         CategoryEntity(
                           title: '',
-                          color: '',
+                          color: 0,
                         ),
                   ),
                   SizedBox(height: 32.h),
@@ -230,7 +230,9 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
                       autoValidateMode: AutovalidateMode.always,
                     );
                     if (_formKey.currentState!.validate()) {
-                      _cubit.addTaskToFirebase();
+                      await _cubit.addTaskToFirebase().then(
+                            (value) => Get.back(),
+                          );
                     }
                   },
                   isLoading: state.isLoading,

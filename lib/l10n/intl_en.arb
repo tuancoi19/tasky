@@ -117,5 +117,6 @@
   "category_detail": "Category detail",
   "add_new_category": "Add new Category",
   "enter_your_category_name": "Enter your Category name",
-  "category_name": "Category name"
+  "category_name": "Category name",
+  "theme": "Theme"
 }

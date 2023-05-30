@@ -131,7 +131,7 @@ class Utils {
   }
 
   static String? emptyValidator(String text, {String? message}) {
-    if (text.isEmpty) {
+    if (text.trim().isEmpty) {
       return message ?? S.current.enter_your_username_or_email;
     }
     return null;

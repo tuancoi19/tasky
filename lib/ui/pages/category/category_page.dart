@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/ui/commons/app_snackbar.dart';
 import 'package:tasky/ui/pages/category/widgets/category_color_picker.dart';
 import 'package:tasky/ui/pages/category/widgets/navigator_row.dart';
 import 'package:tasky/ui/widgets/input/app_input.dart';
@@ -31,7 +34,8 @@ class CategoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        return CategoryCubit();
+        final AppCubit appCubit = BlocProvider.of(context);
+        return CategoryCubit(appCubit: appCubit);
       },
       child: CategoryChildPage(arguments: arguments),
     );
@@ -97,10 +101,13 @@ class _CategoryChildPageState extends State<CategoryChildPage> {
                       message: S.current.enter_your_category_name,
                     );
                   },
+                  onChanged: (value) {
+                    _cubit.changeName(name: value.trim());
+                  },
                 ),
                 SizedBox(height: 28.h),
                 Text(
-                  'Theme',
+                  S.current.theme,
                   style: AppTextStyle.blackS15W500,
                 ),
                 SizedBox(height: 20.h),
@@ -112,7 +119,17 @@ class _CategoryChildPageState extends State<CategoryChildPage> {
                 ),
                 SizedBox(height: 24.h),
                 NavigatorRow(
-                  onPressed: () {},
+                  onPressed: () async {
+                    if (state.selectedColor == null) {
+                      AppSnackbar.showError(message: 'Please choose a theme!');
+                    }
+                    if (_formKey.currentState!.validate() &&
+                        state.selectedColor != null) {
+                      await _cubit.addCategoryToFirebase().then(
+                            (value) => Get.back(),
+                          );
+                    }
+                  },
                 ),
               ],
             ),

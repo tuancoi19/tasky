@@ -10,6 +10,7 @@ import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/database/secure_storage_helper.dart';
 import 'package:tasky/database/share_preferences_helper.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/global/global_data.dart';
 import 'package:tasky/models/entities/token_entity.dart';
 import 'package:tasky/models/entities/user/user_entity.dart';
 import 'package:tasky/models/enums/load_status.dart';
@@ -54,6 +55,7 @@ class AppCubit extends Cubit<AppState> {
       if (newUser != null) {
         final token = await credential.user?.getIdToken();
         newUser.fcmToken = token;
+        GlobalData.instance.userID = credential.user?.uid;
         newUser.userId = credential.user?.uid ?? '';
         await saveSession(
           refreshToken: credential.user?.refreshToken ?? '',
@@ -215,14 +217,14 @@ class AppCubit extends Cubit<AppState> {
     secureStorageHelper.saveToken(tokenEntity);
   }
 
-  // Future<void> _saveToSharedPreferences(
-  //   UserEntity? currentUserEntity,
-  // ) async {
-  //   final sharedPreferencesHelper = SharedPreferencesHelper();
-  //   await sharedPreferencesHelper.setUserEntity(
-  //     currentUserEntity: currentUserEntity,
-  //   );
-  // }
+// Future<void> _saveToSharedPreferences(
+//   UserEntity? currentUserEntity,
+// ) async {
+//   final sharedPreferencesHelper = SharedPreferencesHelper();
+//   await sharedPreferencesHelper.setUserEntity(
+//     currentUserEntity: currentUserEntity,
+//   );
+// }
 
   ///Sign Out
 // void signOut() async {

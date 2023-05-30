@@ -26,15 +26,15 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
       //Todo: add API calls
       changeCategoryList(
         categoryList: [
-          CategoryEntity(color: 'FFF1EEAD', title: '12412'),
-          CategoryEntity(color: 'FFA2F0E2', title: '23535'),
-          CategoryEntity(color: 'FFCBADF1', title: '567658'),
-          CategoryEntity(color: 'FFF4B6B6', title: '12412'),
-          CategoryEntity(color: 'FFADF1E9', title: '23535'),
-          CategoryEntity(color: 'FFADB8F1', title: '567658'),
-          CategoryEntity(color: 'FF3DAE99', title: '12412'),
-          CategoryEntity(color: 'FFBBB64F', title: '23535'),
-          CategoryEntity(color: 'FFA46CEB', title: '567658'),
+          CategoryEntity(color: 0xFFF1EEAD, title: '12412'),
+          CategoryEntity(color: 0xFFA2F0E2, title: '23535'),
+          CategoryEntity(color: 0xFFCBADF1, title: '567658'),
+          CategoryEntity(color: 0xFFF4B6B6, title: '12412'),
+          CategoryEntity(color: 0xFFADF1E9, title: '23535'),
+          CategoryEntity(color: 0xFFADB8F1, title: '567658'),
+          CategoryEntity(color: 0xFF3DAE99, title: '12412'),
+          CategoryEntity(color: 0xFFBBB64F, title: '23535'),
+          CategoryEntity(color: 0xFFA46CEB, title: '567658'),
         ],
       );
       changeDocumentList(
@@ -88,7 +88,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
 
   void changeCategory({required CategoryEntity category}) {
     emit(state.copyWith(category: category));
-    changeThemeColor(colorCode: category.colorHex);
+    changeThemeColor(colorCode: category.color);
   }
 
   void changeDocumentList({required List<String> documentList}) {
@@ -115,7 +115,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
     emit(state.copyWith(autoValidateMode: autoValidateMode));
   }
 
-  void addTaskToFirebase() {
+  Future<void> addTaskToFirebase() async {
     emit(state.copyWith(isLoading: true));
     final bool checkDuration = (state.endTime ?? TimeOfDay.now()).hour >=
             (state.startTime ?? TimeOfDay.now()).hour &&
@@ -138,15 +138,14 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
               state.startTime ?? TimeOfDay.now()),
           end: AppDateTimePicker.convertTimeOfDayToString(
               state.endTime ?? TimeOfDay.now()),
-          category: state.category ?? CategoryEntity(title: '', color: ''),
+          category: state.category ?? CategoryEntity(title: '', color: 0),
         );
 
-        FirebaseFirestore.instance
+        await FirebaseFirestore.instance
             .collection('users')
             .doc(appCubit.currentUser?.uid)
             .collection('tasks')
-            .add(task.toJson())
-            .then((value) {});
+            .add(task.toJson());
       } catch (e) {
         print(e);
       }

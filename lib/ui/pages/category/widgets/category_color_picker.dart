@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tasky/common/app_colors.dart';
 
 class CategoryColorPicker extends StatelessWidget {
-  final Function(Color) onTap;
-  final Color? selectedColor;
+  final Function(int) onTap;
+  final int? selectedColor;
 
   const CategoryColorPicker({
     Key? key,
@@ -24,7 +24,7 @@ class CategoryColorPicker extends StatelessWidget {
   Widget buildColorItem(Color color) {
     return InkWell(
       onTap: () {
-        onTap(color);
+        onTap(color.value);
       },
       child: Container(
         width: 44.h,
@@ -34,7 +34,7 @@ class CategoryColorPicker extends StatelessWidget {
           color: color,
           border: Border.all(
             color:
-                color == selectedColor ? AppColors.primary : Colors.transparent,
+                color.value == selectedColor ? AppColors.primary : Colors.transparent,
             width: 2.w,
           ),
         ),

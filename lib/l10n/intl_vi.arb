@@ -117,5 +117,6 @@
   "category_detail": "Chi tiết Danh mục",
   "add_new_category": "Thêm Danh mục mới",
   "enter_your_category_name": "Nhập tên Danh mục của bạn",
-  "category_name": "Tên danh mục"
+  "category_name": "Tên danh mục",
+  "theme": "Theme"
 }
