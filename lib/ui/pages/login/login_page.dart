@@ -113,7 +113,11 @@ class _LoginChildPageState extends State<LoginChildPage> {
           SizedBox(height: 20.h),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 56).r,
-            child: const OptionListWidget(),
+            child: OptionListWidget(
+              onPressedGoogle: () async {
+                await _cubit.loginByGoogle();
+              },
+            ),
           ),
         ],
       ),
