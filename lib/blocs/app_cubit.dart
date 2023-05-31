@@ -10,6 +10,7 @@ import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/database/secure_storage_helper.dart';
 import 'package:tasky/database/share_preferences_helper.dart';
+import 'package:tasky/firebase_options.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/models/entities/token_entity.dart';
 import 'package:tasky/models/entities/user/user_entity.dart';
@@ -25,7 +26,8 @@ class AppCubit extends Cubit<AppState> {
   AppCubit() : super(const AppState());
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+      clientId: DefaultFirebaseOptions.currentPlatform.iosClientId);
 
   final userCollection = FirebaseFirestore.instance.collection("users");
 
@@ -193,14 +195,28 @@ class AppCubit extends Cubit<AppState> {
       UserCredential credentialUser =
           await _firebaseAuth.signInWithCredential(credential);
       User? user = credentialUser.user;
+
+      //check nếu user đã tồn tại
+      UserEntity? checkAlreadyUser = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(user?.uid)
+          .get()
+          .then(
+        (DocumentSnapshot doc) {
+          final data = doc.data() as Map<String, dynamic>;
+          return UserEntity.fromJson(data);
+        },
+        onError: (e) => print("Error getting document: $e"),
+      );
+      
       if (user != null) {
-        logger.log('🙍‍🙍‍🙍‍ Login success  =->>>> : $user');
         UserEntity currentUser = UserEntity(
-          userName: user.displayName,
+          //ưu tiên lấy lại userName cũ
+          userName: checkAlreadyUser?.userName ?? user.displayName,
           userId: user.uid,
           email: user.email,
           createAt: user.metadata.creationTime,
-            avatarUrl: user.photoURL,
+          avatarUrl: user.photoURL,
         );
         emit(state.copyWith(user: currentUser));
         return currentUser;
