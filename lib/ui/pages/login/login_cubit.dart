@@ -78,6 +78,22 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
+  Future<void> loginByGoogle() async {
+    authenticationCubit.setLoading(LoadStatus.loading);
+    try {
+      UserEntity? user = await appCubit.signInWithGoogle();
+      if (user == null) {
+        authenticationCubit.setLoading(LoadStatus.failure);
+        return;
+      } else {
+        authenticationCubit.setLoading(LoadStatus.success);
+        Get.offAllNamed(RouteConfig.homeScreen);
+      }
+    } catch (e) {
+      authenticationCubit.setLoading(LoadStatus.failure);
+    }
+  }
+
   Future<void> forgotPassword({required String email}) async {
     appCubit.forgotPassword(email: email);
   }
