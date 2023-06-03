@@ -102,5 +102,15 @@ class AppColors {
     logoutBackgroundColor,
     helpCenterIconColor,
     aboutUsIconColor,
+    t,
+    u,
+    i,
   ];
+
+  static const Color q = Color(0xFF58419C);
+  static const Color w = Color(0xFF6EBCB7);
+  static const Color e = Color(0xFF0455BF);
+  static const Color t = Color(0xFFA77D60);
+  static const Color u = Color(0xFF7CCB12);
+  static const Color i = Color(0xFFFFBE21);
 }

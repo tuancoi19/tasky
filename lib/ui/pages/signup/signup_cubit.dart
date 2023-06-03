@@ -26,7 +26,7 @@ class SignupCubit extends Cubit<SignupState> {
   }) async {
     authenticationCubit.setLoading(LoadStatus.loading);
     User? user = await appCubit.createUserWithEmailAndPassword(
-        mail: mail, password: password);
+        mail: mail, password: password, userName: userName);
     if (user != null) {
       await appCubit.saveUserToFirebase(user: user, userName: userName);
       authenticationCubit.setLoading(LoadStatus.success);

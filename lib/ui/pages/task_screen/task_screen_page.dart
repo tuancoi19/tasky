@@ -230,9 +230,7 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
                       autoValidateMode: AutovalidateMode.always,
                     );
                     if (_formKey.currentState!.validate()) {
-                      await _cubit.addTaskToFirebase().then(
-                            (value) => Get.back(),
-                          );
+                      await _cubit.addTaskToFirebase();
                     }
                   },
                   isLoading: state.isLoading,

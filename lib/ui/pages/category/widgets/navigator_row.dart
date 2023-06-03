@@ -10,10 +10,12 @@ import 'package:tasky/ui/widgets/buttons/app_icon_button.dart';
 
 class NavigatorRow extends StatelessWidget {
   final Function() onPressed;
+  final Color? theme;
 
   const NavigatorRow({
     super.key,
     required this.onPressed,
+    this.theme,
   });
 
   @override
@@ -24,16 +26,18 @@ class NavigatorRow extends StatelessWidget {
       children: [
         TextButton(
           onPressed: () {
-            Get.back(closeOverlays: true);
+            Get.back();
           },
           child: Text(
             S.current.close,
-            style: AppTextStyle.primaryO50S14W400,
+            style: AppTextStyle.primaryO50S14W400.copyWith(
+              color: theme,
+            ),
           ),
         ),
         AppIconButton(
           onPressed: onPressed,
-          backgroundColor: AppColors.primary,
+          backgroundColor: theme ?? AppColors.primary,
           cornerRadius: 10,
           width: 48,
           height: 48,

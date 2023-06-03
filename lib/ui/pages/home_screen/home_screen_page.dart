@@ -35,7 +35,8 @@ class HomeScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        return HomeScreenCubit();
+        final AppCubit appCubit = BlocProvider.of(context);
+        return HomeScreenCubit(appCubit);
       },
       child: const HomeScreenChildPage(),
     );

@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/database/secure_storage_helper.dart';
-import 'package:tasky/database/share_preferences_helper.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/global/global_data.dart';
 import 'package:tasky/models/entities/token_entity.dart';
@@ -25,9 +25,12 @@ class AppCubit extends Cubit<AppState> {
   AppCubit() : super(const AppState());
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
   final userCollection = FirebaseFirestore.instance.collection("users");
 
-  User? get currentUser => _firebaseAuth.currentUser;
+  User? get currentUser =>
+    _firebaseAuth.currentUser;
 
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
@@ -55,14 +58,15 @@ class AppCubit extends Cubit<AppState> {
       if (newUser != null) {
         final token = await credential.user?.getIdToken();
         newUser.fcmToken = token;
-        GlobalData.instance.userID = credential.user?.uid;
         newUser.userId = credential.user?.uid ?? '';
+        GlobalData.instance.userID = credential.user?.uid ?? '';
+
         await saveSession(
           refreshToken: credential.user?.refreshToken ?? '',
           token: token,
         );
+        emit(state.copyWith(user: newUser));
       }
-
       return newUser;
     } on FirebaseAuthException catch (e) {
       AppDialog.showCustomDialog(
@@ -97,13 +101,38 @@ class AppCubit extends Cubit<AppState> {
     return null;
   }
 
-  void setUser(UserEntity user) {
-    emit(state.copyWith(user: user));
+  Future<bool> isSignedIn() async {
+    final currentUser = _firebaseAuth.currentUser;
+    return currentUser != null;
+  }
+
+  Future<UserEntity?> getUser() async {
+    UserEntity? newUser = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(_firebaseAuth.currentUser?.uid)
+        .get()
+        .then(
+      (DocumentSnapshot doc) {
+        if (doc.data() != null) {
+          final data = doc.data() as Map<String, dynamic>;
+          return UserEntity.fromJson(data);
+        }
+        return null;
+      },
+      onError: (e) => print("Error getting document: $e"),
+    );
+    if (newUser != null) {
+      emit(state.copyWith(user: newUser));
+      GlobalData.instance.userID = newUser.userId;
+      return newUser;
+    }
+    return null;
   }
 
   Future<User?> createUserWithEmailAndPassword({
     required String mail,
     required String password,
+    required String userName,
   }) async {
     try {
       UserCredential credential =
@@ -114,7 +143,17 @@ class AppCubit extends Cubit<AppState> {
       User? user = credential.user;
       if (user != null) {
         logger.log('🙍‍🙍‍🙍‍ Login success  =->>>> : $user');
-        SharedPreferencesHelper.setSeenIntro(isSeen: true);
+        //save user_name
+        credential.user?.updateDisplayName(userName);
+        UserEntity currentUser = UserEntity(
+          userName: user.displayName,
+          userId: user.uid,
+          email: mail,
+          createAt: user.metadata.creationTime,
+        );
+        GlobalData.instance.userID = credential.user?.uid;
+        emit(state.copyWith(user: currentUser));
+
         return user;
       }
     } on FirebaseAuthException catch (e) {
@@ -147,6 +186,65 @@ class AppCubit extends Cubit<AppState> {
     } catch (e) {
       logger.log('LOGIN FAILED! $e');
     }
+    return null;
+  }
+
+  Future<UserEntity?> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser!.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+          idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
+
+      UserCredential credentialUser =
+          await _firebaseAuth.signInWithCredential(credential);
+      User? user = credentialUser.user;
+      if (user != null) {
+        logger.log('🙍‍🙍‍🙍‍ Login success  =->>>> : $user');
+        UserEntity currentUser = UserEntity(
+          userName: user.displayName,
+          userId: user.uid,
+          email: user.email,
+          createAt: user.metadata.creationTime,
+          avatarUrl: user.photoURL,
+        );
+        GlobalData.instance.userID = credentialUser.user?.uid;
+        emit(state.copyWith(user: currentUser));
+        return currentUser;
+      }
+    } on FirebaseAuthException catch (e) {
+      AppDialog.showCustomDialog(
+        content: Padding(
+          padding: const EdgeInsets.all(16).r,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                e.message ?? '',
+                style: AppTextStyle.secondaryBlackO80S21W600,
+              ),
+              SizedBox(height: 32.h),
+              AppButton(
+                height: 56.h,
+                title: S.current.close,
+                cornerRadius: 15.r,
+                textStyle: AppTextStyle.whiteS18Bold,
+                backgroundColor: AppColors.primary,
+                onPressed: () {
+                  Get.back(closeOverlays: true);
+                },
+              )
+            ],
+          ),
+        ),
+      );
+    } catch (e) {
+      logger.log('LOGIN FAILED! $e');
+    }
+
     return null;
   }
 

@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:tasky/ui/pages/authentication/authentication_page.dart';
-import 'package:tasky/ui/pages/dashboard/dashboard_page.dart';
 import 'package:tasky/ui/pages/home_screen/home_screen_page.dart';
 import 'package:tasky/ui/pages/edit_user_profile/edit_user_profile_page.dart';
 import 'package:tasky/ui/pages/onboarding/onboarding_page.dart';
@@ -16,7 +15,6 @@ class RouteConfig {
   static const String welcome = '/welcome';
   static const String onboarding = '/onboarding';
   static const String authentication = '/authentication';
-  static const String dashboard = '/dashboard';
   static const String editUserProfile = '/edit_user_profile';
   static const String taskInformation = '/task_information';
   static const String homeScreen = '/home_screen';
@@ -39,10 +37,6 @@ class RouteConfig {
     GetPage(
       name: authentication,
       page: () => const AuthenticationPage(),
-    ),
-    GetPage(
-      name: dashboard,
-      page: () => const DashboardPage(),
     ),
     GetPage(
       name: editUserProfile,

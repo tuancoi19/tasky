@@ -5,13 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/global/global_data.dart';
 import 'package:tasky/models/entities/category/category_entity.dart';
 import 'package:tasky/models/entities/task/task_entity.dart';
 import 'package:tasky/models/enums/load_status.dart';
-import 'package:tasky/ui/commons/app_date_time_picker.dart';
+import 'package:tasky/ui/commons/app_snackbar.dart';
+import 'package:tasky/utils/date_time_utils.dart';
+import 'package:tasky/utils/file_utils.dart';
+import 'package:tasky/utils/logger.dart';
 
 part 'task_screen_state.dart';
 
@@ -21,28 +26,12 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
   TaskScreenCubit({required this.appCubit}) : super(const TaskScreenState());
 
   Future<void> loadInitialData() async {
-    emit(state.copyWith(loadDataStatus: LoadStatus.initial));
+    emit(state.copyWith(loadDataStatus: LoadStatus.loading));
     try {
-      //Todo: add API calls
-      changeCategoryList(
-        categoryList: [
-          CategoryEntity(color: 0xFFF1EEAD, title: '12412'),
-          CategoryEntity(color: 0xFFA2F0E2, title: '23535'),
-          CategoryEntity(color: 0xFFCBADF1, title: '567658'),
-          CategoryEntity(color: 0xFFF4B6B6, title: '12412'),
-          CategoryEntity(color: 0xFFADF1E9, title: '23535'),
-          CategoryEntity(color: 0xFFADB8F1, title: '567658'),
-          CategoryEntity(color: 0xFF3DAE99, title: '12412'),
-          CategoryEntity(color: 0xFFBBB64F, title: '23535'),
-          CategoryEntity(color: 0xFFA46CEB, title: '567658'),
-        ],
-      );
-      changeDocumentList(
-        documentList: [
-          'qwefwefkglkgregkerg/qwrqwrqwrqwrqt.jpg',
-          'qwqwfqfefwgweg/qwdqwdfqwf.docx'
-        ],
-      );
+      changeCategoryList(categoryList: GlobalData.instance.categoriesList);
+      changeDate(date: DateTime.now());
+      changeStartTime(startTime: TimeOfDay.now());
+      changeEndTime(endTime: TimeOfDay.now());
       emit(state.copyWith(loadDataStatus: LoadStatus.success));
     } catch (e) {
       //Todo: should print exception here
@@ -97,13 +86,13 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
 
   void sendImage({required File file}) {
     final List<String> addedList = [...?state.documentList];
-    addedList.add(file.uri.pathSegments.last);
+    addedList.add(file.path);
     changeDocumentList(documentList: addedList);
   }
 
   void sendTextFile({required File file}) {
     final List<String> addedList = [...?state.documentList];
-    addedList.add(file.uri.pathSegments.last);
+    addedList.add(file.path);
     changeDocumentList(documentList: addedList);
   }
 
@@ -115,41 +104,78 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
     emit(state.copyWith(autoValidateMode: autoValidateMode));
   }
 
-  Future<void> addTaskToFirebase() async {
-    emit(state.copyWith(isLoading: true));
-    final bool checkDuration = (state.endTime ?? TimeOfDay.now()).hour >=
-            (state.startTime ?? TimeOfDay.now()).hour &&
-        (state.endTime ?? TimeOfDay.now()).minute >=
-            (state.startTime ?? TimeOfDay.now()).minute;
+  Future<void> onDone() async {
+    final bool checkDuration = (state.endTime ?? TimeOfDay.now()).hour >
+            (state.startTime ?? TimeOfDay.now()).hour ||
+        ((state.endTime ?? TimeOfDay.now()).hour ==
+                (state.startTime ?? TimeOfDay.now()).hour &&
+            (state.endTime ?? TimeOfDay.now()).minute >=
+                (state.startTime ?? TimeOfDay.now()).minute);
+
     if (!checkDuration) {
+      AppSnackbar.showError(
+        title: 'Start time - End time',
+        message: 'End time cannot be chosen earlier than Start time',
+      );
     }
     /* ToDo else if () {} */
     else if (state.category == null) {
+      AppSnackbar.showError(
+        title: 'Category',
+        message: 'Please select a category for this task',
+      );
     } else {
-      try {
-        final TaskEntity task = TaskEntity(
-          title: state.title ?? '',
-          note: state.note ?? '',
-          documents: state.documentList ?? [],
-          date: AppDateTimePicker.convertDateTimeToString(
-                  state.date ?? DateTime.now())
-              .toString(),
-          start: AppDateTimePicker.convertTimeOfDayToString(
-              state.startTime ?? TimeOfDay.now()),
-          end: AppDateTimePicker.convertTimeOfDayToString(
-              state.endTime ?? TimeOfDay.now()),
-          category: state.category ?? CategoryEntity(title: '', color: 0),
-        );
+      await addTaskToFirebase();
+    }
+  }
 
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(appCubit.currentUser?.uid)
-            .collection('tasks')
-            .add(task.toJson());
-      } catch (e) {
-        print(e);
-      }
+  Future<void> addTaskToFirebase() async {
+    emit(state.copyWith(isLoading: true));
+    try {
+      final TaskEntity task = TaskEntity(
+        title: state.title ?? '',
+        note: state.note ?? '',
+        documents: await uploadFileToStorage(),
+        date:
+            DateTimeUtils.convertDateTimeToString(state.date ?? DateTime.now())
+                .toString(),
+        start: DateTimeUtils.convertTimeOfDayToString(
+            state.startTime ?? TimeOfDay.now()),
+        end: DateTimeUtils.convertTimeOfDayToString(
+            state.endTime ?? TimeOfDay.now()),
+        category: state.category ?? CategoryEntity(title: '', color: 0),
+      );
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(appCubit.currentUser?.uid)
+          .collection('tasks')
+          .add(task.toJson());
+    } catch (e) {
+      logger.log(e);
     }
     emit(state.copyWith(isLoading: false));
+    Get.back();
+  }
+
+  Future<List<String>> uploadFileToStorage() async {
+    final List<String> result = [];
+    if ((state.documentList ?? []).isNotEmpty) {
+      final List<String> list = [...?state.documentList];
+      for (String item in list) {
+        try {
+          result.add(
+            await FileUtils.uploadFile(
+              file: File(item),
+              userID: appCubit.currentUser?.uid ?? '',
+              type: FileUtils.getDocumentType(item),
+            ),
+          );
+        } catch (e) {
+          logger.log(e);
+        }
+      }
+    }
+    return result;
   }
 }

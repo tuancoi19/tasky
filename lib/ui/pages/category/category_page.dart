@@ -15,10 +15,12 @@ import 'package:tasky/utils/utils.dart';
 import 'category_cubit.dart';
 
 class CategoryArguments {
-  String? id;
+  final String? id;
+  final Color? theme;
 
   CategoryArguments({
     this.id,
+    this.theme,
   });
 }
 
@@ -93,6 +95,7 @@ class _CategoryChildPageState extends State<CategoryChildPage> {
                   textEditingController: _controller,
                   borderRadius: 10,
                   color: AppColors.backgroundTextFieldColor,
+                  textFieldFocusedBorder: widget.arguments.theme,
                   hintText: S.current.enter_your_category_name,
                   labelText: S.current.category_name,
                   validator: (value) {
@@ -116,9 +119,11 @@ class _CategoryChildPageState extends State<CategoryChildPage> {
                     _cubit.changeSelectedColor(selectedColor: value);
                   },
                   selectedColor: state.selectedColor,
+                  theme: widget.arguments.theme,
                 ),
                 SizedBox(height: 24.h),
                 NavigatorRow(
+                  theme: widget.arguments.theme,
                   onPressed: () async {
                     if (state.selectedColor == null) {
                       AppSnackbar.showError(message: 'Please choose a theme!');

@@ -6,6 +6,8 @@ import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/models/entities/category/category_entity.dart';
+import 'package:tasky/ui/commons/app_dialog.dart';
+import 'package:tasky/ui/pages/category/category_page.dart';
 
 class TaskCategoryList extends StatelessWidget {
   final List<CategoryEntity> listData;
@@ -31,21 +33,16 @@ class TaskCategoryList extends StatelessWidget {
             style: AppTextStyle.blackS15W500,
           ),
           SizedBox(height: 20.h),
-          Wrap(
-            spacing: 8.0.w,
-            runSpacing: 8.0.h,
-            children: listData.map(
+          Wrap(spacing: 8.0.w, runSpacing: 8.0.h, children: [
+            if (listData.length < 6) buildItem(),
+            ...listData.map(
               (item) {
                 return buildItem(
                   item: item,
                 );
               },
             ).toList()
-              ..insert(
-                0,
-                buildItem(),
-              ),
-          ),
+          ]),
         ],
       ),
     );
@@ -57,7 +54,13 @@ class TaskCategoryList extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (item == null) {
-          // Navigate to add category screen
+          AppDialog.showCustomDialog(
+            content: CategoryPage(
+              arguments: CategoryArguments(
+                theme: Color(selectedCategory.color),
+              ),
+            ),
+          );
         } else {
           onSelected(item);
         }
@@ -69,8 +72,7 @@ class TaskCategoryList extends StatelessWidget {
           border: Border.all(
             color: item != null ? Color(item.color) : AppColors.border,
           ),
-          color:
-              item == selectedCategory ? Color(item!.color) : Colors.white,
+          color: item == selectedCategory ? Color(item!.color) : Colors.white,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

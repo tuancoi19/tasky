@@ -38,7 +38,7 @@ class LoginCubit extends Cubit<LoginState> {
         authenticationCubit.setLoading(LoadStatus.failure);
         return;
       } else {
-        appCubit.setUser(user);
+        authenticationCubit.setLoading(LoadStatus.success);
         Get.offAllNamed(RouteConfig.homeScreen);
       }
     } on FirebaseAuthException catch (e) {
@@ -74,6 +74,22 @@ class LoginCubit extends Cubit<LoginState> {
           ),
         ),
       );
+      authenticationCubit.setLoading(LoadStatus.failure);
+    }
+  }
+
+  Future<void> loginByGoogle() async {
+    authenticationCubit.setLoading(LoadStatus.loading);
+    try {
+      UserEntity? user = await appCubit.signInWithGoogle();
+      if (user == null) {
+        authenticationCubit.setLoading(LoadStatus.failure);
+        return;
+      } else {
+        authenticationCubit.setLoading(LoadStatus.success);
+        Get.offAllNamed(RouteConfig.homeScreen);
+      }
+    } catch (e) {
       authenticationCubit.setLoading(LoadStatus.failure);
     }
   }

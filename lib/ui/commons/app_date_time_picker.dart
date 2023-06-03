@@ -64,16 +64,4 @@ class AppDateTimePicker {
     );
     return picked;
   }
-
-  static String convertTimeOfDayToString(TimeOfDay timeOfDay) {
-    final DateTime date = DateTime.now().copyWith(
-      hour: timeOfDay.hour,
-      minute: timeOfDay.minute,
-    );
-    return DateFormat(AppConfigs.timeDisplayFormat).format(date);
-  }
-
-  static String convertDateTimeToString(DateTime dateTime) {
-    return DateFormat(AppConfigs.dateDisplayFormat).format(dateTime);
-  }
 }

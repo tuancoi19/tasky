@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/models/entities/category/category_entity.dart';
 import 'package:tasky/models/enums/load_status.dart';
+import 'package:tasky/ui/pages/home_screen/home_screen_cubit.dart';
 
 part 'category_state.dart';
 
@@ -50,7 +51,8 @@ class CategoryCubit extends Cubit<CategoryState> {
           .doc(appCubit.currentUser?.uid)
           .collection('categories')
           .add(category.toJson())
-          .then((value) {});
+          .then((value) async {
+      });
     }
   }
 }

@@ -42,6 +42,7 @@ dependencies:
   equatable: ^2.0.5
   tuple: ^2.0.1
   device_info_plus: ^8.2.0
+  path: ^1.8.2
 
   #Store
   flutter_secure_storage: ^8.0.0
@@ -73,10 +74,12 @@ dependencies:
   firebase_auth: ^4.4.0
   firebase_core: ^2.9.0
   cloud_firestore: ^4.7.1
+  firebase_storage: ^11.2.2
 
   #freezed
   freezed_annotation: ^2.2.0
   cloud_firestore_platform_interface: ^5.14.1
+  google_sign_in: ^6.1.2
 
 dev_dependencies:
   flutter_test:
