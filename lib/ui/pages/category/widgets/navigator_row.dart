@@ -38,9 +38,9 @@ class NavigatorRow extends StatelessWidget {
         AppIconButton(
           onPressed: onPressed,
           backgroundColor: theme ?? AppColors.primary,
-          cornerRadius: 10,
-          width: 48,
-          height: 48,
+          cornerRadius: 10.r,
+          width: 48.h,
+          height: 48.h,
           icon: SvgPicture.asset(
             AppVectors.icArrowRight,
             width: 24.w,

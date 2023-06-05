@@ -17,4 +17,10 @@ class CategoryEntity {
 
   Map<String, dynamic> toJson() => _$CategoryEntityToJson(this);
 
+  @override
+  bool operator ==(other) {
+    return other is CategoryEntity &&
+        other.color == color &&
+        other.title == title;
+  }
 }

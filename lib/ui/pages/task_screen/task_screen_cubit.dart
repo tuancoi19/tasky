@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/global/global_data.dart';
@@ -14,6 +14,7 @@ import 'package:tasky/models/entities/category/category_entity.dart';
 import 'package:tasky/models/entities/task/task_entity.dart';
 import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/ui/commons/app_snackbar.dart';
+import 'package:tasky/ui/pages/home_screen/home_screen_cubit.dart';
 import 'package:tasky/utils/date_time_utils.dart';
 import 'package:tasky/utils/file_utils.dart';
 import 'package:tasky/utils/logger.dart';
@@ -21,14 +22,16 @@ import 'package:tasky/utils/logger.dart';
 part 'task_screen_state.dart';
 
 class TaskScreenCubit extends Cubit<TaskScreenState> {
-  final AppCubit appCubit;
+  final HomeScreenCubit homeScreenCubit;
 
-  TaskScreenCubit({required this.appCubit}) : super(const TaskScreenState());
+  TaskScreenCubit({
+    required this.homeScreenCubit,
+  }) : super(const TaskScreenState());
 
   Future<void> loadInitialData() async {
     emit(state.copyWith(loadDataStatus: LoadStatus.loading));
     try {
-      changeCategoryList(categoryList: GlobalData.instance.categoriesList);
+      fetchCategoryList();
       changeDate(date: DateTime.now());
       changeStartTime(startTime: TimeOfDay.now());
       changeEndTime(endTime: TimeOfDay.now());
@@ -71,8 +74,8 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
     }
   }
 
-  void changeCategoryList({required List<CategoryEntity> categoryList}) {
-    emit(state.copyWith(categoryList: categoryList));
+  void fetchCategoryList() {
+    emit(state.copyWith(categoryList: GlobalData.instance.categoriesList));
   }
 
   void changeCategory({required CategoryEntity category}) {
@@ -112,17 +115,40 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
             (state.endTime ?? TimeOfDay.now()).minute >=
                 (state.startTime ?? TimeOfDay.now()).minute);
 
-    if (!checkDuration) {
+    if (DateTimeUtils.isSameDate(state.date ?? DateTime.now()) &&
+        !(DateTimeUtils.isTimeOfDayValid(state.startTime ?? TimeOfDay.now()) ||
+            DateTimeUtils.isTimeOfDayValid(state.endTime ?? TimeOfDay.now()))) {
       AppSnackbar.showError(
-        title: 'Start time - End time',
-        message: 'End time cannot be chosen earlier than Start time',
+        title: S.current.start_time_end_time,
+        message: S.current.this_time_range_has_passed,
+      );
+    } else if (!checkDuration) {
+      AppSnackbar.showError(
+        title: S.current.start_time_end_time,
+        message: S.current.end_time_cannot_be_chosen_earlier_than_start_time,
       );
     }
-    /* ToDo else if () {} */
+    /* else if (DateTimeUtils.isOverlap(
+      data: TaskDateUtils.filterItemsByDate(
+        items: GlobalData.instance.tasksList,
+        date: state.date ?? DateTime.now(),
+      ),
+      newStartTime: DateTimeUtils.convertTimeOfDayToString(
+        state.startTime ?? TimeOfDay.now(),
+      ),
+      newEndTime: DateTimeUtils.convertTimeOfDayToString(
+        state.endTime ?? TimeOfDay.now(),
+      ),
+    )) {
+      AppSnackbar.showError(
+        title: 'Start time - End time',
+        message: 'There is a task scheduled during this time',
+      );
+    } */
     else if (state.category == null) {
       AppSnackbar.showError(
-        title: 'Category',
-        message: 'Please select a category for this task',
+        title: S.current.category,
+        message: S.current.please_select_a_category_for_this_task,
       );
     } else {
       await addTaskToFirebase();
@@ -133,8 +159,8 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
     emit(state.copyWith(isLoading: true));
     try {
       final TaskEntity task = TaskEntity(
-        title: state.title ?? '',
-        note: state.note ?? '',
+        title: state.title?.trim() ?? '',
+        note: state.note?.trim() ?? '',
         documents: await uploadFileToStorage(),
         date:
             DateTimeUtils.convertDateTimeToString(state.date ?? DateTime.now())
@@ -148,14 +174,16 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
 
       await FirebaseFirestore.instance
           .collection('users')
-          .doc(appCubit.currentUser?.uid)
+          .doc(GlobalData.instance.userID)
           .collection('tasks')
-          .add(task.toJson());
-    } catch (e) {
-      logger.log(e);
+          .add(task.toJson())
+          .then((value) async {
+        Get.back(result: true);
+      });
+    } on FirebaseAuthException catch (e) {
+      AppSnackbar.showError(title: 'Firebase', message: e.message);
     }
     emit(state.copyWith(isLoading: false));
-    Get.back();
   }
 
   Future<List<String>> uploadFileToStorage() async {
@@ -167,7 +195,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
           result.add(
             await FileUtils.uploadFile(
               file: File(item),
-              userID: appCubit.currentUser?.uid ?? '',
+              userID: GlobalData.instance.userID ?? '',
               type: FileUtils.getDocumentType(item),
             ),
           );

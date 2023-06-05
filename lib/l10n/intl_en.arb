@@ -118,5 +118,16 @@
   "add_new_category": "Add new Category",
   "enter_your_category_name": "Enter your Category name",
   "category_name": "Category name",
-  "theme": "Theme"
+  "theme": "Theme",
+  "empty_data": "Empty data",
+  "something_wrong": "Something wrong!",
+  "the_maximum_number_of_categories_has_been_reached": "The maximum number of categories has been reached!",
+  "retry": "Retry",
+  "add": "Add",
+  "start_time_end_time": "Start time - End time",
+  "this_time_range_has_passed": "This time range has passed",
+  "end_time_cannot_be_chosen_earlier_than_start_time": "End time cannot be chosen earlier than Start time",
+  "please_select_a_category_for_this_task": "Please select a category for this task",
+  "please_choose_a_theme": "Please choose a theme!",
+  "add_category": "Thêm Danh mục"
 }

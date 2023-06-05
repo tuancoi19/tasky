@@ -39,7 +39,7 @@ class FileUtils {
         storage.ref().child('$userID/$type/${path.basename(file.path)}');
     try {
       await storageReference.putFile(file);
-    }  on FirebaseException catch (e) {
+    } on FirebaseException catch (e) {
       logger.log(e);
     }
     String downloadURL = await storageReference.getDownloadURL();

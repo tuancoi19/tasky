@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tasky/configs/app_configs.dart';
+import 'package:tasky/models/entities/task/task_entity.dart';
 
 class DateTimeUtils {
   static String convertTimeOfDayToString(TimeOfDay timeOfDay) {
@@ -16,15 +17,41 @@ class DateTimeUtils {
   }
 
   static bool isOverlap({
-    required String existingStartTime,
-    required String existingEndTime,
+    required List<TaskEntity> data,
     required String newStartTime,
     required String newEndTime,
   }) {
-    if (newStartTime.compareTo(existingEndTime) >= 0 ||
-        newEndTime.compareTo(existingStartTime) <= 0) {
-      return false; // Không có sự chồng chéo giữa khoảng thời gian
+    if (data.isNotEmpty) {
+      DateFormat format = DateFormat(AppConfigs.timeDisplayFormat);
+      DateTime parsedNewStartTime = format.parse(newStartTime);
+      DateTime parsedNewEndTime = format.parse(newEndTime);
+
+      for (var range in data) {
+        DateTime existingStartTime = format.parse(range.start);
+        DateTime existingEndTime = format.parse(range.end);
+
+        if (parsedNewStartTime.isBefore(existingEndTime) ||
+            parsedNewEndTime.isBefore(existingStartTime)) {
+          return true; //  // Có sự chồng chéo giữa khoảng thời gian
+        }
+      }
     }
-    return true; // Có sự chồng chéo giữa khoảng thời gian
+    return false; // Có sự chồng chéo giữa khoảng thời gian
+  }
+
+  static bool isTimeOfDayValid(TimeOfDay selectedTime) {
+    DateTime now = DateTime.now();
+    DateTime selectedDateTime = DateTime(
+        now.year, now.month, now.day, selectedTime.hour, selectedTime.minute);
+
+    return selectedDateTime.isAfter(now);
+  }
+
+  static bool isSameDate(DateTime date) {
+    DateTime now = DateTime.now();
+
+    return date.day == now.day &&
+        date.month == now.month &&
+        date.year == now.year;
   }
 }

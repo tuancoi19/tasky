@@ -8,8 +8,6 @@ import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/generated/l10n.dart';
-import 'package:tasky/ui/commons/app_dialog.dart';
-import 'package:tasky/ui/pages/reset_password/reset_password_page.dart';
 import 'package:tasky/ui/widgets/buttons/app_icon_button.dart';
 import 'package:tasky/ui/widgets/input/app_input.dart';
 import 'forgot_password_cubit.dart';

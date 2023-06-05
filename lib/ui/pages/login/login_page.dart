@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
-import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/commons/app_dialog.dart';
 import 'package:tasky/ui/pages/authentication/authentication_cubit.dart';
 import 'package:tasky/ui/pages/forgot_password/forgot_password_page.dart';

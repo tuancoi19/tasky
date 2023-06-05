@@ -11,7 +11,8 @@ class CategoryColorPicker extends StatelessWidget {
   const CategoryColorPicker({
     Key? key,
     required this.onTap,
-    this.selectedColor, this.theme,
+    this.selectedColor,
+    this.theme,
   }) : super(key: key);
 
   @override
@@ -22,8 +23,7 @@ class CategoryColorPicker extends StatelessWidget {
       crossAxisSpacing: 8.w,
       mainAxisSpacing: 8.h,
       crossAxisCount: 5,
-      children:
-      getListColorData().map((e) => buildColorItem(e)).toList(),
+      children: getListColorData().map((e) => buildColorItem(e)).toList(),
     );
   }
 
@@ -52,8 +52,9 @@ class CategoryColorPicker extends StatelessWidget {
   List<Color> getListColorData() {
     List<Color> listColorData = AppColors.categoryColorList;
     if (GlobalData.instance.categoriesList.isNotEmpty) {
-      List<Color> listSelectedColor = GlobalData.instance.categoriesList.map((
-          e) => Color(e.color)).toList();
+      List<Color> listSelectedColor = GlobalData.instance.categoriesList
+          .map((e) => Color(e.color))
+          .toList();
       for (Color item in listSelectedColor) {
         listColorData.remove(item);
       }

@@ -3,11 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/generated/l10n.dart';
-import 'package:tasky/models/entities/category/category_entity.dart';
+import 'package:tasky/ui/pages/home_screen/home_screen_cubit.dart';
 import 'package:tasky/ui/pages/task_screen/widgets/task_category_list.dart';
 import 'package:tasky/ui/pages/task_screen/widgets/task_date_picker.dart';
 import 'package:tasky/ui/pages/task_screen/widgets/task_duration_picker.dart';
@@ -37,11 +36,18 @@ class TaskScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) {
-        final AppCubit appCubit = BlocProvider.of<AppCubit>(context);
-        return TaskScreenCubit(appCubit: appCubit);
-      },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<HomeScreenCubit>(
+          create: (context) => HomeScreenCubit(),
+          lazy: false,
+        ),
+        BlocProvider<TaskScreenCubit>(
+          create: (context) => TaskScreenCubit(
+            homeScreenCubit: BlocProvider.of(context),
+          ),
+        ),
+      ],
       child: const TaskScreenChildPage(),
     );
   }
@@ -187,16 +193,17 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
                   ),
                   SizedBox(height: 32.h),
                   TaskCategoryList(
-                    listData: state.categoryList ?? [],
-                    onSelected: (value) {
-                      _cubit.changeCategory(category: value);
-                    },
-                    selectedCategory: state.category ??
-                        CategoryEntity(
-                          title: '',
-                          color: 0,
-                        ),
-                  ),
+                      listData: state.categoryList ?? [],
+                      onSelected: (value) {
+                        _cubit.changeCategory(category: value);
+                      },
+                      selectedCategory: state.category,
+                      onDone: (value) {
+                        if (value != null) {
+                          _cubit.changeCategory(category: value);
+                        }
+                        _cubit.fetchCategoryList();
+                      }),
                   SizedBox(height: 32.h),
                   Flexible(
                     fit: FlexFit.loose,
@@ -230,7 +237,7 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
                       autoValidateMode: AutovalidateMode.always,
                     );
                     if (_formKey.currentState!.validate()) {
-                      await _cubit.addTaskToFirebase();
+                      await _cubit.onDone();
                     }
                   },
                   isLoading: state.isLoading,

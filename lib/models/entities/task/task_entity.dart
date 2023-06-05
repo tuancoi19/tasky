@@ -1,4 +1,6 @@
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:tasky/configs/app_configs.dart';
 import 'package:tasky/models/entities/category/category_entity.dart';
 
 part 'task_entity.g.dart';
@@ -40,4 +42,10 @@ class TaskEntity {
       _$TaskEntityFromJson(json);
 
   Map<String, dynamic> toJson() => _$TaskEntityToJson(this);
+
+  DateTime get dateFromString {
+    DateFormat dateFormat = DateFormat(AppConfigs.dateDisplayFormat);
+    DateTime dateTime = dateFormat.parse(date);
+    return dateTime;
+  }
 }

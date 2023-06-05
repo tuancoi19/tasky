@@ -1,19 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:tasky/blocs/app_cubit.dart';
+import 'package:tasky/global/global_data.dart';
 import 'package:tasky/models/entities/category/category_entity.dart';
 import 'package:tasky/models/enums/load_status.dart';
+import 'package:tasky/ui/commons/app_snackbar.dart';
 import 'package:tasky/ui/pages/home_screen/home_screen_cubit.dart';
 
 part 'category_state.dart';
 
 class CategoryCubit extends Cubit<CategoryState> {
-  final AppCubit appCubit;
+  final HomeScreenCubit homeScreenCubit;
 
   CategoryCubit({
-    required this.appCubit,
+    required this.homeScreenCubit,
   }) : super(const CategoryState());
 
   Future<void> loadInitialData() async {
@@ -37,22 +39,34 @@ class CategoryCubit extends Cubit<CategoryState> {
     emit(state.copyWith(name: name));
   }
 
-  Future<void> addCategoryToFirebase() async {
-    if (state.name != null &&
-        state.selectedColor != null &&
-        (state.name ?? '').isNotEmpty) {
-      final CategoryEntity category = CategoryEntity(
-        title: state.name ?? '',
-        color: state.selectedColor ?? 0,
-      );
+  Future<CategoryEntity?> addCategoryToFirebase() async {
+    emit(state.copyWith(isLoading: true));
+    try {
+      CategoryEntity? category;
+      if (state.name != null &&
+          state.selectedColor != null &&
+          (state.name ?? '').isNotEmpty) {
+        category = CategoryEntity(
+          title: state.name ?? '',
+          color: state.selectedColor ?? 0,
+        );
 
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(appCubit.currentUser?.uid)
-          .collection('categories')
-          .add(category.toJson())
-          .then((value) async {
-      });
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(GlobalData.instance.userID)
+            .collection('categories')
+            .add(category.toJson())
+            .then((value) async {
+          await homeScreenCubit.getCategoriesList();
+        });
+      }
+      emit(state.copyWith(isLoading: false));
+    } on FirebaseAuthException catch (e) {
+      AppSnackbar.showError(
+        title: 'Firebase',
+        message: e.message,
+      );
     }
+    return null;
   }
 }

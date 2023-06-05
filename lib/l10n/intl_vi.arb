@@ -118,5 +118,16 @@
   "add_new_category": "Thêm Danh mục mới",
   "enter_your_category_name": "Nhập tên Danh mục của bạn",
   "category_name": "Tên danh mục",
-  "theme": "Theme"
+  "theme": "Chủ đề",
+  "empty_data": "Không có dữ liệu",
+  "something_wrong": "Đã xảy ra lỗi!",
+  "the_maximum_number_of_categories_has_been_reached": "Đã đạt số lượng Danh mục tối đa!",
+  "retry": "Thử lại",
+  "add": "Thêm",
+  "start_time_end_time": "Thời gian Bắt đầu - Kết thúc",
+  "this_time_range_has_passed": "Khoảng thời gian này đã qua",
+  "end_time_cannot_be_chosen_earlier_than_start_time": "Thời điểm Kết thúc không thể sớm hơn thời điểm Bắt đầu",
+  "please_select_a_category_for_this_task": "Hãy chọn Danh mục cho tác vụ này!",
+  "please_choose_a_theme": "Hãy chọn màu sắc chủ đề!",
+  "add_category": "Add Category"
 }

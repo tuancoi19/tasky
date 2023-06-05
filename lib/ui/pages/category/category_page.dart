@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/models/entities/category/category_entity.dart';
 import 'package:tasky/ui/commons/app_snackbar.dart';
 import 'package:tasky/ui/pages/category/widgets/category_color_picker.dart';
 import 'package:tasky/ui/pages/category/widgets/navigator_row.dart';
+import 'package:tasky/ui/pages/home_screen/home_screen_cubit.dart';
 import 'package:tasky/ui/widgets/input/app_input.dart';
 import 'package:tasky/utils/utils.dart';
 
@@ -17,10 +18,12 @@ import 'category_cubit.dart';
 class CategoryArguments {
   final String? id;
   final Color? theme;
+  final Function(CategoryEntity?)? onDone;
 
   CategoryArguments({
     this.id,
     this.theme,
+    this.onDone,
   });
 }
 
@@ -34,11 +37,18 @@ class CategoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) {
-        final AppCubit appCubit = BlocProvider.of(context);
-        return CategoryCubit(appCubit: appCubit);
-      },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<HomeScreenCubit>(
+          create: (context) => HomeScreenCubit(),
+          lazy: false,
+        ),
+        BlocProvider<CategoryCubit>(
+          create: (context) => CategoryCubit(
+            homeScreenCubit: BlocProvider.of(context),
+          ),
+        ),
+      ],
       child: CategoryChildPage(arguments: arguments),
     );
   }
@@ -126,13 +136,17 @@ class _CategoryChildPageState extends State<CategoryChildPage> {
                   theme: widget.arguments.theme,
                   onPressed: () async {
                     if (state.selectedColor == null) {
-                      AppSnackbar.showError(message: 'Please choose a theme!');
+                      AppSnackbar.showError(
+                        title: S.current.theme,
+                        message: S.current.please_choose_a_theme,
+                      );
                     }
                     if (_formKey.currentState!.validate() &&
                         state.selectedColor != null) {
-                      await _cubit.addCategoryToFirebase().then(
-                            (value) => Get.back(),
-                          );
+                      await _cubit.addCategoryToFirebase().then((value) {
+                        Get.back();
+                        widget.arguments.onDone!(value);
+                      });
                     }
                   },
                 ),

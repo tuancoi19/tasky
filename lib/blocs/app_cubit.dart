@@ -9,9 +9,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/database/secure_storage_helper.dart';
-import 'package:tasky/database/share_preferences_helper.dart';
 import 'package:tasky/firebase_options.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/global/global_data.dart';
 import 'package:tasky/models/entities/token_entity.dart';
 import 'package:tasky/models/entities/user/user_entity.dart';
 import 'package:tasky/models/enums/load_status.dart';
@@ -31,8 +31,7 @@ class AppCubit extends Cubit<AppState> {
 
   final userCollection = FirebaseFirestore.instance.collection("users");
 
-  User? get currentUser =>
-    _firebaseAuth.currentUser;
+  User? get currentUser => _firebaseAuth.currentUser;
 
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
@@ -125,7 +124,7 @@ class AppCubit extends Cubit<AppState> {
     );
     if (newUser != null) {
       emit(state.copyWith(user: newUser));
-      GlobalData.instance.userID = newUser.userId;
+      GlobalData.instance.userID = currentUser?.uid;
       return newUser;
     }
     return null;
@@ -226,6 +225,7 @@ class AppCubit extends Cubit<AppState> {
           createAt: user.metadata.creationTime,
           avatarUrl: user.photoURL,
         );
+        GlobalData.instance.userID = user.uid;
         emit(state.copyWith(user: currentUser));
         return currentUser;
       }
@@ -271,6 +271,7 @@ class AppCubit extends Cubit<AppState> {
       userName: userName,
       email: user.email,
       createAt: user.metadata.creationTime,
+      userId: user.uid,
     );
     try {
       await userCollection.doc(user.uid).set(newUser.toJson()).catchError((e) {

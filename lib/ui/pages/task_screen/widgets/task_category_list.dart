@@ -12,13 +12,15 @@ import 'package:tasky/ui/pages/category/category_page.dart';
 class TaskCategoryList extends StatelessWidget {
   final List<CategoryEntity> listData;
   final Function(CategoryEntity) onSelected;
-  final CategoryEntity selectedCategory;
+  final CategoryEntity? selectedCategory;
+  final Function(CategoryEntity?) onDone;
 
   const TaskCategoryList({
     super.key,
     required this.listData,
     required this.onSelected,
     required this.selectedCategory,
+    required this.onDone,
   });
 
   @override
@@ -57,7 +59,10 @@ class TaskCategoryList extends StatelessWidget {
           AppDialog.showCustomDialog(
             content: CategoryPage(
               arguments: CategoryArguments(
-                theme: Color(selectedCategory.color),
+                theme: selectedCategory?.color != null
+                    ? Color(selectedCategory!.color)
+                    : null,
+                onDone: onDone,
               ),
             ),
           );
@@ -72,7 +77,8 @@ class TaskCategoryList extends StatelessWidget {
           border: Border.all(
             color: item != null ? Color(item.color) : AppColors.border,
           ),
-          color: item == selectedCategory ? Color(item!.color) : Colors.white,
+          color:
+              item == selectedCategory ? Color(item?.color ?? 0) : Colors.white,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -90,7 +96,7 @@ class TaskCategoryList extends StatelessWidget {
               SizedBox(width: 8.w),
             ],
             Text(
-              item?.title ?? 'Add Category',
+              item?.title ?? S.current.add_category,
               style: TextStyle(
                 color: item != null
                     ? item != selectedCategory

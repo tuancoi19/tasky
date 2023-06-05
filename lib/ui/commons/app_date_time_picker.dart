@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/configs/app_configs.dart';
 import 'package:tasky/generated/l10n.dart';

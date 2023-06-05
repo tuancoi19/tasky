@@ -5,12 +5,14 @@ class CategoryState extends Equatable {
   final int? selectedColor;
   final AutovalidateMode autoValidateMode;
   final String? name;
+  final bool isLoading;
 
   const CategoryState({
     this.loadDataStatus = LoadStatus.initial,
     this.selectedColor,
     this.autoValidateMode = AutovalidateMode.disabled,
     this.name,
+    this.isLoading = false,
   });
 
   @override
@@ -19,6 +21,7 @@ class CategoryState extends Equatable {
         selectedColor,
         autoValidateMode,
         name,
+        isLoading,
       ];
 
   CategoryState copyWith({
@@ -26,12 +29,14 @@ class CategoryState extends Equatable {
     int? selectedColor,
     AutovalidateMode? autoValidateMode,
     String? name,
+    bool? isLoading,
   }) {
     return CategoryState(
       loadDataStatus: loadDataStatus ?? this.loadDataStatus,
       selectedColor: selectedColor ?? this.selectedColor,
       autoValidateMode: autoValidateMode ?? this.autoValidateMode,
       name: name ?? this.name,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 }
