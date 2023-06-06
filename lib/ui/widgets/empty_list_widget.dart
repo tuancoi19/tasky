@@ -32,7 +32,7 @@ class EmptyListWidget extends StatelessWidget {
             AppButton(
               title: S.current.add,
               cornerRadius: 15.r,
-              height: 56.h,
+              height: 48.h,
               textStyle: AppTextStyle.whiteS18Bold,
               backgroundColor: AppColors.primary,
               onPressed: onRefresh,

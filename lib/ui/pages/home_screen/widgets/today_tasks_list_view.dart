@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/models/entities/task/task_entity.dart';
+import 'package:tasky/router/route_config.dart';
+import 'package:tasky/ui/pages/task_screen/task_screen_page.dart';
 
 class TodayTasksListView extends StatelessWidget {
   final List<TaskEntity> taskList;
@@ -20,7 +23,14 @@ class TodayTasksListView extends StatelessWidget {
         return buildTodayTaskItem(
           index: index % 3,
           data: taskList[index],
-          onTap: () {},
+          onTap: () {
+            Get.toNamed(
+              RouteConfig.taskScreen,
+              arguments: TaskScreenArguments(
+                task: taskList[index],
+              ),
+            );
+          },
         );
       },
       physics: const BouncingScrollPhysics(),
@@ -34,7 +44,7 @@ class TodayTasksListView extends StatelessWidget {
     required int index,
   }) {
     return InkWell(
-      onTap: onTap.call(),
+      onTap: onTap,
       child: Container(
         height: 76.h,
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 4).r,
@@ -48,11 +58,11 @@ class TodayTasksListView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        data.start,
+                        data.start ?? '',
                         style: AppTextStyle.blackS15W500,
                       ),
                       Text(
-                        data.end,
+                        data.end ?? '',
                         style: AppTextStyle.blackO50S13W400,
                       ),
                     ],
@@ -62,7 +72,7 @@ class TodayTasksListView extends StatelessWidget {
                     height: 36.h,
                     width: 4.w,
                     decoration: BoxDecoration(
-                      color: Color(data.category.color).withOpacity(0.1),
+                      color: Color(data.category?.color ?? 0).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(15).r,
                     ),
                     child: Stack(
@@ -72,7 +82,7 @@ class TodayTasksListView extends StatelessWidget {
                           width: 4.w,
                           margin: const EdgeInsets.only(bottom: 12).r,
                           decoration: BoxDecoration(
-                            color: Color(data.category.color),
+                            color: Color(data.category?.color ?? 0),
                             borderRadius: BorderRadius.circular(10).r,
                           ),
                         ),
@@ -86,13 +96,13 @@ class TodayTasksListView extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          data.title,
+                          data.title ?? '',
                           style: AppTextStyle.blackS15W500,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ),
                         Text(
-                          data.category.title,
+                          data.category?.title ?? '',
                           style: AppTextStyle.blackO50S13W400,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,

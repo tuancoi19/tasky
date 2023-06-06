@@ -30,7 +30,7 @@ class CategoryItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(10).r,
               boxShadow: [
                 BoxShadow(
-                  color: Color(data.color),
+                  color: Color(data.color ?? 0),
                   blurRadius: 25.r,
                   offset: const Offset(0, 0), // Shadow position
                 ),
@@ -50,7 +50,7 @@ class CategoryItem extends StatelessWidget {
               ),
               fit: BoxFit.cover,
             ),
-            color: Color(data.color),
+            color: Color(data.color ?? 0),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -64,7 +64,7 @@ class CategoryItem extends StatelessWidget {
               ),
               SizedBox(height: 4.h),
               Text(
-                data.title,
+                data.title ?? '',
                 style: AppTextStyle.whiteS15W500,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,

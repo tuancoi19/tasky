@@ -9,12 +9,14 @@ class TaskTakeNoteTextField extends StatelessWidget {
   final Function(String) onChanged;
   final TextEditingController controller;
   final Color color;
+  final bool readOnly;
 
   const TaskTakeNoteTextField({
     Key? key,
     required this.onChanged,
     required this.controller,
     required this.color,
+    required this.readOnly,
   }) : super(key: key);
 
   @override
@@ -33,6 +35,7 @@ class TaskTakeNoteTextField extends StatelessWidget {
             borderRadius: BorderRadius.circular(10).r,
           ),
           child: TextFormField(
+            readOnly: readOnly,
             onChanged: onChanged,
             controller: controller,
             style: AppTextStyle.blackO40S14W400,

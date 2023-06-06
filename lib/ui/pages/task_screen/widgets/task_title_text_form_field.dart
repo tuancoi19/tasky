@@ -7,16 +7,19 @@ import 'package:tasky/utils/utils.dart';
 class TaskTitleTextFormField extends StatelessWidget {
   final TextEditingController controller;
   final Function(String) onChanged;
+  final bool readOnly;
 
   const TaskTitleTextFormField({
     Key? key,
     required this.controller,
     required this.onChanged,
+    required this.readOnly,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      readOnly: readOnly,
       controller: controller,
       maxLines: 2,
       maxLength: 50,

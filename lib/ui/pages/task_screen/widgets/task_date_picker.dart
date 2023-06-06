@@ -8,28 +8,32 @@ class TaskDatePicker extends StatelessWidget {
   final Function(DateTime) whenComplete;
   final DateTime? hintDate;
   final Color? themeColor;
+  final bool readOnly;
 
   const TaskDatePicker({
     Key? key,
     required this.whenComplete,
     this.themeColor,
     this.hintDate,
+    required this.readOnly,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       readOnly: true,
-      onTap: () async {
-        final result = await AppDateTimePicker.selectDate(
-          context,
-          initialDate: hintDate,
-          themeColor: themeColor,
-        );
-        if (result != null) {
-          whenComplete(result);
-        }
-      },
+      onTap: readOnly
+          ? null
+          : () async {
+              final result = await AppDateTimePicker.selectDate(
+                context,
+                initialDate: hintDate,
+                themeColor: themeColor,
+              );
+              if (result != null) {
+                whenComplete(result);
+              }
+            },
       decoration: InputDecoration(
         hintText: DateFormat(AppConfigs.dateDisplayFormat)
             .format(hintDate ?? DateTime.now()),

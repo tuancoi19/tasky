@@ -4,13 +4,17 @@ part 'category_entity.g.dart';
 
 @JsonSerializable()
 class CategoryEntity {
-  @JsonKey()
-  String title;
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  String? id;
 
   @JsonKey()
-  int color;
+  String? title;
 
-  CategoryEntity({required this.title, required this.color});
+  @JsonKey()
+  int? color;
+
+  CategoryEntity({ this.title,  this.color});
 
   factory CategoryEntity.fromJson(Map<String, dynamic> json) =>
       _$CategoryEntityFromJson(json);

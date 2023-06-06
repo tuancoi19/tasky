@@ -60,7 +60,7 @@ class TaskCategoryList extends StatelessWidget {
             content: CategoryPage(
               arguments: CategoryArguments(
                 theme: selectedCategory?.color != null
-                    ? Color(selectedCategory!.color)
+                    ? Color(selectedCategory!.color!)
                     : null,
                 onDone: onDone,
               ),
@@ -75,7 +75,7 @@ class TaskCategoryList extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10).r,
           border: Border.all(
-            color: item != null ? Color(item.color) : AppColors.border,
+            color: item != null ? Color(item.color ?? 0) : AppColors.border,
           ),
           color:
               item == selectedCategory ? Color(item?.color ?? 0) : Colors.white,
@@ -100,7 +100,7 @@ class TaskCategoryList extends StatelessWidget {
               style: TextStyle(
                 color: item != null
                     ? item != selectedCategory
-                        ? Color(item.color)
+                        ? Color(item.color ?? 0)
                         : Colors.white
                     : AppColors.border,
                 fontSize: 14.sp,

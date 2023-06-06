@@ -27,8 +27,8 @@ class DateTimeUtils {
       DateTime parsedNewEndTime = format.parse(newEndTime);
 
       for (var range in data) {
-        DateTime existingStartTime = format.parse(range.start);
-        DateTime existingEndTime = format.parse(range.end);
+        DateTime existingStartTime = format.parse(range.start ?? '');
+        DateTime existingEndTime = format.parse(range.end ?? '');
 
         if (parsedNewStartTime.isBefore(existingEndTime) ||
             parsedNewEndTime.isBefore(existingStartTime)) {

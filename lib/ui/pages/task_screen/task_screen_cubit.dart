@@ -28,17 +28,22 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
     required this.homeScreenCubit,
   }) : super(const TaskScreenState());
 
-  Future<void> loadInitialData() async {
-    emit(state.copyWith(loadDataStatus: LoadStatus.loading));
-    try {
-      fetchCategoryList();
-      changeDate(date: DateTime.now());
-      changeStartTime(startTime: TimeOfDay.now());
-      changeEndTime(endTime: TimeOfDay.now());
-      emit(state.copyWith(loadDataStatus: LoadStatus.success));
-    } catch (e) {
-      //Todo: should print exception here
-      emit(state.copyWith(loadDataStatus: LoadStatus.failure));
+  void loadInitialData(TaskEntity? task) {
+    fetchCategoryList();
+    changeDate(date: task?.dateFromString ?? DateTime.now());
+    changeStartTime(startTime: task?.startFromString ?? TimeOfDay.now());
+    changeEndTime(endTime: task?.endFromString ?? TimeOfDay.now());
+
+    if (task != null) {
+      changeCategory(category: task.category!);
+      changeThemeColor(colorCode: task.category!.color!);
+      changeDocumentList(
+        documentList: task.documents!
+            .map(
+              (e) => FileUtils.getFileNameFromUrl(e),
+            )
+            .toList(),
+      );
     }
   }
 
@@ -80,7 +85,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
 
   void changeCategory({required CategoryEntity category}) {
     emit(state.copyWith(category: category));
-    changeThemeColor(colorCode: category.color);
+    changeThemeColor(colorCode: category.color!);
   }
 
   void changeDocumentList({required List<String> documentList}) {
@@ -105,6 +110,10 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
 
   void setAutoValidateMode({required AutovalidateMode autoValidateMode}) {
     emit(state.copyWith(autoValidateMode: autoValidateMode));
+  }
+
+  void setIsEdit() {
+    emit(state.copyWith(isEdit: !state.isEdit));
   }
 
   Future<void> onDone() async {

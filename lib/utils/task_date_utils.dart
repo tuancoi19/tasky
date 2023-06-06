@@ -6,7 +6,7 @@ class TaskDateUtils {
     required DateTime date,
   }) {
     List<TaskEntity> filteredItems = items.where((item) {
-      DateTime itemDate = item.dateFromString;
+      DateTime itemDate = item.dateFromString ?? DateTime.now();
       return itemDate.year == date.year &&
           itemDate.month == date.month &&
           itemDate.day == date.day;

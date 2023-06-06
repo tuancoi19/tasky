@@ -45,4 +45,13 @@ class FileUtils {
     String downloadURL = await storageReference.getDownloadURL();
     return downloadURL;
   }
+
+  static String getFileNameFromUrl(String url) {
+    final uri = Uri.parse(url);
+    final path = uri.path;
+    final decodedPath = Uri.decodeComponent(path);
+    final segments = decodedPath.split('/');
+    final fileName = segments.last;
+    return fileName;
+  }
 }

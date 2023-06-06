@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:tasky/configs/app_configs.dart';
@@ -7,35 +8,38 @@ part 'task_entity.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class TaskEntity {
-  @JsonKey()
-  String title;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  String? id;
 
   @JsonKey()
-  String note;
+  String? title;
 
   @JsonKey()
-  String date;
+  String? note;
 
   @JsonKey()
-  String start;
+  String? date;
 
   @JsonKey()
-  String end;
+  String? start;
 
   @JsonKey()
-  CategoryEntity category;
+  String? end;
 
   @JsonKey()
-  List<String?> documents;
+  CategoryEntity? category;
+
+  @JsonKey()
+  List<String>? documents;
 
   TaskEntity({
-    required this.title,
-    required this.note,
-    required this.category,
-    required this.documents,
-    required this.date,
-    required this.start,
-    required this.end,
+    this.title,
+    this.note,
+    this.category,
+    this.documents,
+    this.date,
+    this.start,
+    this.end,
   });
 
   factory TaskEntity.fromJson(Map<String, dynamic> json) =>
@@ -43,9 +47,34 @@ class TaskEntity {
 
   Map<String, dynamic> toJson() => _$TaskEntityToJson(this);
 
-  DateTime get dateFromString {
-    DateFormat dateFormat = DateFormat(AppConfigs.dateDisplayFormat);
-    DateTime dateTime = dateFormat.parse(date);
-    return dateTime;
+  DateTime? get dateFromString {
+    if (date != null && date!.isNotEmpty) {
+      DateFormat dateFormat = DateFormat(AppConfigs.dateDisplayFormat);
+      DateTime dateTime = dateFormat.parse(date!);
+      return dateTime;
+    }
+    return null;
+  }
+
+  TimeOfDay? get startFromString {
+    if (start != null && start!.isNotEmpty) {
+      List<String> parts = start!.split(':');
+      int hours = int.parse(parts[0]);
+      int minutes = int.parse(parts[1]);
+
+      return TimeOfDay(hour: hours, minute: minutes);
+    }
+    return null;
+  }
+
+  TimeOfDay? get endFromString {
+    if (start != null && end!.isNotEmpty) {
+      List<String> parts = end!.split(':');
+      int hours = int.parse(parts[0]);
+      int minutes = int.parse(parts[1]);
+
+      return TimeOfDay(hour: hours, minute: minutes);
+    }
+    return null;
   }
 }

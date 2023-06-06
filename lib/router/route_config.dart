@@ -16,9 +16,8 @@ class RouteConfig {
   static const String onboarding = '/onboarding';
   static const String authentication = '/authentication';
   static const String editUserProfile = '/edit_user_profile';
-  static const String taskInformation = '/task_information';
   static const String homeScreen = '/home_screen';
-  static const String addTaskScreen = '/add_task_screen';
+  static const String taskScreen = '/task_screen';
 
   ///Alias ​​mapping page
   static final List<GetPage> getPages = [
@@ -51,8 +50,10 @@ class RouteConfig {
           ),
     ),
     GetPage(
-      name: addTaskScreen,
-      page: () => const TaskScreenPage(),
+      name: taskScreen,
+      page: () => TaskScreenPage(
+        arguments: Get.arguments,
+      ),
     ),
   ];
 }

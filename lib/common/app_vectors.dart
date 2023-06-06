@@ -55,4 +55,10 @@ class AppVectors {
   static const String icCalendar = 'assets/vectors/ic_calendar.svg';
 
   static const String decorateDrawer = 'assets/vectors/decorate_drawer.svg';
+
+  static const String icClose = 'assets/vectors/ic_close.svg';
+
+  static const String icDelete = 'assets/vectors/ic_delete.svg';
+
+  static const String icEdit = 'assets/vectors/ic_edit.svg';
 }

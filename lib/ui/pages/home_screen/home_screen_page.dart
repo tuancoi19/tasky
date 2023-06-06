@@ -215,7 +215,7 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
               child: TodayTasksTitle(
                 onTap: () async {
                   final needReload =
-                      await Get.toNamed(RouteConfig.addTaskScreen);
+                      await Get.toNamed(RouteConfig.taskScreen);
                   if (needReload ?? false) {
                     await _cubit.getTasksList();
                   }
@@ -244,7 +244,7 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
                     return EmptyListWidget(
                       onRefresh: () async {
                         final needReload =
-                            await Get.toNamed(RouteConfig.addTaskScreen);
+                            await Get.toNamed(RouteConfig.taskScreen);
                         if (needReload ?? false) {
                           await _cubit.getTasksList();
                         }

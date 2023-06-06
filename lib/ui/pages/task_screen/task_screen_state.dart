@@ -13,6 +13,7 @@ class TaskScreenState extends Equatable {
   final List<String>? documentList;
   final Color themeColor;
   final bool isLoading;
+  final bool isEdit;
 
   const TaskScreenState({
     this.loadDataStatus = LoadStatus.initial,
@@ -27,6 +28,7 @@ class TaskScreenState extends Equatable {
     this.documentList,
     this.themeColor = AppColors.primary,
     this.isLoading = false,
+    this.isEdit = false,
   });
 
   @override
@@ -43,6 +45,7 @@ class TaskScreenState extends Equatable {
         documentList,
         themeColor,
         isLoading,
+        isEdit,
       ];
 
   TaskScreenState copyWith({
@@ -58,6 +61,7 @@ class TaskScreenState extends Equatable {
     List<String>? documentList,
     Color? themeColor,
     bool? isLoading,
+    bool? isEdit,
   }) {
     return TaskScreenState(
       loadDataStatus: loadDataStatus ?? this.loadDataStatus,
@@ -72,6 +76,7 @@ class TaskScreenState extends Equatable {
       documentList: documentList ?? this.documentList,
       themeColor: themeColor ?? this.themeColor,
       isLoading: isLoading ?? this.isLoading,
+      isEdit: isEdit ?? this.isEdit,
     );
   }
 }

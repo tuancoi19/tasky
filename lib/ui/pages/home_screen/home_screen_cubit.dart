@@ -27,7 +27,10 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
           .get()
           .then((QuerySnapshot querySnapshot) {
         return querySnapshot.docs.map((doc) {
-          return TaskEntity.fromJson(doc.data() as Map<String, dynamic>);
+          final TaskEntity result =
+              TaskEntity.fromJson(doc.data() as Map<String, dynamic>);
+          result.id = doc.id;
+          return result;
         }).toList();
       });
       if (result.isNotEmpty) {
@@ -36,7 +39,9 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
           date: DateTime.now(),
           items: result,
         );
-        todayTaskList.sort((a, b) => a.start.compareTo(b.start));
+        todayTaskList.sort(
+          (a, b) => (a.start ?? '').compareTo(b.start ?? ''),
+        );
         emit(
           state.copyWith(
             tasksList: todayTaskList,
@@ -59,12 +64,15 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
           .get()
           .then((QuerySnapshot querySnapshot) {
         return querySnapshot.docs.map((doc) {
-          return CategoryEntity.fromJson(doc.data() as Map<String, dynamic>);
+          final CategoryEntity result =
+              CategoryEntity.fromJson(doc.data() as Map<String, dynamic>);
+          result.id = doc.id;
+          return result;
         }).toList();
       });
       if (result.isNotEmpty) {
         result.sort(
-          (a, b) => a.title.compareTo(b.title),
+          (a, b) => (a.title ?? '').compareTo(b.title ?? ''),
         );
         GlobalData.instance.categoriesList = result;
         emit(state.copyWith(categoriesList: result));
