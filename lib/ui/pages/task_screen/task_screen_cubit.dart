@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/global/global_data.dart';
@@ -33,6 +34,8 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
     changeDate(date: task?.dateFromString ?? DateTime.now());
     changeStartTime(startTime: task?.startFromString ?? TimeOfDay.now());
     changeEndTime(endTime: task?.endFromString ?? TimeOfDay.now());
+    changeNote(note: task?.note ?? '');
+    changeTitle(title: task?.title ?? '');
 
     if (task != null) {
       changeCategory(category: task.category!);
@@ -116,7 +119,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
     emit(state.copyWith(isEdit: !state.isEdit));
   }
 
-  Future<void> onDone() async {
+  Future<void> onDone(TaskEntity? task) async {
     final bool checkDuration = (state.endTime ?? TimeOfDay.now()).hour >
             (state.startTime ?? TimeOfDay.now()).hour ||
         ((state.endTime ?? TimeOfDay.now()).hour ==
@@ -124,7 +127,12 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
             (state.endTime ?? TimeOfDay.now()).minute >=
                 (state.startTime ?? TimeOfDay.now()).minute);
 
-    if (DateTimeUtils.isSameDate(state.date ?? DateTime.now()) &&
+    if (DateTimeUtils.isOlderDate(state.date ?? DateTime.now())) {
+      AppSnackbar.showError(
+        title: S.current.date,
+        message: S.current.date_has_passed,
+      );
+    } else if (DateTimeUtils.isSameDate(state.date ?? DateTime.now()) &&
         !(DateTimeUtils.isTimeOfDayValid(state.startTime ?? TimeOfDay.now()) ||
             DateTimeUtils.isTimeOfDayValid(state.endTime ?? TimeOfDay.now()))) {
       AppSnackbar.showError(
@@ -160,8 +168,47 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
         message: S.current.please_select_a_category_for_this_task,
       );
     } else {
-      await addTaskToFirebase();
+      if (state.isEdit && task != null) {
+        await updateTaskToFirebase(task);
+      } else {
+        await addTaskToFirebase();
+      }
     }
+  }
+
+  Future<void> updateTaskToFirebase(TaskEntity? initialTask) async {
+    emit(state.copyWith(isLoading: true));
+    final TaskEntity task = TaskEntity(
+      title: state.title?.trim() ?? '',
+      note: state.note?.trim() ?? '',
+      documents: await uploadFileToStorage(task: initialTask),
+      date: DateTimeUtils.convertDateTimeToString(state.date ?? DateTime.now())
+          .toString(),
+      start: DateTimeUtils.convertTimeOfDayToString(
+          state.startTime ?? TimeOfDay.now()),
+      end: DateTimeUtils.convertTimeOfDayToString(
+          state.endTime ?? TimeOfDay.now()),
+      category: state.category ?? CategoryEntity(title: '', color: 0),
+    );
+
+    try {
+      if (task != initialTask) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(GlobalData.instance.userID)
+            .collection('tasks')
+            .doc(initialTask?.id)
+            .update(task.toJson());
+      }
+      Get.back(result: true);
+      AppSnackbar.showSuccess(
+        title: S.current.task,
+        message: S.current.updated_successfully,
+      );
+    } on FirebaseAuthException catch (e) {
+      AppSnackbar.showError(title: 'Firebase', message: e.message);
+    }
+    emit(state.copyWith(isLoading: false));
   }
 
   Future<void> addTaskToFirebase() async {
@@ -189,16 +236,28 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
           .then((value) async {
         Get.back(result: true);
       });
+      AppSnackbar.showSuccess(
+        title: S.current.task,
+        message: S.current.added_successfully,
+      );
     } on FirebaseAuthException catch (e) {
       AppSnackbar.showError(title: 'Firebase', message: e.message);
     }
     emit(state.copyWith(isLoading: false));
   }
 
-  Future<List<String>> uploadFileToStorage() async {
+  Future<List<String>> uploadFileToStorage({TaskEntity? task}) async {
     final List<String> result = [];
-    if ((state.documentList ?? []).isNotEmpty) {
-      final List<String> list = [...?state.documentList];
+    final List<String> list = [...?state.documentList];
+    if ((task?.documents ?? []).isNotEmpty && list.isNotEmpty) {
+      result.addAll(task!.documents!);
+      result.map(
+        (e) => list.remove(
+          FileUtils.getFileNameFromUrl(e),
+        ),
+      );
+    }
+    if (list.isNotEmpty) {
       for (String item in list) {
         try {
           result.add(

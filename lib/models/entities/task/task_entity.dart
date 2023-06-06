@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -46,6 +47,20 @@ class TaskEntity {
       _$TaskEntityFromJson(json);
 
   Map<String, dynamic> toJson() => _$TaskEntityToJson(this);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is TaskEntity &&
+              runtimeType == other.runtimeType &&
+              id == other.id &&
+              title == other.title &&
+              note == other.note &&
+              date == other.date &&
+              start == other.start &&
+              end == other.end &&
+              category == other.category &&
+              listEquals(documents, other.documents);
 
   DateTime? get dateFromString {
     if (date != null && date!.isNotEmpty) {

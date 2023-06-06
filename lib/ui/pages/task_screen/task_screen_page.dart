@@ -77,10 +77,8 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
     super.initState();
     _cubit = BlocProvider.of(context);
     _cubit.loadInitialData(widget.arguments?.task);
-    titleController =
-        TextEditingController(text: widget.arguments?.task.title ?? '');
-    noteController =
-        TextEditingController(text: widget.arguments?.task.note ?? '');
+    titleController = TextEditingController(text: widget.arguments?.task.title);
+    noteController = TextEditingController(text: widget.arguments?.task.note);
   }
 
   @override
@@ -122,7 +120,7 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
                         autoValidateMode: AutovalidateMode.always,
                       );
                       if (_formKey.currentState!.validate()) {
-                        await _cubit.onDone();
+                        await _cubit.onDone(widget.arguments?.task);
                       }
                     },
                     isLoading: state.isLoading,
@@ -151,10 +149,14 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
               TaskNavigatorHeader(
                 isEdit: state.isEdit,
                 onChangeIsEdit: () {
-                  _cubit.setIsEdit();
-                  if (!state.isEdit) {
+                  if (state.isEdit) {
                     _cubit.loadInitialData(widget.arguments?.task);
+                    titleController = TextEditingController(
+                        text: widget.arguments?.task.title);
+                    noteController = TextEditingController(
+                        text: widget.arguments?.task.note);
                   }
+                  _cubit.setIsEdit();
                 },
                 onDelete: () {},
                 isShowOptions: widget.arguments?.task != null && !state.isEdit,

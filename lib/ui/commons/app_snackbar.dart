@@ -28,4 +28,13 @@ class AppSnackbar {
       colorText: Colors.white,
     );
   }
+
+  static void showSuccess({String? title, String? message}) {
+    Get.snackbar(
+      title ?? "Info",
+      message ?? "Empty message",
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
+    );
+  }
 }

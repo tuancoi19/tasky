@@ -54,4 +54,12 @@ class DateTimeUtils {
         date.month == now.month &&
         date.year == now.year;
   }
+
+  static bool isOlderDate(DateTime date) {
+    DateTime now = DateTime.now();
+
+    return date.day < now.day &&
+        date.month < now.month &&
+        date.year < now.year;
+  }
 }

@@ -129,5 +129,9 @@
   "end_time_cannot_be_chosen_earlier_than_start_time": "End time cannot be chosen earlier than Start time",
   "please_select_a_category_for_this_task": "Please select a category for this task",
   "please_choose_a_theme": "Please choose a theme!",
-  "add_category": "Thêm Danh mục"
+  "add_category": "Thêm Danh mục",
+  "updated_successfully": "Updated Successfully!",
+  "task": "Task",
+  "added_successfully": "Added Successfully!",
+  "date_has_passed": "Date has passed"
 }

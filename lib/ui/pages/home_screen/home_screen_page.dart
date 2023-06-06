@@ -217,7 +217,7 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
                   final needReload =
                       await Get.toNamed(RouteConfig.taskScreen);
                   if (needReload ?? false) {
-                    await _cubit.getTasksList();
+                    await _cubit.loadInitialData();
                   }
                 },
               ),
