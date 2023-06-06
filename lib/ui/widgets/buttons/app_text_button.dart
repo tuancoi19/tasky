@@ -3,10 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tasky/common/app_dimens.dart';
 import 'package:tasky/ui/widgets/app_circular_progress_indicator.dart';
 
-class AppButton extends StatelessWidget {
-  final String? title;
-  final Widget? leadingIcon;
-  final Widget? trailingIcon;
+class AppTextButton extends StatelessWidget {
+  final String title;
 
   final bool isLoading;
 
@@ -24,11 +22,9 @@ class AppButton extends StatelessWidget {
 
   final EdgeInsets? padding;
 
-  const AppButton({
+  const AppTextButton({
     Key? key,
-    this.title,
-    this.leadingIcon,
-    this.trailingIcon,
+    required this.title,
     this.isLoading = false,
     this.height,
     this.width,
@@ -47,7 +43,7 @@ class AppButton extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         height: (height ?? AppDimens.buttonHeight).h,
-        width: (width ?? double.infinity).w,
+        width: width?.w,
         padding: padding ?? const EdgeInsets.symmetric(horizontal: 12).r,
         decoration: BoxDecoration(
           color: backgroundColor,
@@ -68,27 +64,17 @@ class AppButton extends StatelessWidget {
     if (isLoading) {
       return const AppCircularProgressIndicator(color: Colors.white);
     } else {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          leadingIcon ?? const SizedBox(),
-          title != null
-              ? Flexible(
-                  child: Text(
-                    title!,
-                    overflow: TextOverflow.ellipsis,
-                    style: textStyle ??
-                        TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                        ),
-                  ),
-                )
-              : const SizedBox(),
-          trailingIcon ?? const SizedBox(),
-        ],
+      return Center(
+        child: Text(
+          title,
+          overflow: TextOverflow.ellipsis,
+          style: textStyle ??
+              TextStyle(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w800,
+                color: Colors.white,
+              ),
+        ),
       );
     }
   }

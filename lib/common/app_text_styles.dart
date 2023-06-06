@@ -27,6 +27,7 @@ class AppTextStyle {
 
   //s16
   static final blackS16 = black.copyWith(fontSize: 16.sp);
+  static final blackS16W400 = blackS16.copyWith(fontWeight: FontWeight.w400);
   static final blackS16Bold = blackS16.copyWith(fontWeight: FontWeight.bold);
   static final blackS16ExtraBold =
       blackS16.copyWith(fontWeight: FontWeight.w800);
@@ -34,6 +35,7 @@ class AppTextStyle {
   //s17
   static final blackS17 = black.copyWith(fontSize: 17.sp);
   static final blackS17W600 = blackS17.copyWith(fontWeight: FontWeight.w600);
+
   //s16
   static final blackS1 = black.copyWith(fontSize: 17.sp);
 
@@ -185,6 +187,10 @@ class AppTextStyle {
   static final whiteS23 = white.copyWith(fontSize: 23.sp);
   static final whiteS23W500 = whiteS23.copyWith(fontWeight: FontWeight.w500);
 
+  //s26
+  static final whiteS26 = white.copyWith(fontSize: 26.sp);
+  static final whiteS26Bold = whiteS26.copyWith(fontWeight: FontWeight.bold);
+
   ///White O90
   static final whiteO90 = TextStyle(color: Colors.white.withOpacity(0.9));
 
@@ -279,6 +285,16 @@ class AppTextStyle {
   static final primaryS14 = primary.copyWith(fontSize: 14.sp);
   static final primaryS14W400 =
       primaryS14.copyWith(fontWeight: FontWeight.w400);
+
+  //s18
+  static final primaryS16 = primary.copyWith(fontSize: 16.sp);
+  static final primaryS16W400 =
+      primaryS16.copyWith(fontWeight: FontWeight.w400);
+
+  //s18
+  static final primaryS18 = primary.copyWith(fontSize: 18.sp);
+  static final primaryS18Bold =
+      primaryS18.copyWith(fontWeight: FontWeight.bold);
 
   //s25
   static final primaryS25 = primary.copyWith(fontSize: 25.sp);

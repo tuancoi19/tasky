@@ -3,17 +3,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_images.dart';
 
-class AppTaskPage extends StatelessWidget {
+class AppDetailPage extends StatelessWidget {
   final Widget headerWidget;
   final Widget bodyWidget;
-  final double bodyHeight;
+  final double? bodyHeight;
   final Color? headerColor;
 
-  const AppTaskPage({
+  const AppDetailPage({
     Key? key,
     required this.headerWidget,
     required this.bodyWidget,
-    required this.bodyHeight,
+    this.bodyHeight,
     this.headerColor,
   }) : super(key: key);
 
@@ -37,7 +37,7 @@ class AppTaskPage extends StatelessWidget {
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-            height: bodyHeight,
+            height: bodyHeight ?? 564.h,
             width: double.infinity,
             decoration: BoxDecoration(
               color: Colors.white,

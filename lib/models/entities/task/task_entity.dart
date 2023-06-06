@@ -50,16 +50,16 @@ class TaskEntity {
 
   @override
   bool operator ==(Object other) =>
-          other is TaskEntity &&
-              runtimeType == other.runtimeType &&
-              id == other.id &&
-              title == other.title &&
-              note == other.note &&
-              date == other.date &&
-              start == other.start &&
-              end == other.end &&
-              category == other.category &&
-              listEquals(documents, other.documents);
+      other is TaskEntity &&
+      runtimeType == other.runtimeType &&
+      id == other.id &&
+      title == other.title &&
+      note == other.note &&
+      date == other.date &&
+      start == other.start &&
+      end == other.end &&
+      category == other.category &&
+      listEquals(documents, other.documents);
 
   DateTime? get dateFromString {
     if (date != null && date!.isNotEmpty) {

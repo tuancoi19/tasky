@@ -34,6 +34,7 @@ class TaskDatePicker extends StatelessWidget {
                 whenComplete(result);
               }
             },
+      textAlign: TextAlign.right,
       decoration: InputDecoration(
         hintText: DateFormat(AppConfigs.dateDisplayFormat)
             .format(hintDate ?? DateTime.now()),

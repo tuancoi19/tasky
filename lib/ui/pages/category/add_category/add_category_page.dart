@@ -7,30 +7,30 @@ import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/models/entities/category/category_entity.dart';
 import 'package:tasky/ui/commons/app_snackbar.dart';
-import 'package:tasky/ui/pages/category/widgets/category_color_picker.dart';
-import 'package:tasky/ui/pages/category/widgets/navigator_row.dart';
+import 'package:tasky/ui/pages/category/add_category/widgets/category_color_picker.dart';
+import 'package:tasky/ui/pages/category/add_category/widgets/navigator_row.dart';
 import 'package:tasky/ui/pages/home_screen/home_screen_cubit.dart';
 import 'package:tasky/ui/widgets/input/app_input.dart';
 import 'package:tasky/utils/utils.dart';
 
-import 'category_cubit.dart';
+import 'add_category_cubit.dart';
 
-class CategoryArguments {
+class AddCategoryArguments {
   final String? id;
   final Color? theme;
   final Function(CategoryEntity?)? onDone;
 
-  CategoryArguments({
+  AddCategoryArguments({
     this.id,
     this.theme,
     this.onDone,
   });
 }
 
-class CategoryPage extends StatelessWidget {
-  final CategoryArguments arguments;
+class AddCategoryPage extends StatelessWidget {
+  final AddCategoryArguments arguments;
 
-  const CategoryPage({
+  const AddCategoryPage({
     Key? key,
     required this.arguments,
   }) : super(key: key);
@@ -43,29 +43,29 @@ class CategoryPage extends StatelessWidget {
           create: (context) => HomeScreenCubit(),
           lazy: false,
         ),
-        BlocProvider<CategoryCubit>(
-          create: (context) => CategoryCubit(
+        BlocProvider<AddCategoryCubit>(
+          create: (context) => AddCategoryCubit(
             homeScreenCubit: BlocProvider.of(context),
           ),
         ),
       ],
-      child: CategoryChildPage(arguments: arguments),
+      child: AddCategoryChildPage(arguments: arguments),
     );
   }
 }
 
-class CategoryChildPage extends StatefulWidget {
-  final CategoryArguments arguments;
+class AddCategoryChildPage extends StatefulWidget {
+  final AddCategoryArguments arguments;
 
-  const CategoryChildPage({Key? key, required this.arguments})
+  const AddCategoryChildPage({Key? key, required this.arguments})
       : super(key: key);
 
   @override
-  State<CategoryChildPage> createState() => _CategoryChildPageState();
+  State<AddCategoryChildPage> createState() => _AddCategoryChildPageState();
 }
 
-class _CategoryChildPageState extends State<CategoryChildPage> {
-  late final CategoryCubit _cubit;
+class _AddCategoryChildPageState extends State<AddCategoryChildPage> {
+  late final AddCategoryCubit _cubit;
   late TextEditingController _controller;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -83,7 +83,7 @@ class _CategoryChildPageState extends State<CategoryChildPage> {
   }
 
   Widget _buildBodyWidget() {
-    return BlocBuilder<CategoryCubit, CategoryState>(
+    return BlocBuilder<AddCategoryCubit, AddCategoryState>(
       builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.fromLTRB(20, 32, 20, 20).r,

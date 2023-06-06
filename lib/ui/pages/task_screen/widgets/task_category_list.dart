@@ -7,7 +7,7 @@ import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/models/entities/category/category_entity.dart';
 import 'package:tasky/ui/commons/app_dialog.dart';
-import 'package:tasky/ui/pages/category/category_page.dart';
+import 'package:tasky/ui/pages/category/add_category/add_category_page.dart';
 
 class TaskCategoryList extends StatelessWidget {
   final List<CategoryEntity> listData;
@@ -63,8 +63,8 @@ class TaskCategoryList extends StatelessWidget {
       onTap: () {
         if (item == null) {
           AppDialog.showCustomDialog(
-            content: CategoryPage(
-              arguments: CategoryArguments(
+            content: AddCategoryPage(
+              arguments: AddCategoryArguments(
                 theme: selectedCategory?.color != null
                     ? Color(selectedCategory!.color!)
                     : null,

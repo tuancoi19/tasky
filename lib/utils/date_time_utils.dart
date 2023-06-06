@@ -58,8 +58,6 @@ class DateTimeUtils {
   static bool isOlderDate(DateTime date) {
     DateTime now = DateTime.now();
 
-    return date.day < now.day &&
-        date.month < now.month &&
-        date.year < now.year;
+    return date.day < now.day && date.month < now.month && date.year < now.year;
   }
 }

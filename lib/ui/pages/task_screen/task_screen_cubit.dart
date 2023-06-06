@@ -5,9 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/global/global_data.dart';
@@ -47,9 +45,9 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
   Future<void> changeTitle({required String title}) async {
     emit(state.copyWith(title: title));
     if (title.length == 50) {
-      await Fluttertoast.showToast(
-        msg: S.current.please_do_not_enter_more_than_characters(50),
-        toastLength: Toast.LENGTH_LONG,
+      AppSnackbar.showWarning(
+        title: S.current.title,
+        message: S.current.please_do_not_enter_more_than_characters(50),
       );
     }
   }
@@ -69,9 +67,9 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
   Future<void> changeNote({required String note}) async {
     emit(state.copyWith(note: note));
     if (note.length == 1000) {
-      await Fluttertoast.showToast(
-        msg: S.current.please_do_not_enter_more_than_characters(1000),
-        toastLength: Toast.LENGTH_LONG,
+      AppSnackbar.showWarning(
+        title: S.current.note,
+        message: S.current.please_do_not_enter_more_than_characters(1000),
       );
     }
   }
@@ -233,6 +231,26 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
       AppSnackbar.showSuccess(
         title: S.current.task,
         message: S.current.added_successfully,
+      );
+    } on FirebaseAuthException catch (e) {
+      AppSnackbar.showError(title: 'Firebase', message: e.message);
+    }
+    emit(state.copyWith(isLoading: false));
+  }
+
+  Future<void> deleteTaskOnFirebase(String id) async {
+    emit(state.copyWith(isLoading: true));
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(GlobalData.instance.userID)
+          .collection('tasks')
+          .doc(id)
+          .delete();
+      Get.back(result: true, closeOverlays: true);
+      AppSnackbar.showSuccess(
+        title: S.current.task,
+        message: S.current.deleted_successfully,
       );
     } on FirebaseAuthException catch (e) {
       AppSnackbar.showError(title: 'Firebase', message: e.message);

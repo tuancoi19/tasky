@@ -11,7 +11,7 @@ import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/commons/app_dialog.dart';
-import 'package:tasky/ui/pages/category/category_page.dart';
+import 'package:tasky/ui/pages/category/add_category/add_category_page.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/category_title.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/hello_text.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/home_app_bar.dart';
@@ -136,8 +136,8 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
                       ? CategoryTitle(
                           onTap: () async {
                             await AppDialog.showCustomDialog(
-                              content: CategoryPage(
-                                arguments: CategoryArguments(
+                              content: AddCategoryPage(
+                                arguments: AddCategoryArguments(
                                   onDone: (value) async {
                                     await _cubit.getCategoriesList();
                                   },
@@ -192,8 +192,8 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
                       height: 236.h,
                       onRefresh: () async {
                         await AppDialog.showCustomDialog(
-                          content: CategoryPage(
-                            arguments: CategoryArguments(
+                          content: AddCategoryPage(
+                            arguments: AddCategoryArguments(
                               onDone: (value) async {
                                 await _cubit.getCategoriesList();
                               },

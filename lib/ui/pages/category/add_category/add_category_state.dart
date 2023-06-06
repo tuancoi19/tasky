@@ -1,13 +1,13 @@
-part of 'category_cubit.dart';
+part of 'add_category_cubit.dart';
 
-class CategoryState extends Equatable {
+class AddCategoryState extends Equatable {
   final LoadStatus loadDataStatus;
   final int? selectedColor;
   final AutovalidateMode autoValidateMode;
   final String? name;
   final bool isLoading;
 
-  const CategoryState({
+  const AddCategoryState({
     this.loadDataStatus = LoadStatus.initial,
     this.selectedColor,
     this.autoValidateMode = AutovalidateMode.disabled,
@@ -24,14 +24,14 @@ class CategoryState extends Equatable {
         isLoading,
       ];
 
-  CategoryState copyWith({
+  AddCategoryState copyWith({
     LoadStatus? loadDataStatus,
     int? selectedColor,
     AutovalidateMode? autoValidateMode,
     String? name,
     bool? isLoading,
   }) {
-    return CategoryState(
+    return AddCategoryState(
       loadDataStatus: loadDataStatus ?? this.loadDataStatus,
       selectedColor: selectedColor ?? this.selectedColor,
       autoValidateMode: autoValidateMode ?? this.autoValidateMode,

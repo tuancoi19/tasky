@@ -135,5 +135,11 @@
   "added_successfully": "Thêm thành công!",
   "date_has_passed": "Ngày này đã trôi qua",
   "document": "Tài liệu",
-  "cant_open_document": "Không thể mở tài liệu này"
+  "cant_open_document": "Không thể mở tài liệu này",
+  "deleted_successfully": "Deleted Successfully!",
+  "yes": "Có",
+  "no": "Không",
+  "delete_message": "Tất cả dữ liệu sẽ mất khi thực hiện việc xóa. Bạn vẫn muốn tiếp tục?",
+  "delete_task": "Xóa Tác vụ",
+  "proceed": "Thực hiện"
 }

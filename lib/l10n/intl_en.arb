@@ -135,5 +135,11 @@
   "added_successfully": "Added Successfully!",
   "date_has_passed": "Date has passed",
   "document": "Document",
-  "cant_open_document": "Can't open document"
+  "cant_open_document": "Can't open document",
+  "deleted_successfully": "Deleted Successfully!",
+  "yes": "Yes",
+  "no": "No",
+  "delete_message": "All data will be lost if you proceed with the deletion. Do you want to continue?",
+  "delete_task": "Delete Task",
+  "proceed": "Proceed"
 }

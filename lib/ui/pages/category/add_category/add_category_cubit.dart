@@ -9,14 +9,14 @@ import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/ui/commons/app_snackbar.dart';
 import 'package:tasky/ui/pages/home_screen/home_screen_cubit.dart';
 
-part 'category_state.dart';
+part 'add_category_state.dart';
 
-class CategoryCubit extends Cubit<CategoryState> {
+class AddCategoryCubit extends Cubit<AddCategoryState> {
   final HomeScreenCubit homeScreenCubit;
 
-  CategoryCubit({
+  AddCategoryCubit({
     required this.homeScreenCubit,
-  }) : super(const CategoryState());
+  }) : super(const AddCategoryState());
 
   Future<void> loadInitialData() async {
     emit(state.copyWith(loadDataStatus: LoadStatus.initial));

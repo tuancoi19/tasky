@@ -12,7 +12,7 @@ import 'package:tasky/ui/pages/task_screen/widgets/task_navigator_header.dart';
 import 'package:tasky/ui/pages/task_screen/widgets/task_title_text_form_field.dart';
 import 'package:tasky/ui/pages/task_screen/widgets/task_upload_documents.dart';
 import 'package:tasky/ui/pages/task_screen/widgets/task_take_note_text_field.dart';
-import 'package:tasky/ui/widgets/app_task_page.dart';
+import 'package:tasky/ui/widgets/app_detail_page.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
 
 import 'task_screen_cubit.dart';
@@ -99,7 +99,7 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
             Form(
               key: _formKey,
               autovalidateMode: state.autoValidateMode,
-              child: AppTaskPage(
+              child: AppDetailPage(
                 headerWidget: buildFormAddTaskHeader(),
                 bodyWidget: buildFormAddTaskBody(),
                 bodyHeight: 564.h,
@@ -158,8 +158,13 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
                   }
                   _cubit.setIsEdit();
                 },
-                onDelete: () {},
+                onDelete: () async {
+                  await _cubit
+                      .deleteTaskOnFirebase(widget.arguments?.task.id ?? '');
+                },
                 isShowOptions: widget.arguments?.task != null && !state.isEdit,
+                isLoading: state.isLoading,
+                theme: state.themeColor,
               ),
               SizedBox(height: 32.h),
               Row(
