@@ -95,4 +95,6 @@ class AppColors {
   static const Color aboutUsIconColor = Color(0xFF485FD3);
 
   static const Color iconBackgroundColor = Color(0xFFF5F8FF);
+
+  static const Color iconAddImage = Color(0xFF42AF68);
 }

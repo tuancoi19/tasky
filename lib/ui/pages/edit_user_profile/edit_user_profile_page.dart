@@ -1,29 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_images.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
-import 'package:tasky/ui/commons/app_dialog.dart';
 import 'package:tasky/ui/widgets/appbar/app_bar_with_back_icon_widget.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
 import 'package:tasky/ui/widgets/input/app_input.dart';
 import 'package:tasky/ui/widgets/input/app_password_input.dart';
-import 'package:tasky/ui/widgets/pickers/app_image_picker.dart';
 import 'package:tasky/utils/utils.dart';
 
 import 'edit_user_profile_cubit.dart';
 
 class EditUserProfileArguments {
   bool fromSignUp;
-  String username;
-  String email;
 
   EditUserProfileArguments({
     required this.fromSignUp,
-    this.username = 'Username',
-    this.email = 'Email',
   });
 }
 
@@ -39,7 +34,8 @@ class EditUserProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        return EditUserProfileCubit();
+        final AppCubit appCubit = BlocProvider.of<AppCubit>(context);
+        return EditUserProfileCubit(appCubit);
       },
       child: EditUserProfileChildPage(
         arguments: arguments,
@@ -63,8 +59,8 @@ class EditUserProfileChildPage extends StatefulWidget {
 
 class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
   late final EditUserProfileCubit _cubit;
+  late AppCubit appCubit;
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController displayNameController;
   late ObscureTextController obscurePasswordController;
   late TextEditingController passwordTextController;
   late TextEditingController usernameTextController;
@@ -74,13 +70,14 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
   void initState() {
     super.initState();
     _cubit = BlocProvider.of(context);
+    appCubit = BlocProvider.of(context);
     _cubit.loadInitialData();
-    displayNameController = TextEditingController();
     obscurePasswordController = ObscureTextController();
     passwordTextController = TextEditingController();
     usernameTextController =
-        TextEditingController(text: widget.arguments.username);
-    emailTextController = TextEditingController(text: widget.arguments.email);
+        TextEditingController(text: appCubit.state.user?.userName);
+    emailTextController =
+        TextEditingController(text: appCubit.state.user?.email);
   }
 
   @override
@@ -94,6 +91,24 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
             AppBarWithBackIconWidget(fromSignUp: widget.arguments.fromSignUp),
         body: SafeArea(
           child: _buildBodyWidget(),
+        ),
+        floatingActionButton:
+            BlocBuilder<EditUserProfileCubit, EditUserProfileState>(
+          builder: (context, state) {
+            return !state.isEditProfile
+                ? FloatingActionButton(
+                    onPressed: () {
+                      _cubit.setIsEdit(true);
+                    },
+                    backgroundColor: AppColors.backgroundLight,
+                    child: const Icon(
+                      Icons.mode_edit_outline_outlined,
+                      size: 30,
+                      color: AppColors.primary,
+                    ),
+                  )
+                : const SizedBox();
+          },
         ),
       ),
     );
@@ -114,33 +129,15 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  InkWell(
-                    onTap: () {
-                      AppDialog.showCustomBottomSheet(
-                        context,
-                        widget: AppImagePicker(
-                          onSubmitImage: (value) {
-                            return _cubit.setImagePath(imagePath: value.path);
-                          },
-                        ),
+                  buildAvatar(),
+                  SizedBox(height: 16.h),
+                  BlocBuilder<AppCubit, AppState>(
+                    builder: (context, state) {
+                      return Text(
+                        state.user?.userName ?? '',
+                        style: AppTextStyle.blackS17W600,
                       );
                     },
-                    child: Container(
-                      width: 84.h,
-                      height: 84.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(9).r,
-                      ),
-                      child: Image.asset(
-                        AppImages.icUser,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 16.h),
-                  Text(
-                    'Loren Ipsum',
-                    style: AppTextStyle.blackS17W600,
                   ),
                   SizedBox(height: 40.h),
                   buildInfoColumn(state.autoValidateMode),
@@ -153,88 +150,169 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
     );
   }
 
-  Widget buildInfoColumn(AutovalidateMode autoValidateMode) {
-    return Container(
-      padding: const EdgeInsets.all(24).r,
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 50.r,
-            color: AppColors.boxShadowColor.withOpacity(0.27),
-            blurStyle: BlurStyle.outer,
+  Widget buildAvatar() {
+    return Stack(
+      children: [
+        CircleAvatar(
+          radius: 55.h,
+          backgroundColor: Colors.transparent,
+          child: Image.asset(
+            AppImages.icUser,
+            width: 110.h,
+            height: 110.h,
+            fit: BoxFit.cover,
           ),
-        ],
-        borderRadius: BorderRadius.vertical(
-          top: const Radius.circular(30).r,
         ),
-      ),
-      child: Column(
-        children: [
-          AppInput(
-            textEditingController: displayNameController,
-            color: AppColors.backgroundTextFieldColor,
-            borderRadius: 10,
-            autoTrim: true,
-            autoValidateMode: autoValidateMode,
-            labelText: S.current.display_name,
-            hintText: S.current.enter_your_display_name,
-            onChanged: (value) {
-              _cubit.changeDisplayName(displayName: value);
-            },
-            validator: (value) {
-              return Utils.nameInvalid(value ?? '');
-            },
-          ),
-          SizedBox(height: 32.h),
-          AppInput(
-            textEditingController: usernameTextController,
-            color: AppColors.backgroundTextFieldColor,
-            borderRadius: 10,
-            labelText: S.current.username,
-            readOnly: true,
-            textFieldFocusedBorder: Colors.transparent,
-          ),
-          SizedBox(height: 32.h),
-          AppInput(
-            textEditingController: emailTextController,
-            color: AppColors.backgroundTextFieldColor,
-            borderRadius: 10,
-            labelText: S.current.email,
-            readOnly: true,
-            textFieldFocusedBorder: Colors.transparent,
-          ),
-          SizedBox(height: 32.h),
-          if (!widget.arguments.fromSignUp)
-            AppPasswordInput(
-              obscureTextController: obscurePasswordController,
-              textEditingController: passwordTextController,
-              color: AppColors.backgroundTextFieldColor,
-              borderRadius: 10,
-              autoTrim: true,
-              autoValidateMode: autoValidateMode,
-              labelText: S.current.password,
-              hintText: S.current.enter_your_password,
-              onChanged: (value) {
-                _cubit.changePassword(password: value);
-              },
-              validator: (password) {
-                return Utils.currentPasswordValidator(password ?? '');
-              },
+        _cubit.state.isEditProfile
+            ? Container(
+                width: 115.h,
+                height: 115.h,
+                alignment: Alignment.bottomRight,
+                child: InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(25.0),
+                        ),
+                      ),
+                      builder: (BuildContext context) {
+                        return SizedBox(
+                          height: 200,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                const Text('Modal BottomSheet'),
+                                ElevatedButton(
+                                  child: const Text('Close BottomSheet'),
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  child: CircleAvatar(
+                    radius: 18.h,
+                    backgroundColor: Colors.white38.withOpacity(0.8),
+                    // color: Colors.red,
+                    child: const Icon(
+                      Icons.add_a_photo_outlined,
+                      size: 25,
+                      color: AppColors.iconAddImage,
+                    ),
+                  ),
+                ),
+              )
+            : const SizedBox(),
+      ],
+    );
+  }
+
+  Widget buildInfoColumn(AutovalidateMode autoValidateMode) {
+    return BlocBuilder<AppCubit, AppState>(
+      builder: (context, state) {
+        return Container(
+          padding: const EdgeInsets.all(24).r,
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 50.r,
+                color: AppColors.boxShadowColor.withOpacity(0.27),
+                blurStyle: BlurStyle.outer,
+              ),
+            ],
+            borderRadius: BorderRadius.vertical(
+              top: const Radius.circular(30).r,
             ),
-          SizedBox(height: 32.h),
-          AppButton(
-            height: 56.h,
-            cornerRadius: 10,
-            title: S.current.done,
-            backgroundColor: AppColors.primary,
-            textStyle: AppTextStyle.whiteS18Bold,
-            onPressed: () {
-              _save();
-            },
           ),
-          SizedBox(height: 8.h),
-        ],
-      ),
+          child: Column(
+            children: [
+              SizedBox(height: 32.h),
+              AppInput(
+                textEditingController: usernameTextController,
+                color: AppColors.backgroundTextFieldColor,
+                borderRadius: 10,
+                labelText: S.current.username,
+                readOnly: !_cubit.state.isEditProfile,
+                textFieldFocusedBorder: Colors.transparent,
+                onChanged: (value) {
+                  _cubit.changeUserName(userName: value);
+                },
+              ),
+              SizedBox(height: 32.h),
+              AppInput(
+                textEditingController: emailTextController,
+                color: AppColors.backgroundTextFieldColor,
+                borderRadius: 10,
+                labelText: S.current.email,
+                readOnly: true,
+                textFieldFocusedBorder: Colors.transparent,
+              ),
+              SizedBox(height: 32.h),
+              if (!widget.arguments.fromSignUp)
+                AppPasswordInput(
+                  obscureTextController: obscurePasswordController,
+                  textEditingController: passwordTextController,
+                  color: AppColors.backgroundTextFieldColor,
+                  borderRadius: 10,
+                  autoTrim: true,
+                  autoValidateMode: autoValidateMode,
+                  labelText: S.current.password,
+                  hintText: S.current.enter_your_password,
+                  onChanged: (value) {
+                    _cubit.changePassword(password: value);
+                  },
+                  validator: (password) {
+                    return Utils.currentPasswordValidator(password ?? '');
+                  },
+                ),
+              SizedBox(height: 32.h),
+              BlocBuilder<EditUserProfileCubit, EditUserProfileState>(
+                builder: (context, state) {
+                  if (state.isEditProfile) {
+                    return Column(
+                      children: [
+                        AppButton(
+                          height: 56.h,
+                          cornerRadius: 10,
+                          title: S.current.done,
+                          backgroundColor: AppColors.primary,
+                          textStyle: AppTextStyle.whiteS18Bold,
+                          onPressed: () {
+                            _save();
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        AppButton(
+                          height: 56.h,
+                          cornerRadius: 10,
+                          title: S.current.cancel,
+                          backgroundColor: AppColors.welcomeBackgroundColor,
+                          textStyle: AppTextStyle.whiteS18Bold,
+                          onPressed: () {
+                            _cubit.setIsEdit(false);
+                            usernameTextController.value = TextEditingValue(
+                                text: appCubit.state.user?.userName ?? '');
+                          },
+                        ),
+                      ],
+                    );
+                  } else {
+                    return const SizedBox();
+                  }
+                },
+              ),
+              SizedBox(height: 8.h),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -242,7 +320,6 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
   void dispose() {
     _cubit.close();
     passwordTextController.dispose();
-    displayNameController.dispose();
     obscurePasswordController.dispose();
     super.dispose();
   }
@@ -252,6 +329,7 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
       _cubit.onValidateForm();
     } else {
       // _cubit.save();
+      _cubit.setIsEdit(false);
     }
     FocusScope.of(context).unfocus();
   }

@@ -113,6 +113,9 @@ class AppCubit extends Cubit<AppState> {
         .then(
       (DocumentSnapshot doc) {
         final data = doc.data() as Map<String, dynamic>;
+        if(doc.data() == null){
+          return null;
+        }
         return UserEntity.fromJson(data);
       },
       onError: (e) => print("Error getting document: $e"),
@@ -208,7 +211,7 @@ class AppCubit extends Cubit<AppState> {
         },
         onError: (e) => print("Error getting document: $e"),
       );
-      
+
       if (user != null) {
         UserEntity currentUser = UserEntity(
           //ưu tiên lấy lại userName cũ
