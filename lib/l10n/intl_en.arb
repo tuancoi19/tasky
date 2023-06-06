@@ -133,5 +133,7 @@
   "updated_successfully": "Updated Successfully!",
   "task": "Task",
   "added_successfully": "Added Successfully!",
-  "date_has_passed": "Date has passed"
+  "date_has_passed": "Date has passed",
+  "document": "Document",
+  "cant_open_document": "Can't open document"
 }

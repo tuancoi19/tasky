@@ -60,9 +60,11 @@ class TaskTakeNoteTextField extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10).r,
-                borderSide: BorderSide(
-                  color: color,
-                ),
+                borderSide: readOnly
+                    ? BorderSide.none
+                    : BorderSide(
+                        color: color,
+                      ),
               ),
               disabledBorder: InputBorder.none,
               fillColor: AppColors.backgroundBackButtonColor,

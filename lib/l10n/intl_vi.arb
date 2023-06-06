@@ -129,9 +129,11 @@
   "end_time_cannot_be_chosen_earlier_than_start_time": "Thời điểm Kết thúc không thể sớm hơn thời điểm Bắt đầu",
   "please_select_a_category_for_this_task": "Hãy chọn Danh mục cho tác vụ này!",
   "please_choose_a_theme": "Hãy chọn màu sắc chủ đề!",
-  "add_category": "Add Category",
-  "updated_successfully": "Updated Successfully!",
-  "task": "Task",
-  "added_successfully": "Added Successfully!",
-  "date_has_passed": "Date has passed"
+  "add_category": "Theem Danh mục",
+  "updated_successfully": "Cập nhật thành công!",
+  "task": "Tác vụ",
+  "added_successfully": "Thêm thành công!",
+  "date_has_passed": "Ngày này đã trôi qua",
+  "document": "Tài liệu",
+  "cant_open_document": "Không thể mở tài liệu này"
 }

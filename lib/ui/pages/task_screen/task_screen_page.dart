@@ -167,7 +167,7 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    flex: 3,
+                    flex: 2,
                     child: TaskTitleTextFormField(
                       controller: titleController,
                       onChanged: (value) async {
@@ -231,41 +231,37 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
                 readOnly: widget.arguments?.task != null && !state.isEdit,
               ),
               SizedBox(height: 32.h),
-              AbsorbPointer(
-                absorbing: widget.arguments?.task != null && !state.isEdit,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TaskCategoryList(
-                        listData: state.categoryList ?? [],
-                        onSelected: (value) {
-                          _cubit.changeCategory(category: value);
-                        },
-                        selectedCategory: state.category,
-                        onDone: (value) {
-                          if (value != null) {
-                            _cubit.changeCategory(category: value);
-                            _cubit.fetchCategoryList();
-                          }
-                        }),
-                    SizedBox(height: 32.h),
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: TaskUploadDocuments(
-                        documentList: state.documentList ?? [],
-                        onDelete: (value) {
-                          _cubit.changeDocumentList(documentList: value);
-                        },
-                        sendImage: (value) {
-                          _cubit.sendImage(file: value);
-                        },
-                        sendTextFile: (value) {
-                          _cubit.sendTextFile(file: value);
-                        },
-                        buttonColor: state.themeColor,
-                      ),
-                    ),
-                  ],
+              TaskCategoryList(
+                listData: state.categoryList ?? [],
+                onSelected: (value) {
+                  _cubit.changeCategory(category: value);
+                },
+                selectedCategory: state.category,
+                onDone: (value) {
+                  if (value != null) {
+                    _cubit.changeCategory(category: value);
+                    _cubit.fetchCategoryList();
+                  }
+                },
+                allowToEdit: !(widget.arguments?.task != null && !state.isEdit),
+              ),
+              SizedBox(height: 32.h),
+              Flexible(
+                fit: FlexFit.loose,
+                child: TaskUploadDocuments(
+                  documentList: state.documentList ?? [],
+                  onDelete: (value) {
+                    _cubit.changeDocumentList(documentList: value);
+                  },
+                  sendImage: (value) {
+                    _cubit.sendImage(file: value);
+                  },
+                  sendTextFile: (value) {
+                    _cubit.sendTextFile(file: value);
+                  },
+                  buttonColor: state.themeColor,
+                  allowToEdit:
+                      !(widget.arguments?.task != null && !state.isEdit),
                 ),
               ),
               SizedBox(height: 88.h),

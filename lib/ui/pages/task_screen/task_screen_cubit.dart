@@ -40,13 +40,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
     if (task != null) {
       changeCategory(category: task.category!);
       changeThemeColor(colorCode: task.category!.color!);
-      changeDocumentList(
-        documentList: task.documents!
-            .map(
-              (e) => FileUtils.getFileNameFromUrl(e),
-            )
-            .toList(),
-      );
+      changeDocumentList(documentList: task.documents!);
     }
   }
 
@@ -248,14 +242,14 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
 
   Future<List<String>> uploadFileToStorage({TaskEntity? task}) async {
     final List<String> result = [];
-    final List<String> list = [...?state.documentList];
+    List<String> list = [...?state.documentList];
     if ((task?.documents ?? []).isNotEmpty && list.isNotEmpty) {
       result.addAll(task!.documents!);
-      result.map(
-        (e) => list.remove(
-          FileUtils.getFileNameFromUrl(e),
-        ),
-      );
+      for (var e in result) {
+        if (list.contains(e)) {
+          list.remove(e);
+        }
+      }
     }
     if (list.isNotEmpty) {
       for (String item in list) {

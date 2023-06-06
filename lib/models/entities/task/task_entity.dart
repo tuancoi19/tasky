@@ -50,7 +50,6 @@ class TaskEntity {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
           other is TaskEntity &&
               runtimeType == other.runtimeType &&
               id == other.id &&

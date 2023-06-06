@@ -10,10 +10,12 @@ import 'package:tasky/ui/pages/task_screen/task_screen_page.dart';
 
 class TodayTasksListView extends StatelessWidget {
   final List<TaskEntity> taskList;
+  final Function() onDone;
 
   const TodayTasksListView({
     Key? key,
     required this.taskList,
+    required this.onDone,
   }) : super(key: key);
 
   @override
@@ -23,13 +25,16 @@ class TodayTasksListView extends StatelessWidget {
         return buildTodayTaskItem(
           index: index % 3,
           data: taskList[index],
-          onTap: () {
-            Get.toNamed(
+          onTap: () async {
+            final needReload = await Get.toNamed(
               RouteConfig.taskScreen,
               arguments: TaskScreenArguments(
                 task: taskList[index],
               ),
             );
+            if (needReload ?? false) {
+              onDone.call();
+            }
           },
         );
       },

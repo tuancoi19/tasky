@@ -214,8 +214,7 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
               padding: const EdgeInsets.symmetric(horizontal: 24).r,
               child: TodayTasksTitle(
                 onTap: () async {
-                  final needReload =
-                      await Get.toNamed(RouteConfig.taskScreen);
+                  final needReload = await Get.toNamed(RouteConfig.taskScreen);
                   if (needReload ?? false) {
                     await _cubit.loadInitialData();
                   }
@@ -246,13 +245,16 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
                         final needReload =
                             await Get.toNamed(RouteConfig.taskScreen);
                         if (needReload ?? false) {
-                          await _cubit.getTasksList();
+                          await _cubit.loadInitialData();
                         }
                       },
                     );
                   } else {
                     return TodayTasksListView(
                       taskList: state.tasksList ?? [],
+                      onDone: () async {
+                        await _cubit.loadInitialData();
+                      },
                     );
                   }
                 },

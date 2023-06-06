@@ -14,6 +14,7 @@ class TaskCategoryList extends StatelessWidget {
   final Function(CategoryEntity) onSelected;
   final CategoryEntity? selectedCategory;
   final Function(CategoryEntity?) onDone;
+  final bool allowToEdit;
 
   const TaskCategoryList({
     super.key,
@@ -21,6 +22,7 @@ class TaskCategoryList extends StatelessWidget {
     required this.onSelected,
     required this.selectedCategory,
     required this.onDone,
+    required this.allowToEdit,
   });
 
   @override
@@ -35,16 +37,20 @@ class TaskCategoryList extends StatelessWidget {
             style: AppTextStyle.blackS15W500,
           ),
           SizedBox(height: 20.h),
-          Wrap(spacing: 8.0.w, runSpacing: 8.0.h, children: [
-            if (listData.length < 6) buildItem(),
-            ...listData.map(
-              (item) {
-                return buildItem(
-                  item: item,
-                );
-              },
-            ).toList()
-          ]),
+          allowToEdit
+              ? Wrap(spacing: 8.0.w, runSpacing: 8.0.h, children: [
+                  if (listData.length < 6) buildItem(),
+                  ...listData.map(
+                    (item) {
+                      return buildItem(
+                        item: item,
+                      );
+                    },
+                  ).toList()
+                ])
+              : buildItem(
+                  item: selectedCategory,
+                ),
         ],
       ),
     );
