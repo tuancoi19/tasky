@@ -11,7 +11,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/database/secure_storage_helper.dart';
-import 'package:tasky/database/share_preferences_helper.dart';
 import 'package:tasky/firebase_options.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/global/global_data.dart';
@@ -21,6 +20,7 @@ import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/commons/app_dialog.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
+import 'package:tasky/utils/file_utils.dart';
 import 'package:tasky/utils/logger.dart';
 
 part 'app_state.dart';
@@ -118,7 +118,7 @@ class AppCubit extends Cubit<AppState> {
         .then(
       (DocumentSnapshot doc) {
         final data = doc.data() as Map<String, dynamic>;
-        if(doc.data() == null){
+        if (doc.data() == null) {
           return null;
         }
         return UserEntity.fromJson(data);
@@ -126,6 +126,7 @@ class AppCubit extends Cubit<AppState> {
       onError: (e) => print("Error getting document: $e"),
     );
     if (newUser != null) {
+      newUser.userId = _firebaseAuth.currentUser?.uid;
       emit(state.copyWith(user: newUser));
       GlobalData.instance.userID = currentUser?.uid;
       return newUser;
@@ -218,7 +219,7 @@ class AppCubit extends Cubit<AppState> {
         },
         onError: (e) => print("Error getting document: $e"),
       );
-      
+
       if (user != null) {
         UserEntity currentUser = UserEntity(
           //ưu tiên lấy lại userName cũ
@@ -311,11 +312,8 @@ class AppCubit extends Cubit<AppState> {
   Future<bool> saveSession({
     String? token,
     String refreshToken = '',
-    // UserEntity? currentUserEntity,
   }) async {
     await _saveToSecureStorage(token: token ?? '', refreshToken: refreshToken);
-    // await _saveToSharedPreferences(currentUserEntity);
-
     return true;
   }
 
@@ -333,17 +331,42 @@ class AppCubit extends Cubit<AppState> {
     secureStorageHelper.saveToken(tokenEntity);
   }
 
-
-  Future<String?> uploadImgToFirebase(File file)async {
-    // final imagesRef = storageRef.child("images/${file.na}");
+  Future<String?> uploadImgToFirebase(File file) async {
     try {
-      //Upload the file to firebase
-      TaskSnapshot uploadFile = await imagesRef.putFile(file);
-      String urlImg = await uploadFile.ref.getDownloadURL();
+      String urlImg = await FileUtils.uploadFile(
+          file: file, userID: state.user?.userId ?? '', type: 'image');
       print('🗳️🗳️🗳️🗳️ $urlImg');
+      await _firebaseAuth.currentUser?.updatePhotoURL(urlImg);
       return urlImg;
     } on FirebaseException catch (e) {
       logger.e(e);
     }
     return null;
   }
+
+  Future<String?> updateUserToFirebase(
+      {String? userName, String? pathAvatar}) async {
+    try {
+      print('--- ${state.user?.userId}');
+      final userRef = userCollection.doc(state.user?.userId ?? '');
+      userRef.update({
+        "user_name": userName ?? state.user?.userName,
+        "avatar_url": pathAvatar ?? state.user?.avatarUrl
+      }).then((value) => print("User successfully updated!"),
+          onError: (e) => print("Error updating user $e"));
+
+      UserEntity newUser = UserEntity(
+        userName: userName ?? state.user?.userName,
+        email: state.user?.email,
+        userId: state.user?.userId,
+        createAt: state.user?.createAt,
+        avatarUrl:  pathAvatar??state.user?.avatarUrl,
+      );
+
+      emit(state.copyWith(user: newUser));
+    } on FirebaseException catch (e) {
+      logger.e(e);
+    }
+    return null;
+  }
+}

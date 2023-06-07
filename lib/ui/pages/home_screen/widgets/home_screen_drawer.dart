@@ -75,7 +75,6 @@ class HomeScreenDrawer extends StatelessWidget {
       onTap: () {
         Get.toNamed(
           RouteConfig.editUserProfile,
-          arguments: EditUserProfileArguments(fromSignUp: false),
         );
       },
       child: SizedBox(

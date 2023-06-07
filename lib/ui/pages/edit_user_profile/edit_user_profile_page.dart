@@ -8,6 +8,7 @@ import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_images.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/ui/widgets/appbar/app_bar_with_back_icon_widget.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
 import 'package:tasky/ui/widgets/input/app_input.dart';
@@ -16,20 +17,9 @@ import 'package:tasky/utils/utils.dart';
 
 import 'edit_user_profile_cubit.dart';
 
-class EditUserProfileArguments {
-  bool fromSignUp;
-
-  EditUserProfileArguments({
-    required this.fromSignUp,
-  });
-}
-
 class EditUserProfilePage extends StatelessWidget {
-  final EditUserProfileArguments arguments;
-
   const EditUserProfilePage({
     Key? key,
-    required this.arguments,
   }) : super(key: key);
 
   @override
@@ -39,19 +29,14 @@ class EditUserProfilePage extends StatelessWidget {
         final AppCubit appCubit = BlocProvider.of<AppCubit>(context);
         return EditUserProfileCubit(appCubit);
       },
-      child: EditUserProfileChildPage(
-        arguments: arguments,
-      ),
+      child: const EditUserProfileChildPage(),
     );
   }
 }
 
 class EditUserProfileChildPage extends StatefulWidget {
-  final EditUserProfileArguments arguments;
-
   const EditUserProfileChildPage({
     Key? key,
-    required this.arguments,
   }) : super(key: key);
 
   @override
@@ -84,34 +69,48 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return !widget.arguments.fromSignUp;
-      },
-      child: Scaffold(
-        appBar:
-            AppBarWithBackIconWidget(fromSignUp: widget.arguments.fromSignUp),
-        body: SafeArea(
-          child: _buildBodyWidget(),
-        ),
-        floatingActionButton:
-            BlocBuilder<EditUserProfileCubit, EditUserProfileState>(
-          builder: (context, state) {
-            return !state.isEditProfile
-                ? FloatingActionButton(
-                    onPressed: () {
-                      _cubit.setIsEdit(true);
-                    },
-                    backgroundColor: AppColors.backgroundLight,
-                    child: const Icon(
-                      Icons.mode_edit_outline_outlined,
-                      size: 30,
-                      color: AppColors.primary,
-                    ),
-                  )
-                : const SizedBox();
-          },
-        ),
+    return Scaffold(
+      appBar: const AppBarWithBackIconWidget(),
+      body: BlocBuilder<EditUserProfileCubit, EditUserProfileState>(
+        builder: (context, state) {
+          return Stack(
+            children: [
+              SafeArea(
+                child: _buildBodyWidget(),
+              ),
+              state.loadDataStatus == LoadStatus.loading
+                  ? Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.black.withOpacity(0.5),
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    )
+                  : const SizedBox(),
+            ],
+          );
+        },
+      ),
+      floatingActionButton:
+          BlocBuilder<EditUserProfileCubit, EditUserProfileState>(
+        builder: (context, state) {
+          return !state.isEditProfile
+              ? FloatingActionButton(
+                  onPressed: () {
+                    _cubit.setIsEdit(true);
+                  },
+                  backgroundColor: AppColors.backgroundLight,
+                  child: const Icon(
+                    Icons.mode_edit_outline_outlined,
+                    size: 30,
+                    color: AppColors.primary,
+                  ),
+                )
+              : const SizedBox();
+        },
       ),
     );
   }
@@ -168,12 +167,22 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
                     fit: BoxFit.cover,
                   ),
                 )
-              : Image.asset(
-                  AppImages.icUser,
-                  width: 110.h,
-                  height: 110.h,
-                  fit: BoxFit.cover,
-                ),
+              : appCubit.state.user?.avatarUrl != null
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(55),
+                      child: Image.network(
+                        appCubit.state.user?.avatarUrl ?? '',
+                        width: 110.h,
+                        height: 110.h,
+                        fit: BoxFit.fill,
+                      ),
+                    )
+                  : Image.asset(
+                      AppImages.icUser,
+                      width: 110.h,
+                      height: 110.h,
+                      fit: BoxFit.cover,
+                    ),
         ),
         _cubit.state.isEditProfile
             ? Container(
@@ -276,23 +285,22 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
                 textFieldFocusedBorder: Colors.transparent,
               ),
               SizedBox(height: 32.h),
-              if (!widget.arguments.fromSignUp)
-                AppPasswordInput(
-                  obscureTextController: obscurePasswordController,
-                  textEditingController: passwordTextController,
-                  color: AppColors.backgroundTextFieldColor,
-                  borderRadius: 10,
-                  autoTrim: true,
-                  autoValidateMode: autoValidateMode,
-                  labelText: S.current.password,
-                  hintText: S.current.enter_your_password,
-                  onChanged: (value) {
-                    _cubit.changePassword(password: value);
-                  },
-                  validator: (password) {
-                    return Utils.currentPasswordValidator(password ?? '');
-                  },
-                ),
+              AppPasswordInput(
+                obscureTextController: obscurePasswordController,
+                textEditingController: passwordTextController,
+                color: AppColors.backgroundTextFieldColor,
+                borderRadius: 10,
+                autoTrim: true,
+                autoValidateMode: autoValidateMode,
+                labelText: S.current.password,
+                hintText: S.current.enter_your_password,
+                onChanged: (value) {
+                  _cubit.changePassword(password: value);
+                },
+                validator: (password) {
+                  return Utils.currentPasswordValidator(password ?? '');
+                },
+              ),
               SizedBox(height: 32.h),
               BlocBuilder<EditUserProfileCubit, EditUserProfileState>(
                 builder: (context, state) {

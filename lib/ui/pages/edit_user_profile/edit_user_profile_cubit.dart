@@ -12,7 +12,7 @@ import 'package:tasky/models/enums/load_status.dart';
 part 'edit_user_profile_state.dart';
 
 class EditUserProfileCubit extends Cubit<EditUserProfileState> {
-  EditUserProfileCubit(this.appCubit) : super(EditUserProfileState());
+  EditUserProfileCubit(this.appCubit) : super(const EditUserProfileState());
   final AppCubit appCubit;
 
   Future<void> loadInitialData() async {
@@ -49,20 +49,26 @@ class EditUserProfileCubit extends Cubit<EditUserProfileState> {
   void actionCancel() {
     emit(state.copyWith(
       isEditProfile: false,
-      clearImg: true,
+      isClear: true,
     ));
   }
 
   void getPhotoGallery() async {
+    emit(state.copyWith(loadDataStatus: LoadStatus.loading));
+
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       emit(state.copyWith(image: image));
       await cropImage();
+    } else {
+      emit(state.copyWith(loadDataStatus: LoadStatus.failure));
     }
   }
 
   void takePhotoCamera() async {
+    emit(state.copyWith(loadDataStatus: LoadStatus.loading));
+
     final ImagePicker picker = ImagePicker();
     final XFile? photo = await picker.pickImage(source: ImageSource.camera);
 
@@ -98,11 +104,13 @@ class EditUserProfileCubit extends Cubit<EditUserProfileState> {
         );
       }
     }
+    emit(state.copyWith(loadDataStatus: LoadStatus.success));
   }
 
   Future<void> saveInfo() async {
-    //TODO
     String? urlImg;
+    emit(state.copyWith(loadDataStatus: LoadStatus.loading));
+
     if (state.imageCrop != null) {
       urlImg =
           await appCubit.uploadImgToFirebase(File(state.imageCrop?.path ?? ''));
@@ -111,5 +119,14 @@ class EditUserProfileCubit extends Cubit<EditUserProfileState> {
         return;
       }
     }
+    await appCubit.updateUserToFirebase(
+      userName: state.userName,
+      pathAvatar: urlImg,
+    );
+
+    emit(state.copyWith(
+      loadDataStatus: LoadStatus.success,
+      isEditProfile: false,
+    ));
   }
 }
