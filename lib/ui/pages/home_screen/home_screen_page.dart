@@ -205,6 +205,9 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
                   } else {
                     return CategoryListView(
                       categoryList: state.categoriesList ?? [],
+                      onDone: () async {
+                        await _cubit.loadInitialData();
+                      },
                     );
                   }
                 },

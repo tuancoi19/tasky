@@ -30,7 +30,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                   width: 24.h,
                   height: 24.h,
                 ),
-                onTap: onTap),
+                onTap: onTap,),
             SizedBox(width: 16.w),
             const Expanded(
               child: HomeSearchBar(),

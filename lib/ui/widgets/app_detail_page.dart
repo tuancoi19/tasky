@@ -8,13 +8,14 @@ class AppDetailPage extends StatelessWidget {
   final Widget bodyWidget;
   final double? bodyHeight;
   final Color? headerColor;
+  final String? backgroundHeader;
 
   const AppDetailPage({
     Key? key,
     required this.headerWidget,
     required this.bodyWidget,
     this.bodyHeight,
-    this.headerColor,
+    this.headerColor, this.backgroundHeader,
   }) : super(key: key);
 
   @override
@@ -24,10 +25,10 @@ class AppDetailPage extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             color: headerColor ?? AppColors.primary,
-            image: const DecorationImage(
+            image: DecorationImage(
               fit: BoxFit.cover,
               image: AssetImage(
-                AppImages.firstTaskOverlay,
+                backgroundHeader ?? AppImages.firstTaskOverlay,
               ),
               alignment: Alignment.topCenter,
             ),

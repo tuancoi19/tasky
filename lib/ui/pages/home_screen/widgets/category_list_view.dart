@@ -5,10 +5,12 @@ import 'package:tasky/ui/pages/home_screen/widgets/category_item.dart';
 
 class CategoryListView extends StatelessWidget {
   final List<CategoryEntity> categoryList;
+  final Function() onDone;
 
   const CategoryListView({
     Key? key,
     required this.categoryList,
+    required this.onDone,
   }) : super(key: key);
 
   @override
@@ -18,6 +20,7 @@ class CategoryListView extends StatelessWidget {
         return CategoryItem(
           index: index,
           data: categoryList[index],
+          onDone: onDone,
         );
       },
       separatorBuilder: (context, index) {

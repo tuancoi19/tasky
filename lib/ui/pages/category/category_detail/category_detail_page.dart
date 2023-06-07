@@ -6,15 +6,18 @@ import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/models/entities/category/category_entity.dart';
 import 'package:tasky/ui/pages/category/category_detail/widgets/category_navigator_header.dart';
 import 'package:tasky/ui/pages/category/category_detail/widgets/task_list_view.dart';
+import 'package:tasky/ui/pages/category/category_detail/widgets/task_title_row.dart';
 import 'package:tasky/ui/widgets/app_detail_page.dart';
 
 import 'category_detail_cubit.dart';
 
 class CategoryDetailArguments {
   final CategoryEntity category;
+  final String background;
 
   CategoryDetailArguments({
     required this.category,
+    required this.background,
   });
 }
 
@@ -75,7 +78,8 @@ class _CategoryDetailChildPageState extends State<CategoryDetailChildPage> {
         return AppDetailPage(
           headerWidget: buildFormAddTaskHeader(),
           bodyWidget: buildFormAddTaskBody(),
-          headerColor: Colors.amber,
+          headerColor: Color(widget.arguments.category.color ?? 0),
+          backgroundHeader: widget.arguments.background,
         );
       },
     );
@@ -90,18 +94,18 @@ class _CategoryDetailChildPageState extends State<CategoryDetailChildPage> {
           CategoryNavigatorHeader(
             onDelete: () {},
             isLoading: false,
-            theme: Colors.amber,
+            theme: Color(widget.arguments.category.color ?? 0),
             onEdit: () {},
           ),
           SizedBox(height: 32.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
-                  flex: 2,
+                  flex: 7,
                   child: Text(
-                    '',
+                    widget.arguments.category.title ?? '',
                     style: AppTextStyle.whiteS23W500,
                   )),
               Expanded(
@@ -129,7 +133,19 @@ class _CategoryDetailChildPageState extends State<CategoryDetailChildPage> {
   }
 
   Widget buildFormAddTaskBody() {
-    return TaskListView(taskList: []);
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 24,
+        vertical: 32,
+      ).r,
+      child: Column(
+        children: [
+          const TaskTitleRow(),
+          SizedBox(height: 20.h),
+          Expanded(child: TaskListView(taskList: [])),
+        ],
+      ),
+    );
   }
 
   @override
