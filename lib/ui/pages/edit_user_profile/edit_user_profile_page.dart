@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -156,12 +158,22 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
         CircleAvatar(
           radius: 55.h,
           backgroundColor: Colors.transparent,
-          child: Image.asset(
-            AppImages.icUser,
-            width: 110.h,
-            height: 110.h,
-            fit: BoxFit.cover,
-          ),
+          child: (_cubit.state.imageCrop != null) && _cubit.state.isEditProfile
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(55),
+                  child: Image.file(
+                    File(_cubit.state.imageCrop?.path ?? ''),
+                    width: 110.h,
+                    height: 110.h,
+                    fit: BoxFit.cover,
+                  ),
+                )
+              : Image.asset(
+                  AppImages.icUser,
+                  width: 110.h,
+                  height: 110.h,
+                  fit: BoxFit.cover,
+                ),
         ),
         _cubit.state.isEditProfile
             ? Container(
@@ -185,10 +197,19 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
-                                const Text('Modal BottomSheet'),
                                 ElevatedButton(
-                                  child: const Text('Close BottomSheet'),
-                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('Take photo'),
+                                  onPressed: () async {
+                                    _cubit.takePhotoCamera();
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                ElevatedButton(
+                                  child: const Text('Get photo from gallery'),
+                                  onPressed: () {
+                                    _cubit.getPhotoGallery();
+                                    Navigator.pop(context);
+                                  },
                                 ),
                               ],
                             ),
@@ -296,7 +317,7 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
                           backgroundColor: AppColors.welcomeBackgroundColor,
                           textStyle: AppTextStyle.whiteS18Bold,
                           onPressed: () {
-                            _cubit.setIsEdit(false);
+                            _cubit.actionCancel();
                             usernameTextController.value = TextEditingValue(
                                 text: appCubit.state.user?.userName ?? '');
                           },
@@ -328,8 +349,7 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
     if (!validateAndSave) {
       _cubit.onValidateForm();
     } else {
-      // _cubit.save();
-      _cubit.setIsEdit(false);
+      _cubit.saveInfo();
     }
     FocusScope.of(context).unfocus();
   }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -24,10 +26,6 @@ class EditUserProfileCubit extends Cubit<EditUserProfileState> {
     }
   }
 
-  void setImagePath({required String imagePath}) {
-    emit(state.copyWith(imagePath: imagePath));
-  }
-
   void onValidateForm() {
     emit(
       state.copyWith(
@@ -46,6 +44,32 @@ class EditUserProfileCubit extends Cubit<EditUserProfileState> {
 
   void setIsEdit(bool value) {
     emit(state.copyWith(isEditProfile: value));
+  }
+
+  void actionCancel() {
+    emit(state.copyWith(
+      isEditProfile: false,
+      clearImg: true,
+    ));
+  }
+
+  void getPhotoGallery() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      emit(state.copyWith(image: image));
+      await cropImage();
+    }
+  }
+
+  void takePhotoCamera() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? photo = await picker.pickImage(source: ImageSource.camera);
+
+    if (photo != null) {
+      emit(state.copyWith(image: photo));
+      await cropImage();
+    }
   }
 
   Future<void> cropImage() async {
@@ -67,16 +91,24 @@ class EditUserProfileCubit extends Cubit<EditUserProfileState> {
         ],
       );
       if (croppedFile != null) {
-        var decodedImage =
-            await decodeImageFromList(await croppedFile.readAsBytes());
-        print('Image: ${decodedImage.width} - ${decodedImage.height}');
         emit(
           state.copyWith(
             imageCrop: croppedFile,
-            width: decodedImage.width,
-            height: decodedImage.height,
           ),
         );
+      }
+    }
+  }
+
+  Future<void> saveInfo() async {
+    //TODO
+    String? urlImg;
+    if (state.imageCrop != null) {
+      urlImg =
+          await appCubit.uploadImgToFirebase(File(state.imageCrop?.path ?? ''));
+      if (urlImg == null) {
+        print('ERROR UPLOAD FILE URL : $urlImg');
+        return;
       }
     }
   }

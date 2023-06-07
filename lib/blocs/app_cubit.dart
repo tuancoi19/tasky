@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -30,6 +33,8 @@ class AppCubit extends Cubit<AppState> {
       clientId: DefaultFirebaseOptions.currentPlatform.iosClientId);
 
   final userCollection = FirebaseFirestore.instance.collection("users");
+  final storageRef = FirebaseStorage.instance.ref('images/');
+
 
   User? get currentUser => _firebaseAuth.currentUser;
 
@@ -334,19 +339,17 @@ class AppCubit extends Cubit<AppState> {
     );
   }
 
-  ///Sign Out
-// void signOut() async {
-//   emit(state.copyWith(signOutStatus: LoadStatus.loading));
-//   try {
-//     await Future.delayed(const Duration(seconds: 2));
-//     final sharedPreferencesHelper = SharedPreferencesHelper();
-//     final secureStorageHelper = SecureStorageHelper.instance;
-//
-//     secureStorageHelper.removeToken();
-//     await sharedPreferencesHelper.logout();
-//   } catch (e) {
-//     logger.e(e);
-//     emit(state.copyWith(signOutStatus: LoadStatus.failure));
-//   }
-// }
+  Future<String?> uploadImgToFirebase(File file)async {
+    // final imagesRef = storageRef.child("images/${file.na}");
+    try {
+      //Upload the file to firebase
+      TaskSnapshot uploadFile = await imagesRef.putFile(file);
+      String urlImg = await uploadFile.ref.getDownloadURL();
+      print('🗳️🗳️🗳️🗳️ $urlImg');
+      return urlImg;
+    } on FirebaseException catch (e) {
+      logger.e(e);
+    }
+    return null;
+  }
 }
