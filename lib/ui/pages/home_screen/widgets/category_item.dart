@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:tasky/common/app_images.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/global/global_data.dart';
 import 'package:tasky/models/entities/category/category_entity.dart';
 import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/pages/category/category_detail/category_detail_page.dart';
@@ -77,7 +78,7 @@ class CategoryItem extends StatelessWidget {
               children: [
                 SizedBox(height: 4.h),
                 Text(
-                  '0 ${S.current.tasks}',
+                  '${GlobalData.instance.tasksList.where((element) => element.categoryId == data.id).length} ${S.current.tasks}',
                   style: AppTextStyle.whiteO50S10W500,
                 ),
                 SizedBox(height: 4.h),

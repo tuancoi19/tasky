@@ -25,12 +25,13 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             buildIconButton(
-                icon: SvgPicture.asset(
-                  AppVectors.icMenu,
-                  width: 24.h,
-                  height: 24.h,
-                ),
-                onTap: onTap,),
+              icon: SvgPicture.asset(
+                AppVectors.icMenu,
+                width: 24.h,
+                height: 24.h,
+              ),
+              onTap: onTap,
+            ),
             SizedBox(width: 16.w),
             const Expanded(
               child: HomeSearchBar(),

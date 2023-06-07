@@ -8,11 +8,13 @@ import 'package:tasky/ui/widgets/buttons/app_button.dart';
 class ErrorListWidget extends StatelessWidget {
   final double? height;
   final Function() onRefresh;
+  final Color? theme;
 
   const ErrorListWidget({
     Key? key,
     required this.onRefresh,
     this.height,
+    this.theme,
   }) : super(key: key);
 
   @override
@@ -35,7 +37,7 @@ class ErrorListWidget extends StatelessWidget {
               height: 56.h,
               onPressed: onRefresh,
               textStyle: AppTextStyle.whiteS18Bold,
-              backgroundColor: AppColors.primary,
+              backgroundColor: theme ?? AppColors.primary,
             )
           ],
         ),

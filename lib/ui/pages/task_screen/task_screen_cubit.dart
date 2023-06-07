@@ -168,7 +168,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
     }
   }
 
-  Future<void> updateTaskToFirebase(TaskEntity? initialTask) async {
+  Future<void> updateTaskToFirebase(TaskEntity initialTask) async {
     emit(state.copyWith(isLoading: true));
     final TaskEntity task = TaskEntity(
       title: state.title?.trim() ?? '',
@@ -180,7 +180,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
           state.startTime ?? TimeOfDay.now()),
       end: DateTimeUtils.convertTimeOfDayToString(
           state.endTime ?? TimeOfDay.now()),
-      category: state.category ?? CategoryEntity(title: '', color: 0),
+      categoryId: state.category?.id,
     );
 
     try {
@@ -189,7 +189,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
             .collection('users')
             .doc(GlobalData.instance.userID)
             .collection('tasks')
-            .doc(initialTask?.id)
+            .doc(initialTask.id)
             .update(task.toJson());
       }
       Get.back(result: true);
@@ -217,7 +217,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
             state.startTime ?? TimeOfDay.now()),
         end: DateTimeUtils.convertTimeOfDayToString(
             state.endTime ?? TimeOfDay.now()),
-        category: state.category ?? CategoryEntity(title: '', color: 0),
+        categoryId: state.category?.id,
       );
 
       await FirebaseFirestore.instance

@@ -63,5 +63,4 @@ class AppVectors {
   static const String icEdit = 'assets/vectors/ic_edit.svg';
 
   static const String icFilter = 'assets/vectors/ic_filter.svg';
-
 }

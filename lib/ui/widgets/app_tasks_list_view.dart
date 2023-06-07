@@ -8,21 +8,23 @@ import 'package:tasky/models/entities/task/task_entity.dart';
 import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/pages/task_screen/task_screen_page.dart';
 
-class TodayTasksListView extends StatelessWidget {
+class AppTasksListView extends StatelessWidget {
   final List<TaskEntity> taskList;
   final Function() onDone;
+  final bool showDate;
 
-  const TodayTasksListView({
+  const AppTasksListView({
     Key? key,
     required this.taskList,
     required this.onDone,
+    this.showDate = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemBuilder: (context, index) {
-        return buildTodayTaskItem(
+        return buildAppTaskItem(
           index: index % 3,
           data: taskList[index],
           onTap: () async {
@@ -43,7 +45,7 @@ class TodayTasksListView extends StatelessWidget {
     );
   }
 
-  Widget buildTodayTaskItem({
+  Widget buildAppTaskItem({
     required final TaskEntity data,
     required final Function() onTap,
     required int index,
@@ -107,7 +109,7 @@ class TodayTasksListView extends StatelessWidget {
                           maxLines: 1,
                         ),
                         Text(
-                          data.category?.title ?? '',
+                          (showDate ? data.date : data.category?.title) ?? '',
                           style: AppTextStyle.blackO50S13W400,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,

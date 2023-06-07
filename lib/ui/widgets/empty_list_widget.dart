@@ -8,11 +8,13 @@ import 'package:tasky/ui/widgets/buttons/app_button.dart';
 class EmptyListWidget extends StatelessWidget {
   final Function() onRefresh;
   final double? height;
+  final Color? theme;
 
   const EmptyListWidget({
     Key? key,
     required this.onRefresh,
     this.height,
+    this.theme,
   }) : super(key: key);
 
   @override
@@ -34,7 +36,7 @@ class EmptyListWidget extends StatelessWidget {
               cornerRadius: 15.r,
               height: 48.h,
               textStyle: AppTextStyle.whiteS18Bold,
-              backgroundColor: AppColors.primary,
+              backgroundColor: theme ?? AppColors.primary,
               onPressed: onRefresh,
             )
           ],

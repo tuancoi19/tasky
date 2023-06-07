@@ -16,13 +16,11 @@ import 'package:tasky/utils/utils.dart';
 import 'add_category_cubit.dart';
 
 class AddCategoryArguments {
-  final String? id;
-  final Color? theme;
+  final CategoryEntity? category;
   final Function(CategoryEntity?)? onDone;
 
   AddCategoryArguments({
-    this.id,
-    this.theme,
+    this.category,
     this.onDone,
   });
 }
@@ -73,8 +71,8 @@ class _AddCategoryChildPageState extends State<AddCategoryChildPage> {
   void initState() {
     super.initState();
     _cubit = BlocProvider.of(context);
-    _cubit.loadInitialData();
-    _controller = TextEditingController();
+    _cubit.loadInitialData(widget.arguments.category);
+    _controller = TextEditingController(text: widget.arguments.category?.title);
   }
 
   @override
@@ -95,8 +93,8 @@ class _AddCategoryChildPageState extends State<AddCategoryChildPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.arguments.id != null
-                      ? S.current.category_detail
+                  widget.arguments.category?.id != null
+                      ? S.current.edit_category
                       : S.current.add_new_category,
                   style: AppTextStyle.secondaryBlackO80S21W600,
                 ),
@@ -105,7 +103,9 @@ class _AddCategoryChildPageState extends State<AddCategoryChildPage> {
                   textEditingController: _controller,
                   borderRadius: 10,
                   color: AppColors.backgroundTextFieldColor,
-                  textFieldFocusedBorder: widget.arguments.theme,
+                  textFieldFocusedBorder: widget.arguments.category != null
+                      ? Color(widget.arguments.category?.color ?? 0)
+                      : null,
                   hintText: S.current.enter_your_category_name,
                   labelText: S.current.category_name,
                   validator: (value) {
@@ -129,11 +129,15 @@ class _AddCategoryChildPageState extends State<AddCategoryChildPage> {
                     _cubit.changeSelectedColor(selectedColor: value);
                   },
                   selectedColor: state.selectedColor,
-                  theme: widget.arguments.theme,
+                  theme: widget.arguments.category != null
+                      ? Color(widget.arguments.category?.color ?? 0)
+                      : null,
                 ),
                 SizedBox(height: 24.h),
                 NavigatorRow(
-                  theme: widget.arguments.theme,
+                  theme: widget.arguments.category != null
+                      ? Color(widget.arguments.category?.color ?? 0)
+                      : null,
                   onPressed: () async {
                     if (state.selectedColor == null) {
                       AppSnackbar.showError(
@@ -143,10 +147,16 @@ class _AddCategoryChildPageState extends State<AddCategoryChildPage> {
                     }
                     if (_formKey.currentState!.validate() &&
                         state.selectedColor != null) {
-                      await _cubit.addCategoryToFirebase().then((value) {
-                        Get.back();
-                        widget.arguments.onDone!(value);
-                      });
+                      CategoryEntity? result;
+                      if (widget.arguments.category != null) {
+                        result = await _cubit.updateCategoryOnFirebase(
+                          widget.arguments.category!,
+                        );
+                      } else {
+                        result = await _cubit.addCategoryToFirebase();
+                      }
+                      Get.back();
+                      widget.arguments.onDone!(result);
                     }
                   },
                 ),

@@ -1,10 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:tasky/global/global_data.dart';
 
 part 'category_entity.g.dart';
 
 @JsonSerializable()
 class CategoryEntity {
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(includeToJson: false, includeFromJson: false)
   String? id;
 
   @JsonKey()
@@ -25,5 +26,11 @@ class CategoryEntity {
     return other is CategoryEntity &&
         other.color == color &&
         other.title == title;
+  }
+
+  int get numberOfTasks {
+    return GlobalData.instance.tasksList
+        .where((element) => element.categoryId == id)
+        .length;
   }
 }

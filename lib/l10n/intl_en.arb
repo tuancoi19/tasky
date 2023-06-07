@@ -114,7 +114,6 @@
   "enter_your_task_note": "Enter your Task note",
   "please_do_not_enter_more_than_characters": "Please do not enter more than {length} characters",
   "forgot_password_instruction": "A email has been sent to your email inbox. Please check your inbox and follow the instructions.",
-  "category_detail": "Category detail",
   "add_new_category": "Add new Category",
   "enter_your_category_name": "Enter your Category name",
   "category_name": "Category name",
@@ -129,7 +128,7 @@
   "end_time_cannot_be_chosen_earlier_than_start_time": "End time cannot be chosen earlier than Start time",
   "please_select_a_category_for_this_task": "Please select a category for this task",
   "please_choose_a_theme": "Please choose a theme!",
-  "add_category": "Thêm Danh mục",
+  "add_category": "Add Category",
   "updated_successfully": "Updated Successfully!",
   "task": "Task",
   "added_successfully": "Added Successfully!",
@@ -141,5 +140,8 @@
   "no": "No",
   "delete_message": "All data will be lost if you proceed with the deletion. Do you want to continue?",
   "delete_task": "Delete Task",
-  "proceed": "Proceed"
+  "proceed": "Proceed",
+  "edit_category": "Edit Category",
+  "delete_category": "Delete Category",
+  "delete_category_message": "All data will be lost (including Tasks related to this Category) if you proceed with the deletion. Do you want to continue?"
 }

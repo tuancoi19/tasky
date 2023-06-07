@@ -114,7 +114,6 @@
   "enter_your_task_note": "Hãy điền ghi chú cho tác vụ của bạn",
   "please_do_not_enter_more_than_characters": "Không điền quá {length} kí tự",
   "forgot_password_instruction": "Một email đã được gửi đến hộp thư email của bạn. Vui lòng kiểm tra hộp thư và làm theo hướng dẫn",
-  "category_detail": "Chi tiết Danh mục",
   "add_new_category": "Thêm Danh mục mới",
   "enter_your_category_name": "Nhập tên Danh mục của bạn",
   "category_name": "Tên danh mục",
@@ -129,7 +128,7 @@
   "end_time_cannot_be_chosen_earlier_than_start_time": "Thời điểm Kết thúc không thể sớm hơn thời điểm Bắt đầu",
   "please_select_a_category_for_this_task": "Hãy chọn Danh mục cho tác vụ này!",
   "please_choose_a_theme": "Hãy chọn màu sắc chủ đề!",
-  "add_category": "Theem Danh mục",
+  "add_category": "Thêm Danh mục",
   "updated_successfully": "Cập nhật thành công!",
   "task": "Tác vụ",
   "added_successfully": "Thêm thành công!",
@@ -141,5 +140,8 @@
   "no": "Không",
   "delete_message": "Tất cả dữ liệu sẽ mất khi thực hiện việc xóa. Bạn vẫn muốn tiếp tục?",
   "delete_task": "Xóa Tác vụ",
-  "proceed": "Thực hiện"
+  "proceed": "Thực hiện",
+  "edit_category": "Chỉnh sửa Danh mục",
+  "delete_category": "Xóa Danh mục",
+  "delete_category_message": "Tất cả dữ liệu sẽ mất (bao gồm cả các Tác vụ liên quan đến Danh mục này) khi thực hiện việc xóa. Bạn vẫn muốn tiếp tục?"
 }

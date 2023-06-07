@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:tasky/configs/app_configs.dart';
+import 'package:tasky/global/global_data.dart';
 import 'package:tasky/models/entities/category/category_entity.dart';
 
 part 'task_entity.g.dart';
@@ -28,7 +29,7 @@ class TaskEntity {
   String? end;
 
   @JsonKey()
-  CategoryEntity? category;
+  String? categoryId;
 
   @JsonKey()
   List<String>? documents;
@@ -36,7 +37,7 @@ class TaskEntity {
   TaskEntity({
     this.title,
     this.note,
-    this.category,
+    this.categoryId,
     this.documents,
     this.date,
     this.start,
@@ -58,7 +59,7 @@ class TaskEntity {
       date == other.date &&
       start == other.start &&
       end == other.end &&
-      category == other.category &&
+      categoryId == other.categoryId &&
       listEquals(documents, other.documents);
 
   DateTime? get dateFromString {
@@ -90,5 +91,10 @@ class TaskEntity {
       return TimeOfDay(hour: hours, minute: minutes);
     }
     return null;
+  }
+
+  CategoryEntity? get category {
+    return GlobalData.instance.categoriesList
+        .singleWhere((element) => element.id == categoryId);
   }
 }

@@ -15,7 +15,8 @@ class AppDetailPage extends StatelessWidget {
     required this.headerWidget,
     required this.bodyWidget,
     this.bodyHeight,
-    this.headerColor, this.backgroundHeader,
+    this.headerColor,
+    this.backgroundHeader,
   }) : super(key: key);
 
   @override

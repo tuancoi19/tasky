@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:tasky/global/global_data.dart';
 import 'package:tasky/models/entities/category/category_entity.dart';
 import 'package:tasky/models/entities/task/task_entity.dart';
 import 'package:tasky/models/enums/load_status.dart';
+import 'package:tasky/ui/commons/app_snackbar.dart';
 import 'package:tasky/utils/task_date_utils.dart';
 
 part 'home_screen_state.dart';
@@ -13,6 +15,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
   HomeScreenCubit() : super(const HomeScreenState());
 
   Future<void> loadInitialData() async {
+    await getCategoriesList();
     await getTasksList();
     await getCategoriesList();
   }
@@ -33,24 +36,29 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
           return result;
         }).toList();
       });
+      List<TaskEntity>? todayTaskList;
       if (result.isNotEmpty) {
-        GlobalData.instance.tasksList = result;
-        final List<TaskEntity> todayTaskList = TaskDateUtils.filterItemsByDate(
+        todayTaskList = TaskDateUtils.filterItemsByDate(
           date: DateTime.now(),
           items: result,
         );
         todayTaskList.sort(
           (a, b) => (a.start ?? '').compareTo(b.start ?? ''),
         );
-        emit(
-          state.copyWith(
-            tasksList: todayTaskList,
-          ),
-        );
       }
+      GlobalData.instance.tasksList = result;
+      emit(
+        state.copyWith(
+          tasksList: todayTaskList ?? [],
+        ),
+      );
       emit(state.copyWith(loadTasksListStatus: LoadStatus.success));
-    } catch (e) {
+    } on FirebaseAuthException catch (e) {
       emit(state.copyWith(loadTasksListStatus: LoadStatus.failure));
+      AppSnackbar.showError(
+        title: 'Firebase',
+        message: e.message,
+      );
     }
   }
 
@@ -74,12 +82,16 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
         result.sort(
           (a, b) => (a.title ?? '').compareTo(b.title ?? ''),
         );
-        GlobalData.instance.categoriesList = result;
-        emit(state.copyWith(categoriesList: result));
       }
+      GlobalData.instance.categoriesList = result;
+      emit(state.copyWith(categoriesList: result));
       emit(state.copyWith(loadCategoriesListStatus: LoadStatus.success));
-    } catch (e) {
-      emit(state.copyWith(loadCategoriesListStatus: LoadStatus.failure));
+    } on FirebaseAuthException catch (e) {
+      emit(state.copyWith(loadTasksListStatus: LoadStatus.failure));
+      AppSnackbar.showError(
+        title: 'Firebase',
+        message: e.message,
+      );
     }
   }
 }

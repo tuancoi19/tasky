@@ -16,7 +16,7 @@ import 'package:tasky/ui/pages/home_screen/widgets/category_title.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/hello_text.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/home_app_bar.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/category_list_view.dart';
-import 'package:tasky/ui/pages/home_screen/widgets/today_tasks_list_view.dart';
+import 'package:tasky/ui/widgets/app_tasks_list_view.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/home_screen_drawer.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/today_tasks_title.dart';
 import 'package:tasky/ui/widgets/app_circular_progress_indicator.dart';
@@ -219,7 +219,7 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
                 onTap: () async {
                   final needReload = await Get.toNamed(RouteConfig.taskScreen);
                   if (needReload ?? false) {
-                    await _cubit.loadInitialData();
+                    _cubit.loadInitialData();
                   }
                 },
               ),
@@ -253,7 +253,7 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
                       },
                     );
                   } else {
-                    return TodayTasksListView(
+                    return AppTasksListView(
                       taskList: state.tasksList ?? [],
                       onDone: () async {
                         await _cubit.loadInitialData();

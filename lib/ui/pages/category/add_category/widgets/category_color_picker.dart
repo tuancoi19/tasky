@@ -50,7 +50,7 @@ class CategoryColorPicker extends StatelessWidget {
   }
 
   List<Color> getListColorData() {
-    List<Color> listColorData = AppColors.categoryColorList;
+    List<Color> listColorData = [...AppColors.categoryColorList];
     if (GlobalData.instance.categoriesList.isNotEmpty) {
       List<Color> listSelectedColor = GlobalData.instance.categoriesList
           .map((e) => Color(e.color ?? 0))

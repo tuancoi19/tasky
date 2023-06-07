@@ -62,11 +62,12 @@ class TaskNavigatorHeader extends StatelessWidget {
             children: [
               InkWell(
                 onTap: () async => await AppDialog.showConfirmDialog(
-                    onConfirm: onDelete,
-                    title: S.current.delete_task,
-                    message: S.current.delete_message,
-                    isLoading: isLoading,
-                    color: theme),
+                  onConfirm: onDelete,
+                  title: S.current.delete_task,
+                  message: S.current.delete_message,
+                  isLoading: isLoading,
+                  color: theme,
+                ),
                 child: SvgPicture.asset(
                   AppVectors.icDelete,
                   width: 24.h,

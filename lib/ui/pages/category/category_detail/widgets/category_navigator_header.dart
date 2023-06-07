@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/models/entities/category/category_entity.dart';
 import 'package:tasky/ui/commons/app_dialog.dart';
+import 'package:tasky/ui/pages/category/add_category/add_category_page.dart';
 
 class CategoryNavigatorHeader extends StatelessWidget {
   final Function() onDelete;
-  final Function() onEdit;
+  final Function(CategoryEntity?) onEdit;
   final bool isLoading;
-  final Color theme;
+  final CategoryEntity category;
+  final Function() onBack;
 
   const CategoryNavigatorHeader({
     Key? key,
     required this.onDelete,
     required this.onEdit,
     required this.isLoading,
-    required this.theme,
+    required this.category,
+    required this.onBack,
   }) : super(key: key);
 
   @override
@@ -26,9 +29,7 @@ class CategoryNavigatorHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         InkWell(
-          onTap: () {
-            Get.back();
-          },
+          onTap: onBack,
           child: SvgPicture.asset(
             AppVectors.icArrowLeft,
             width: 20.w,
@@ -44,11 +45,12 @@ class CategoryNavigatorHeader extends StatelessWidget {
           children: [
             InkWell(
               onTap: () async => await AppDialog.showConfirmDialog(
-                  onConfirm: onDelete,
-                  title: S.current.delete_task,
-                  message: S.current.delete_message,
-                  isLoading: isLoading,
-                  color: theme),
+                onConfirm: onDelete,
+                title: S.current.delete_category,
+                message: S.current.delete_category_message,
+                isLoading: isLoading,
+                color: Color(category.color ?? 0),
+              ),
               child: SvgPicture.asset(
                 AppVectors.icDelete,
                 width: 24.h,
@@ -61,7 +63,18 @@ class CategoryNavigatorHeader extends StatelessWidget {
             ),
             SizedBox(width: 32.w),
             InkWell(
-              onTap: onEdit,
+              onTap: () async {
+                await AppDialog.showCustomDialog(
+                  content: AddCategoryPage(
+                    arguments: AddCategoryArguments(
+                      category: category,
+                      onDone: (value) {
+                        onEdit.call(value);
+                      },
+                    ),
+                  ),
+                );
+              },
               child: SvgPicture.asset(
                 AppVectors.icEdit,
                 width: 24.h,

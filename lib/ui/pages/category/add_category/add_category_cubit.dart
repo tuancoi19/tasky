@@ -18,12 +18,9 @@ class AddCategoryCubit extends Cubit<AddCategoryState> {
     required this.homeScreenCubit,
   }) : super(const AddCategoryState());
 
-  Future<void> loadInitialData() async {
-    emit(state.copyWith(loadDataStatus: LoadStatus.initial));
-    try {
-      emit(state.copyWith(loadDataStatus: LoadStatus.success));
-    } catch (e) {
-      emit(state.copyWith(loadDataStatus: LoadStatus.failure));
+  Future<void> loadInitialData(CategoryEntity? category) async {
+    if (category != null) {
+      emit(state.copyWith(name: category.title));
     }
   }
 
@@ -41,16 +38,16 @@ class AddCategoryCubit extends Cubit<AddCategoryState> {
 
   Future<CategoryEntity?> addCategoryToFirebase() async {
     emit(state.copyWith(isLoading: true));
-    try {
-      CategoryEntity? category;
-      if (state.name != null &&
-          state.selectedColor != null &&
-          (state.name ?? '').isNotEmpty) {
-        category = CategoryEntity(
-          title: state.name ?? '',
-          color: state.selectedColor ?? 0,
-        );
 
+    CategoryEntity? category;
+    if (state.name != null &&
+        state.selectedColor != null &&
+        (state.name ?? '').isNotEmpty) {
+      category = CategoryEntity(
+        title: state.name ?? '',
+        color: state.selectedColor ?? 0,
+      );
+      try {
         await FirebaseFirestore.instance
             .collection('users')
             .doc(GlobalData.instance.userID)
@@ -59,14 +56,49 @@ class AddCategoryCubit extends Cubit<AddCategoryState> {
             .then((value) async {
           await homeScreenCubit.getCategoriesList();
         });
+      } on FirebaseAuthException catch (e) {
+        AppSnackbar.showError(
+          title: 'Firebase',
+          message: e.message,
+        );
       }
-      emit(state.copyWith(isLoading: false));
-    } on FirebaseAuthException catch (e) {
-      AppSnackbar.showError(
-        title: 'Firebase',
-        message: e.message,
-      );
     }
-    return null;
+    emit(state.copyWith(isLoading: false));
+    return category;
+  }
+
+  Future<CategoryEntity?> updateCategoryOnFirebase(
+      CategoryEntity initialCategory) async {
+    emit(state.copyWith(isLoading: true));
+    CategoryEntity? category;
+    if (state.name != null &&
+        state.selectedColor != null &&
+        (state.name ?? '').isNotEmpty) {
+      category = CategoryEntity(
+        title: state.name ?? '',
+        color: state.selectedColor ?? 0,
+      );
+      category.id = initialCategory.id;
+      if (category != initialCategory) {
+        try {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(GlobalData.instance.userID)
+              .collection('categories')
+              .doc(initialCategory.id)
+              .update(category.toJson())
+              .then((value) async {
+            await homeScreenCubit.loadInitialData();
+          });
+        } on FirebaseAuthException catch (e) {
+          AppSnackbar.showError(
+            title: 'Firebase',
+            message: e.message,
+          );
+        }
+      }
+    }
+    emit(state.copyWith(isLoading: false));
+    return category;
   }
 }
