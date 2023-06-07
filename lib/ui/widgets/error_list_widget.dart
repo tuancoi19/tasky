@@ -1,37 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
+import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/ui/widgets/buttons/app_button.dart';
 
 class ErrorListWidget extends StatelessWidget {
-  final String text;
-  final RefreshCallback? onRefresh;
+  final double? height;
+  final Function() onRefresh;
 
   const ErrorListWidget({
     Key? key,
-    this.text = 'Đã xảy ra lỗi',
-    this.onRefresh,
+    required this.onRefresh,
+    this.height,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: onRefresh ?? _onRefreshData,
-      child: ListView.builder(
-        itemBuilder: (context, index) {
-          return SizedBox(
-            height: 200,
-            width: double.infinity,
-            child: Center(
-              child: Text(
-                text,
-                style: AppTextStyle.greyS18ExtraBold,
-              ),
+    return Container(
+      height: height ?? double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 32).r,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              S.current.something_wrong,
+              style: AppTextStyle.blackS20W500,
             ),
-          );
-        },
-        itemCount: 1,
+            SizedBox(height: 24.h),
+            AppButton(
+              title: S.current.retry,
+              cornerRadius: 15.r,
+              height: 56.h,
+              onPressed: onRefresh,
+              textStyle: AppTextStyle.whiteS18Bold,
+              backgroundColor: AppColors.primary,
+            )
+          ],
+        ),
       ),
     );
   }
-
-  Future<void> _onRefreshData() async {}
 }

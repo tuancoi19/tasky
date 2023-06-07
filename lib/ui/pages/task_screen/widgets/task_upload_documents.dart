@@ -19,6 +19,7 @@ class TaskUploadDocuments extends StatelessWidget {
   final Function(File) sendImage;
   final Function(File) sendTextFile;
   final Color buttonColor;
+  final bool allowToEdit;
 
   const TaskUploadDocuments({
     Key? key,
@@ -27,114 +28,143 @@ class TaskUploadDocuments extends StatelessWidget {
     required this.sendImage,
     required this.sendTextFile,
     required this.buttonColor,
+    required this.allowToEdit,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final List<String> documents = [];
+    for (var e in documentList) {
+      documents.add(
+        e.startsWith(AppConfigs.firebaseStoragePrefix)
+            ? FileUtils.getFileNameFromUrl(e)
+            : FileUtils.getDocumentName(e),
+      );
+    }
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppTitleWithAddButton(
-          onTap: () {
-            AppBottomSheet.show(
-              TaskUploadDocumentOptions(
-                sendImage: sendImage,
-                sendTextFile: sendTextFile,
+        allowToEdit
+            ? AppTitleWithAddButton(
+                onTap: () {
+                  AppBottomSheet.show(
+                    TaskUploadDocumentOptions(
+                      sendImage: sendImage,
+                      sendTextFile: sendTextFile,
+                    ),
+                  );
+                },
+                color: buttonColor,
+                titleWidget: Text(
+                  S.current.documents,
+                  style: AppTextStyle.blackS15W500,
+                ),
+              )
+            : Text(
+                S.current.documents,
+                style: AppTextStyle.blackS15W500,
               ),
-            );
-          },
-          color: buttonColor,
-          titleWidget: Text(
-            S.current.documents,
-            style: AppTextStyle.blackS15W500,
-          ),
-        ),
         SizedBox(height: 20.h),
         Flexible(
           fit: FlexFit.loose,
-          child: buildDocumentListView(),
+          child: buildDocumentListView(documents),
         ),
       ],
     );
   }
 
-  Widget buildDocumentListView() {
+  Widget buildDocumentListView(List<String> documents) {
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         return buildDocumentItem(
-          document: documentList[index],
+          document: documents[index],
+          url: documentList[index],
         );
       },
       separatorBuilder: (context, index) {
         return SizedBox(height: 8.h);
       },
-      itemCount: documentList.length,
+      itemCount: documents.length,
     );
   }
 
   Widget buildDocumentItem({
     required String document,
+    required String url,
   }) {
     bool isTextFile = AppConfigs.listTextFileType.contains(
       splitDocumentName(document).last,
     );
-    return SizedBox(
-      height: 48.h,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            height: 48.h,
-            width: 48.h,
-            decoration: BoxDecoration(
-              color: AppColors.iconBackgroundColor,
-              borderRadius: BorderRadius.circular(10).r,
-            ),
-            child: Center(
-              child: SvgPicture.asset(
-                isTextFile ? AppVectors.icTextFile : AppVectors.icImageFile,
-                width: 24.h,
-                height: 24.h,
+    return InkWell(
+      onTap: () async {
+        await FileUtils.openFile(url);
+      },
+      child: SizedBox(
+        height: 48.h,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              height: 48.h,
+              width: 48.h,
+              decoration: BoxDecoration(
+                color: AppColors.iconBackgroundColor,
+                borderRadius: BorderRadius.circular(10).r,
+              ),
+              child: Center(
+                child: SvgPicture.asset(
+                  isTextFile ? AppVectors.icTextFile : AppVectors.icImageFile,
+                  width: 24.h,
+                  height: 24.h,
+                ),
               ),
             ),
-          ),
-          SizedBox(width: 20.w),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  splitDocumentName(document).first,
-                  style: AppTextStyle.blackO90S15W500,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  '${splitDocumentName(document).last.toUpperCase()} file',
-                  style: AppTextStyle.blackO50S13W400,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+            SizedBox(width: 20.w),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    splitDocumentName(document).first,
+                    style: AppTextStyle.blackO90S15W500,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    '${splitDocumentName(document).last.toUpperCase()} file',
+                    style: AppTextStyle.blackO50S13W400,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(width: 24.w),
-          InkWell(
-            onTap: () {
-              final List<String> removedList = [...documentList];
-              removedList.remove(document);
-              onDelete(removedList);
-            },
-            child: Icon(
-              Icons.close,
-              size: 24.r,
-              color: AppColors.textBlack.withOpacity(0.45),
-            ),
-          ),
-        ],
+            SizedBox(width: 24.w),
+            if (allowToEdit)
+              InkWell(
+                onTap: () {
+                  final List<String> removedList = [...documentList];
+                  removedList.removeWhere((element) {
+                    final name =
+                        element.startsWith(AppConfigs.firebaseStoragePrefix)
+                            ? FileUtils.getFileNameFromUrl(element)
+                            : FileUtils.getDocumentName(element);
+                    return document == name;
+                  });
+                  onDelete(removedList);
+                },
+                child: Icon(
+                  Icons.close,
+                  size: 24.r,
+                  color: AppColors.textBlack.withOpacity(0.45),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

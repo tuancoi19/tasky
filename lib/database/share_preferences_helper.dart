@@ -76,9 +76,9 @@ class SharedPreferencesHelper {
     return UserEntity.fromJson(map);
   }
 
-  Future<void> _updateUserEntity(UserEntity UserEntity) async {
+  Future<void> _updateUserEntity(UserEntity userEntity) async {
     final prefs = await SharedPreferences.getInstance();
-    final value = jsonEncode(UserEntity.toJson());
+    final value = jsonEncode(userEntity.toJson());
     await prefs.setString(_keyUser, value);
   }
 

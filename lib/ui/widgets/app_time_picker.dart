@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/ui/commons/app_date_time_picker.dart';
+import 'package:tasky/utils/date_time_utils.dart';
 
 class AppTimePicker extends StatelessWidget {
   final String title;
@@ -75,7 +76,7 @@ class AppTimePicker extends StatelessWidget {
               ),
               fillColor: AppColors.backgroundBackButtonColor,
               hintStyle: AppTextStyle.blackO40S14W400,
-              hintText: AppDateTimePicker.convertTimeOfDayToString(
+              hintText: DateTimeUtils.convertTimeOfDayToString(
                       hintTime ?? TimeOfDay.now())
                   .toString(),
               isDense: true,

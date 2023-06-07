@@ -86,6 +86,8 @@ class AppConfigs {
 
   ///Image
   static const int imageSize = 10;
+
+  static const String firebaseStoragePrefix = 'https://';
 }
 
 class FirebaseConfig {

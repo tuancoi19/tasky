@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_images.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/models/entities/category/category_entity.dart';
 
 class CategoryItem extends StatelessWidget {
   final int index;
+  final CategoryEntity data;
 
   const CategoryItem({
     Key? key,
     required this.index,
+    required this.data,
   }) : super(key: key);
 
   @override
@@ -28,7 +30,7 @@ class CategoryItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(10).r,
               boxShadow: [
                 BoxShadow(
-                  color: generatedColor(index),
+                  color: Color(data.color ?? 0),
                   blurRadius: 25.r,
                   offset: const Offset(0, 0), // Shadow position
                 ),
@@ -48,6 +50,7 @@ class CategoryItem extends StatelessWidget {
               ),
               fit: BoxFit.cover,
             ),
+            color: Color(data.color ?? 0),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -61,7 +64,7 @@ class CategoryItem extends StatelessWidget {
               ),
               SizedBox(height: 4.h),
               Text(
-                'Some Unknown Tasks',
+                data.title ?? '',
                 style: AppTextStyle.whiteS15W500,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
@@ -75,15 +78,10 @@ class CategoryItem extends StatelessWidget {
 
   String generatedImage(int index) {
     const listImage = [
-      AppImages.bgBlueTask,
-      AppImages.bgRedTask,
-      AppImages.bgGreenTask,
+      AppImages.firstTaskOverlay,
+      AppImages.secondTaskOverlay,
+      AppImages.thirdTaskOverlay,
     ];
     return listImage[index % listImage.length];
-  }
-
-  Color generatedColor(int index) {
-    return AppColors.taskColorList[index % AppColors.taskColorList.length]
-        .withOpacity(0.5);
   }
 }

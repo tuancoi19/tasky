@@ -6,7 +6,7 @@ import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/ui/widgets/buttons/app_icon_button.dart';
 
 class HomeAddButton extends StatelessWidget {
-  final Function() onTap;
+  final Function()? onTap;
   final Color? color;
 
   const HomeAddButton({

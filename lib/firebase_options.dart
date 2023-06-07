@@ -65,8 +65,10 @@ class DefaultFirebaseOptions {
     projectId: 'tasky-a5cb4',
     databaseURL: 'https://tasky-a5cb4-default-rtdb.firebaseio.com',
     storageBucket: 'tasky-a5cb4.appspot.com',
-    androidClientId: '49143107546-v6nbnoo3pklb2v0b475ot7lk0tcakn9n.apps.googleusercontent.com',
-    iosClientId: '49143107546-bafehiphfb3jqi98j15k4thght9601dq.apps.googleusercontent.com',
+    androidClientId:
+        '49143107546-v6nbnoo3pklb2v0b475ot7lk0tcakn9n.apps.googleusercontent.com',
+    iosClientId:
+        '49143107546-bafehiphfb3jqi98j15k4thght9601dq.apps.googleusercontent.com',
     iosBundleId: 'it.thoson.flutterBase',
   );
 }

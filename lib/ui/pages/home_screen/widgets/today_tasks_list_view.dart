@@ -1,38 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tasky/common/app_colors.dart';
+import 'package:get/get.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/common/app_vectors.dart';
+import 'package:tasky/models/entities/task/task_entity.dart';
+import 'package:tasky/router/route_config.dart';
+import 'package:tasky/ui/pages/task_screen/task_screen_page.dart';
 
 class TodayTasksListView extends StatelessWidget {
-  const TodayTasksListView({Key? key}) : super(key: key);
+  final List<TaskEntity> taskList;
+  final Function() onDone;
+
+  const TodayTasksListView({
+    Key? key,
+    required this.taskList,
+    required this.onDone,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      shrinkWrap: true,
       itemBuilder: (context, index) {
-        return buildInProgressItem(
+        return buildTodayTaskItem(
           index: index % 3,
-          title: 'Loren Ipsum',
-          taskTitle: 'Loren Ipsum',
-          onTap: () {},
+          data: taskList[index],
+          onTap: () async {
+            final needReload = await Get.toNamed(
+              RouteConfig.taskScreen,
+              arguments: TaskScreenArguments(
+                task: taskList[index],
+              ),
+            );
+            if (needReload ?? false) {
+              onDone.call();
+            }
+          },
         );
       },
       physics: const BouncingScrollPhysics(),
-      itemCount: 10,
+      itemCount: taskList.length,
     );
   }
 
-  Widget buildInProgressItem({
-    required final String title,
-    required final String taskTitle,
+  Widget buildTodayTaskItem({
+    required final TaskEntity data,
     required final Function() onTap,
     required int index,
   }) {
     return InkWell(
-      onTap: onTap.call(),
+      onTap: onTap,
       child: Container(
         height: 76.h,
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 4).r,
@@ -46,11 +63,11 @@ class TodayTasksListView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '11:00',
+                        data.start ?? '',
                         style: AppTextStyle.blackS15W500,
                       ),
                       Text(
-                        '12:00',
+                        data.end ?? '',
                         style: AppTextStyle.blackO50S13W400,
                       ),
                     ],
@@ -60,7 +77,7 @@ class TodayTasksListView extends StatelessWidget {
                     height: 36.h,
                     width: 4.w,
                     decoration: BoxDecoration(
-                      color: AppColors.taskColorList[index].withOpacity(0.1),
+                      color: Color(data.category?.color ?? 0).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(15).r,
                     ),
                     child: Stack(
@@ -70,7 +87,7 @@ class TodayTasksListView extends StatelessWidget {
                           width: 4.w,
                           margin: const EdgeInsets.only(bottom: 12).r,
                           decoration: BoxDecoration(
-                            color: AppColors.taskColorList[index],
+                            color: Color(data.category?.color ?? 0),
                             borderRadius: BorderRadius.circular(10).r,
                           ),
                         ),
@@ -84,13 +101,13 @@ class TodayTasksListView extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          title,
+                          data.title ?? '',
                           style: AppTextStyle.blackS15W500,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ),
                         Text(
-                          taskTitle,
+                          data.category?.title ?? '',
                           style: AppTextStyle.blackO50S13W400,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,

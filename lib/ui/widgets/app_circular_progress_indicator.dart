@@ -11,15 +11,15 @@ class AppCircularProgressIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Align(
       alignment: Alignment.center,
       child: SizedBox(
         width: 24,
         height: 24,
         child: CircularProgressIndicator(
-          backgroundColor: color,
-          valueColor: const AlwaysStoppedAnimation<Color>(
-            Colors.white,
+          backgroundColor: AppColors.secondary,
+          valueColor: AlwaysStoppedAnimation<Color>(
+            color,
           ),
         ),
       ),

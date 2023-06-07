@@ -6,17 +6,23 @@ import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/models/entities/category/category_entity.dart';
+import 'package:tasky/ui/commons/app_dialog.dart';
+import 'package:tasky/ui/pages/category/category_page.dart';
 
 class TaskCategoryList extends StatelessWidget {
   final List<CategoryEntity> listData;
   final Function(CategoryEntity) onSelected;
-  final CategoryEntity selectedCategory;
+  final CategoryEntity? selectedCategory;
+  final Function(CategoryEntity?) onDone;
+  final bool allowToEdit;
 
   const TaskCategoryList({
     super.key,
     required this.listData,
     required this.onSelected,
     required this.selectedCategory,
+    required this.onDone,
+    required this.allowToEdit,
   });
 
   @override
@@ -31,21 +37,20 @@ class TaskCategoryList extends StatelessWidget {
             style: AppTextStyle.blackS15W500,
           ),
           SizedBox(height: 20.h),
-          Wrap(
-            spacing: 8.0.w,
-            runSpacing: 8.0.h,
-            children: listData.map(
-              (item) {
-                return buildItem(
-                  item: item,
-                );
-              },
-            ).toList()
-              ..insert(
-                0,
-                buildItem(),
-              ),
-          ),
+          allowToEdit
+              ? Wrap(spacing: 8.0.w, runSpacing: 8.0.h, children: [
+                  if (listData.length < 6) buildItem(),
+                  ...listData.map(
+                    (item) {
+                      return buildItem(
+                        item: item,
+                      );
+                    },
+                  ).toList()
+                ])
+              : buildItem(
+                  item: selectedCategory,
+                ),
         ],
       ),
     );
@@ -57,7 +62,16 @@ class TaskCategoryList extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (item == null) {
-          // Navigate to add category screen
+          AppDialog.showCustomDialog(
+            content: CategoryPage(
+              arguments: CategoryArguments(
+                theme: selectedCategory?.color != null
+                    ? Color(selectedCategory!.color!)
+                    : null,
+                onDone: onDone,
+              ),
+            ),
+          );
         } else {
           onSelected(item);
         }
@@ -67,10 +81,10 @@ class TaskCategoryList extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10).r,
           border: Border.all(
-            color: item != null ? Color(item.colorHex) : AppColors.border,
+            color: item != null ? Color(item.color ?? 0) : AppColors.border,
           ),
           color:
-              item == selectedCategory ? Color(item!.colorHex) : Colors.white,
+              item == selectedCategory ? Color(item?.color ?? 0) : Colors.white,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -88,11 +102,11 @@ class TaskCategoryList extends StatelessWidget {
               SizedBox(width: 8.w),
             ],
             Text(
-              item?.title ?? 'Add Category',
+              item?.title ?? S.current.add_category,
               style: TextStyle(
                 color: item != null
                     ? item != selectedCategory
-                        ? Color(item.colorHex)
+                        ? Color(item.color ?? 0)
                         : Colors.white
                     : AppColors.border,
                 fontSize: 14.sp,

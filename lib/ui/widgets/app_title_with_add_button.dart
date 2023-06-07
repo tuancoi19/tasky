@@ -3,7 +3,7 @@ import 'package:tasky/ui/widgets/buttons/home_add_button.dart';
 
 class AppTitleWithAddButton extends StatelessWidget {
   final Widget titleWidget;
-  final Function() onTap;
+  final Function()? onTap;
   final Color? color;
 
   const AppTitleWithAddButton({

@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:tasky/blocs/app_cubit.dart';
@@ -14,7 +13,6 @@ class SplashCubit extends Cubit<SplashState> {
   SplashCubit({required this.appCubit}) : super(const SplashState());
 
   void checkLogin() async {
-
     bool isLoggIn = await appCubit.isSignedIn();
     String route;
 

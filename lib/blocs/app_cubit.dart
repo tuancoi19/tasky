@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,6 +14,7 @@ import 'package:tasky/database/secure_storage_helper.dart';
 import 'package:tasky/database/share_preferences_helper.dart';
 import 'package:tasky/firebase_options.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/global/global_data.dart';
 import 'package:tasky/models/entities/token_entity.dart';
 import 'package:tasky/models/entities/user/user_entity.dart';
 import 'package:tasky/models/enums/load_status.dart';
@@ -34,7 +34,6 @@ class AppCubit extends Cubit<AppState> {
 
   final userCollection = FirebaseFirestore.instance.collection("users");
   final storageRef = FirebaseStorage.instance.ref('images/');
-
 
   User? get currentUser => _firebaseAuth.currentUser;
 
@@ -65,6 +64,7 @@ class AppCubit extends Cubit<AppState> {
         final token = await credential.user?.getIdToken();
         newUser.fcmToken = token;
         newUser.userId = credential.user?.uid ?? '';
+        GlobalData.instance.userID = credential.user?.uid ?? '';
         await saveSession(
           refreshToken: credential.user?.refreshToken ?? '',
           token: token,
@@ -127,6 +127,7 @@ class AppCubit extends Cubit<AppState> {
     );
     if (newUser != null) {
       emit(state.copyWith(user: newUser));
+      GlobalData.instance.userID = currentUser?.uid;
       return newUser;
     }
     return null;
@@ -154,6 +155,7 @@ class AppCubit extends Cubit<AppState> {
           email: mail,
           createAt: user.metadata.creationTime,
         );
+        GlobalData.instance.userID = credential.user?.uid;
         emit(state.copyWith(user: currentUser));
 
         return user;
@@ -216,7 +218,7 @@ class AppCubit extends Cubit<AppState> {
         },
         onError: (e) => print("Error getting document: $e"),
       );
-
+      
       if (user != null) {
         UserEntity currentUser = UserEntity(
           //ưu tiên lấy lại userName cũ
@@ -226,6 +228,7 @@ class AppCubit extends Cubit<AppState> {
           createAt: user.metadata.creationTime,
           avatarUrl: user.photoURL,
         );
+        GlobalData.instance.userID = user.uid;
         emit(state.copyWith(user: currentUser));
         return currentUser;
       }
@@ -330,14 +333,6 @@ class AppCubit extends Cubit<AppState> {
     secureStorageHelper.saveToken(tokenEntity);
   }
 
-  Future<void> _saveToSharedPreferences(
-    UserEntity? currentUserEntity,
-  ) async {
-    final sharedPreferencesHelper = SharedPreferencesHelper();
-    await sharedPreferencesHelper.setUserEntity(
-      currentUserEntity: currentUserEntity,
-    );
-  }
 
   Future<String?> uploadImgToFirebase(File file)async {
     // final imagesRef = storageRef.child("images/${file.na}");
@@ -352,4 +347,3 @@ class AppCubit extends Cubit<AppState> {
     }
     return null;
   }
-}

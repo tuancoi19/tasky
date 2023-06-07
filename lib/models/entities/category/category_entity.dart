@@ -4,20 +4,27 @@ part 'category_entity.g.dart';
 
 @JsonSerializable()
 class CategoryEntity {
-  @JsonKey()
-  String title;
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  String? id;
 
   @JsonKey()
-  String color;
+  String? title;
 
-  CategoryEntity({required this.title, required this.color});
+  @JsonKey()
+  int? color;
+
+  CategoryEntity({ this.title,  this.color});
 
   factory CategoryEntity.fromJson(Map<String, dynamic> json) =>
       _$CategoryEntityFromJson(json);
 
   Map<String, dynamic> toJson() => _$CategoryEntityToJson(this);
 
-  int get colorHex {
-    return int.parse(color, radix: 16);
+  @override
+  bool operator ==(other) {
+    return other is CategoryEntity &&
+        other.color == color &&
+        other.title == title;
   }
 }
