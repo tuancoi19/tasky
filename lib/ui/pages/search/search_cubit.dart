@@ -11,7 +11,7 @@ class SearchCubit extends Cubit<SearchState> {
   void searchByName({required String keyword}) {
     final data = [...GlobalData.instance.tasksList];
     List<TaskEntity> result = [];
-    if (keyword != '') {
+    if (keyword.isNotEmpty) {
       result.addAll(
         data
             .where(

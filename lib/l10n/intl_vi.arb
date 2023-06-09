@@ -144,5 +144,6 @@
   "edit_category": "Chỉnh sửa Danh mục",
   "delete_category": "Xóa Danh mục",
   "delete_category_message": "Tất cả dữ liệu sẽ mất (bao gồm cả các Tác vụ liên quan đến Danh mục này) khi thực hiện việc xóa. Bạn vẫn muốn tiếp tục?",
-  "no_results": "No results"
+  "no_results": "Không có kết quả",
+  "success": "Thành công!"
 }

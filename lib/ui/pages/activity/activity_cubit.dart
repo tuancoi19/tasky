@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:tasky/models/enums/load_status.dart';
 
 part 'activity_state.dart';
 

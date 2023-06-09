@@ -49,12 +49,12 @@ class _ActivityChildPageState extends State<ActivityChildPage> {
 
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
-       appBar: AppBar(),
-       body: SafeArea(
-         child: _buildBodyWidget(),
-       ),
-     );
+    return Scaffold(
+      appBar: AppBar(),
+      body: SafeArea(
+        child: _buildBodyWidget(),
+      ),
+    );
   }
 
   Widget _buildBodyWidget() {

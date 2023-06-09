@@ -10,13 +10,11 @@ import 'package:tasky/generated/l10n.dart';
 class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
   final TextEditingController controller;
   final Function(String) onChanged;
-  final FocusNode focusNode;
 
   const SearchAppBar({
     Key? key,
     required this.controller,
     required this.onChanged,
-    required this.focusNode,
   }) : super(key: key);
 
   @override
@@ -66,7 +64,7 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
                       color: AppColors.backgroundBackButtonColor,
                     ),
                     child: TextField(
-                      focusNode: focusNode,
+                      autofocus: true,
                       controller: controller,
                       onChanged: onChanged,
                       maxLines: 1,

@@ -40,7 +40,7 @@ class AppTasksListView extends StatelessWidget {
           },
         );
       },
-      physics: const BouncingScrollPhysics(),
+      physics: const ClampingScrollPhysics(),
       itemCount: taskList.length,
     );
   }

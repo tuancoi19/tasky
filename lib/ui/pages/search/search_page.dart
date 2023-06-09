@@ -40,17 +40,12 @@ class SearchChildPage extends StatefulWidget {
 class _SearchChildPageState extends State<SearchChildPage> {
   late final SearchCubit _cubit;
   late TextEditingController controller;
-  late FocusNode focusNode;
 
   @override
   void initState() {
     super.initState();
     _cubit = BlocProvider.of(context);
     controller = TextEditingController();
-    focusNode = FocusNode();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => focusNode.requestFocus(),
-    );
   }
 
   @override
@@ -61,7 +56,6 @@ class _SearchChildPageState extends State<SearchChildPage> {
         onChanged: (value) {
           _cubit.searchByName(keyword: value);
         },
-        focusNode: focusNode,
       ),
       body: SafeArea(
         child: _buildBodyWidget(),
@@ -104,7 +98,13 @@ class _SearchChildPageState extends State<SearchChildPage> {
             } else {
               return AppTasksListView(
                 taskList: state.taskList ?? [],
-                onDone: () {},
+                onDone: () {
+                  Get.back(result: true, closeOverlays: true);
+                  AppSnackbar.showSuccess(
+                    title: S.current.task,
+                    message: S.current.success,
+                  );
+                },
               );
             }
           }
@@ -117,7 +117,6 @@ class _SearchChildPageState extends State<SearchChildPage> {
   void dispose() {
     _cubit.close();
     controller.dispose();
-    focusNode.dispose();
     super.dispose();
   }
 }
