@@ -134,6 +134,23 @@ class AppCubit extends Cubit<AppState> {
     return null;
   }
 
+  Future<bool> checkPassword(String password) async {
+    try {
+      UserCredential credential =
+          await _firebaseAuth.signInWithEmailAndPassword(
+        email: state.user?.email ?? '',
+        password: password,
+      );
+
+      return true;
+    } on FirebaseAuthException catch (e) {
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
   Future<User?> createUserWithEmailAndPassword({
     required String mail,
     required String password,
@@ -360,7 +377,7 @@ class AppCubit extends Cubit<AppState> {
         email: state.user?.email,
         userId: state.user?.userId,
         createAt: state.user?.createAt,
-        avatarUrl:  pathAvatar??state.user?.avatarUrl,
+        avatarUrl: pathAvatar ?? state.user?.avatarUrl,
       );
 
       emit(state.copyWith(user: newUser));
