@@ -141,8 +141,13 @@ class AppCubit extends Cubit<AppState> {
         email: state.user?.email ?? '',
         password: password,
       );
-
-      return true;
+      if (credential.user != null) {
+        print('❤️❤️❤️ - TRUE');
+        return true;
+      } else {
+        print('❤️❤️❤️ - FALSE');
+        return false;
+      }
     } on FirebaseAuthException catch (e) {
       return false;
     } catch (e) {

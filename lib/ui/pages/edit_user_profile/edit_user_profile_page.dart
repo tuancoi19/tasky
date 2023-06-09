@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -58,7 +59,6 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
     super.initState();
     _cubit = BlocProvider.of(context);
     appCubit = BlocProvider.of(context);
-    _cubit.loadInitialData();
     obscurePasswordController = ObscureTextController();
     passwordTextController = TextEditingController();
     usernameTextController =
@@ -76,6 +76,7 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
           return Stack(
             children: [
               SafeArea(
+                bottom: false,
                 child: _buildBodyWidget(),
               ),
               state.loadDataStatus == LoadStatus.loading
@@ -170,11 +171,13 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
               : appCubit.state.user?.avatarUrl != null
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(55),
-                      child: Image.network(
-                        appCubit.state.user?.avatarUrl ?? '',
+                      child: Image(
                         width: 110.h,
                         height: 110.h,
                         fit: BoxFit.fill,
+                        image: CachedNetworkImageProvider(
+                          appCubit.state.user?.avatarUrl ?? '',
+                        ),
                       ),
                     )
                   : Image.asset(
