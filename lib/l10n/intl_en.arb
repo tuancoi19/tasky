@@ -143,5 +143,6 @@
   "proceed": "Proceed",
   "edit_category": "Edit Category",
   "delete_category": "Delete Category",
-  "delete_category_message": "All data will be lost (including Tasks related to this Category) if you proceed with the deletion. Do you want to continue?"
+  "delete_category_message": "All data will be lost (including Tasks related to this Category) if you proceed with the deletion. Do you want to continue?",
+  "no_results": "No results"
 }

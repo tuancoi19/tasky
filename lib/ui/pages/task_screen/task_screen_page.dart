@@ -152,9 +152,11 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
                   if (state.isEdit) {
                     _cubit.loadInitialData(widget.arguments?.task);
                     titleController = TextEditingController(
-                        text: widget.arguments?.task.title);
+                      text: widget.arguments?.task.title,
+                    );
                     noteController = TextEditingController(
-                        text: widget.arguments?.task.note);
+                      text: widget.arguments?.task.note,
+                    );
                   }
                   _cubit.setIsEdit();
                 },
