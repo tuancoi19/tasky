@@ -1,7 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_images.dart';
 import 'package:tasky/common/app_text_styles.dart';
@@ -75,45 +78,60 @@ class HomeScreenDrawer extends StatelessWidget {
       onTap: () {
         Get.toNamed(
           RouteConfig.editUserProfile,
-          arguments: EditUserProfileArguments(fromSignUp: false),
         );
       },
       child: SizedBox(
         width: double.infinity,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(7).r,
-              child: Image.asset(
-                AppImages.avatarTest,
-                fit: BoxFit.cover,
-                width: 68.h,
-                height: 68.h,
-              ),
-            ),
-            SizedBox(height: 20.h),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 28).r,
-              child: Column(
-                children: [
-                  Text(
-                    'Loren Ipsum Loren Ipsum Loren Ipsum Loren Ipsum Loren Ipsum Loren Ipsum ',
-                    style: AppTextStyle.whiteS16W600,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+        child: BlocBuilder<AppCubit, AppState>(
+          builder: (context, state) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(7).r,
+                  child: state.user?.avatarUrl != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(7).r,
+                          child: Image(
+                            width: 68.h,
+                            height: 68.h,
+                            fit: BoxFit.fill,
+                            image: CachedNetworkImageProvider(
+                              state.user?.avatarUrl ?? '',
+                            ),
+                          ),
+                        )
+                      : Image.asset(
+                          AppImages.icUser,
+                          width: 68.h,
+                          height: 68.h,
+                          fit: BoxFit.cover,
+                        ),
+                ),
+                SizedBox(height: 20.h),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 28).r,
+                  child: Column(
+                    children: [
+                      Text(
+                        state.user?.userName ?? '',
+                        style: AppTextStyle.whiteS16W600,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                      Text(
+                        state.user?.email ?? '',
+                        style: AppTextStyle.whiteO80S13W400,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ],
                   ),
-                  Text(
-                    'Loren Ipsum',
-                    style: AppTextStyle.whiteO80S13W400,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                ],
-              ),
-            ),
-          ],
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
