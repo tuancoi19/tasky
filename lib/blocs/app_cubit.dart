@@ -117,11 +117,12 @@ class AppCubit extends Cubit<AppState> {
         .get()
         .then(
       (DocumentSnapshot doc) {
-        final data = doc.data() as Map<String, dynamic>;
         if (doc.data() == null) {
           return null;
+        }else{
+          final data = doc.data() as Map<String, dynamic>;
+          return UserEntity.fromJson(data);
         }
-        return UserEntity.fromJson(data);
       },
       onError: (e) => print("Error getting document: $e"),
     );
