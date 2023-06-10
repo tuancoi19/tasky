@@ -113,4 +113,6 @@ class AppColors {
   static const Color t = Color(0xFFA77D60);
   static const Color u = Color(0xFF7CCB12);
   static const Color i = Color(0xFFFFBE21);
+
+  static const Color iconAddImage = Color(0xFF42AF68);
 }

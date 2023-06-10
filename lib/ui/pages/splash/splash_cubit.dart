@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/database/share_preferences_helper.dart';
+import 'package:tasky/models/entities/user/user_entity.dart';
 import 'package:tasky/router/route_config.dart';
 
 import 'splash_state.dart';
@@ -16,8 +17,13 @@ class SplashCubit extends Cubit<SplashState> {
     String route;
 
     if (isLoggIn) {
-      route = RouteConfig.homeScreen;
-      await appCubit.getUser();
+      UserEntity? user = await appCubit.getUser();
+      if(user != null){
+        route = RouteConfig.homeScreen;
+      }else{
+        bool isSeenIntro = await SharedPreferencesHelper.isSeenIntro();
+        route = isSeenIntro ? RouteConfig.authentication : RouteConfig.welcome;
+      }
     } else {
       bool isSeenIntro = await SharedPreferencesHelper.isSeenIntro();
       route = isSeenIntro ? RouteConfig.authentication : RouteConfig.welcome;

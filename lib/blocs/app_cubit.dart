@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,6 +20,7 @@ import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/commons/app_dialog.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
+import 'package:tasky/utils/file_utils.dart';
 import 'package:tasky/utils/logger.dart';
 
 part 'app_state.dart';
@@ -30,6 +33,7 @@ class AppCubit extends Cubit<AppState> {
       clientId: DefaultFirebaseOptions.currentPlatform.iosClientId);
 
   final userCollection = FirebaseFirestore.instance.collection("users");
+  final storageRef = FirebaseStorage.instance.ref('images/');
 
   User? get currentUser => _firebaseAuth.currentUser;
 
@@ -61,7 +65,6 @@ class AppCubit extends Cubit<AppState> {
         newUser.fcmToken = token;
         newUser.userId = credential.user?.uid ?? '';
         GlobalData.instance.userID = credential.user?.uid ?? '';
-
         await saveSession(
           refreshToken: credential.user?.refreshToken ?? '',
           token: token,
@@ -114,20 +117,43 @@ class AppCubit extends Cubit<AppState> {
         .get()
         .then(
       (DocumentSnapshot doc) {
-        if (doc.data() != null) {
-          final data = doc.data() as Map<String, dynamic>;
-          return UserEntity.fromJson(data);
+        final data = doc.data() as Map<String, dynamic>;
+        if (doc.data() == null) {
+          return null;
         }
-        return null;
+        return UserEntity.fromJson(data);
       },
       onError: (e) => print("Error getting document: $e"),
     );
     if (newUser != null) {
+      newUser.userId = _firebaseAuth.currentUser?.uid;
       emit(state.copyWith(user: newUser));
       GlobalData.instance.userID = currentUser?.uid;
       return newUser;
     }
     return null;
+  }
+
+  Future<bool> checkPassword(String password) async {
+    try {
+      UserCredential credential =
+          await _firebaseAuth.signInWithEmailAndPassword(
+        email: state.user?.email ?? '',
+        password: password,
+      );
+      if (credential.user != null) {
+        print('❤️❤️❤️ - TRUE');
+        return true;
+      } else {
+        print('❤️❤️❤️ - FALSE');
+        return false;
+      }
+    } on FirebaseAuthException catch (e) {
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
   }
 
   Future<User?> createUserWithEmailAndPassword({
@@ -271,7 +297,6 @@ class AppCubit extends Cubit<AppState> {
       userName: userName,
       email: user.email,
       createAt: user.metadata.creationTime,
-      userId: user.uid,
     );
     try {
       await userCollection.doc(user.uid).set(newUser.toJson()).catchError((e) {
@@ -309,11 +334,8 @@ class AppCubit extends Cubit<AppState> {
   Future<bool> saveSession({
     String? token,
     String refreshToken = '',
-    // UserEntity? currentUserEntity,
   }) async {
     await _saveToSecureStorage(token: token ?? '', refreshToken: refreshToken);
-    // await _saveToSharedPreferences(currentUserEntity);
-
     return true;
   }
 
@@ -331,28 +353,42 @@ class AppCubit extends Cubit<AppState> {
     secureStorageHelper.saveToken(tokenEntity);
   }
 
-// Future<void> _saveToSharedPreferences(
-//   UserEntity? currentUserEntity,
-// ) async {
-//   final sharedPreferencesHelper = SharedPreferencesHelper();
-//   await sharedPreferencesHelper.setUserEntity(
-//     currentUserEntity: currentUserEntity,
-//   );
-// }
+  Future<String?> uploadImgToFirebase(File file) async {
+    try {
+      String urlImg = await FileUtils.uploadFile(
+          file: file, userID: state.user?.userId ?? '', type: 'image');
+      print('🗳️🗳️🗳️🗳️ $urlImg');
+      await _firebaseAuth.currentUser?.updatePhotoURL(urlImg);
+      return urlImg;
+    } on FirebaseException catch (e) {
+      logger.e(e);
+    }
+    return null;
+  }
 
-  ///Sign Out
-// void signOut() async {
-//   emit(state.copyWith(signOutStatus: LoadStatus.loading));
-//   try {
-//     await Future.delayed(const Duration(seconds: 2));
-//     final sharedPreferencesHelper = SharedPreferencesHelper();
-//     final secureStorageHelper = SecureStorageHelper.instance;
-//
-//     secureStorageHelper.removeToken();
-//     await sharedPreferencesHelper.logout();
-//   } catch (e) {
-//     logger.e(e);
-//     emit(state.copyWith(signOutStatus: LoadStatus.failure));
-//   }
-// }
+  Future<String?> updateUserToFirebase(
+      {String? userName, String? pathAvatar}) async {
+    try {
+      print('--- ${state.user?.userId}');
+      final userRef = userCollection.doc(state.user?.userId ?? '');
+      userRef.update({
+        "user_name": userName ?? state.user?.userName,
+        "avatar_url": pathAvatar ?? state.user?.avatarUrl
+      }).then((value) => print("User successfully updated!"),
+          onError: (e) => print("Error updating user $e"));
+
+      UserEntity newUser = UserEntity(
+        userName: userName ?? state.user?.userName,
+        email: state.user?.email,
+        userId: state.user?.userId,
+        createAt: state.user?.createAt,
+        avatarUrl: pathAvatar ?? state.user?.avatarUrl,
+      );
+
+      emit(state.copyWith(user: newUser));
+    } on FirebaseException catch (e) {
+      logger.e(e);
+    }
+    return null;
+  }
 }
