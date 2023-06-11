@@ -37,15 +37,16 @@ class TaskEntity {
   @JsonKey()
   int? notificationId;
 
-  TaskEntity(
-      {this.title,
-      this.note,
-      this.categoryId,
-      this.documents,
-      this.date,
-      this.start,
-      this.end,
-      this.notificationId});
+  TaskEntity({
+    this.title,
+    this.note,
+    this.categoryId,
+    this.documents,
+    this.date,
+    this.start,
+    this.end,
+    this.notificationId,
+  });
 
   factory TaskEntity.fromJson(Map<String, dynamic> json) =>
       _$TaskEntityFromJson(json);
@@ -63,6 +64,7 @@ class TaskEntity {
       start == other.start &&
       end == other.end &&
       categoryId == other.categoryId &&
+      notificationId == other.notificationId &&
       listEquals(documents, other.documents);
 
   DateTime? get dateFromString {

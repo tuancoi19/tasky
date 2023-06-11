@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tasky/configs/app_configs.dart';
 
@@ -17,6 +18,19 @@ class AppDateUtils {
     } catch (e) {
       return '';
     }
+  }
+
+  static DateTime combineTimeOfDayWithDateTime(
+    DateTime dateTime,
+    TimeOfDay timeOfDay,
+  ) {
+    return DateTime(
+      dateTime.year,
+      dateTime.month,
+      dateTime.day,
+      timeOfDay.hour,
+      timeOfDay.minute,
+    );
   }
 
   static String toDateTimeString(DateTime dateTime,

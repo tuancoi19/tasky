@@ -19,11 +19,10 @@ class OptionListWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        buildOptionItemButton(AppImages.icGoogle, onPressedGoogle ?? () {}),
-        SizedBox(width: 32.w),
-        buildOptionItemButton(AppImages.icUser, () {}),
-        SizedBox(width: 32.w),
-        buildOptionItemButton(AppImages.icFacebook, () {}),
+        buildOptionItemButton(
+          AppImages.icGoogle,
+          onPressedGoogle ?? () {},
+        ),
       ],
     );
   }

@@ -106,7 +106,7 @@ class _AppImagePickerState extends State<AppImagePicker> {
                 bottom: 16,
               ).r,
               child: Text(
-                S.current.choose_from_gallery,
+                S.current.upload_image,
                 style: AppTextStyle.blackS18Bold,
               ),
             ),
@@ -118,7 +118,7 @@ class _AppImagePickerState extends State<AppImagePicker> {
               onPressed: () async {
                 if (permissionCamera != PermissionStatus.denied) {
                   if (permissionCamera == PermissionStatus.permanentlyDenied) {
-                    openAppSettings();
+                    await openAppSettings();
                   } else {
                     await getImageFromCamera();
                   }
@@ -154,7 +154,7 @@ class _AppImagePickerState extends State<AppImagePicker> {
                     final result = await Permission.photos.request();
                     if (result != PermissionStatus.denied) {
                       if (result == PermissionStatus.permanentlyDenied) {
-                        openAppSettings();
+                        await openAppSettings();
                       } else {
                         Get.back();
                         await getImageFromGallery();

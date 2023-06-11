@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
-import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
 
 class CalendarViewOptions extends StatelessWidget {
