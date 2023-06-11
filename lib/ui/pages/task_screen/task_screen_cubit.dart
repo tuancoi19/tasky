@@ -14,9 +14,11 @@ import 'package:tasky/models/entities/task/task_entity.dart';
 import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/ui/commons/app_snackbar.dart';
 import 'package:tasky/ui/pages/home_screen/home_screen_cubit.dart';
+import 'package:tasky/utils/app_date_utils.dart';
 import 'package:tasky/utils/date_time_utils.dart';
 import 'package:tasky/utils/file_utils.dart';
 import 'package:tasky/utils/logger.dart';
+import 'package:tasky/utils/notification_helper.dart';
 
 part 'task_screen_state.dart';
 
@@ -124,6 +126,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
         title: S.current.date,
         message: S.current.date_has_passed,
       );
+      return;
     } else if (DateTimeUtils.isSameDate(state.date ?? DateTime.now()) &&
         !(DateTimeUtils.isTimeOfDayValid(state.startTime ?? TimeOfDay.now()) ||
             DateTimeUtils.isTimeOfDayValid(state.endTime ?? TimeOfDay.now()))) {
@@ -131,11 +134,13 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
         title: S.current.start_time_end_time,
         message: S.current.this_time_range_has_passed,
       );
+      return;
     } else if (!checkDuration) {
       AppSnackbar.showError(
         title: S.current.start_time_end_time,
         message: S.current.end_time_cannot_be_chosen_earlier_than_start_time,
       );
+      return;
     }
     /* else if (DateTimeUtils.isOverlap(
       data: TaskDateUtils.filterItemsByDate(
@@ -192,6 +197,20 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
             .doc(initialTask.id)
             .update(task.toJson());
       }
+
+      final NotificationHelper notification = NotificationHelper();
+      await notification.cancelNotification(task.notificationId ?? 1);
+      final DateTime notiDateTime = AppDateUtils.combineTimeOfDayWithDateTime(
+        task.dateFromString ?? DateTime.now(),
+        task.startFromString ?? TimeOfDay.now(),
+      );
+
+      notification.showNotification(
+        task.title ?? ' ',
+        task.note ?? ' ',
+        notiDateTime,
+        task.notificationId ?? 1,
+      );
       Get.back(result: true);
       AppSnackbar.showSuccess(
         title: S.current.task,
@@ -218,6 +237,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
         end: DateTimeUtils.convertTimeOfDayToString(
             state.endTime ?? TimeOfDay.now()),
         categoryId: state.category?.id,
+        notificationId: GlobalData.instance.tasksList.length,
       );
 
       await FirebaseFirestore.instance
@@ -228,6 +248,18 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
           .then((value) async {
         Get.back(result: true);
       });
+      final NotificationHelper createNotification = NotificationHelper();
+      final DateTime notiDateTime = AppDateUtils.combineTimeOfDayWithDateTime(
+        state.date ?? DateTime.now(),
+        state.startTime ?? TimeOfDay.now(),
+      );
+
+      createNotification.showNotification(
+        state.title ?? ' ',
+        state.note ?? ' ',
+        notiDateTime,
+        GlobalData.instance.tasksList.length,
+      );
       AppSnackbar.showSuccess(
         title: S.current.task,
         message: S.current.added_successfully,
