@@ -34,6 +34,9 @@ class TaskEntity {
   @JsonKey()
   List<String>? documents;
 
+  @JsonKey()
+  int? notificationId;
+
   TaskEntity({
     this.title,
     this.note,
@@ -42,6 +45,7 @@ class TaskEntity {
     this.date,
     this.start,
     this.end,
+    this.notificationId,
   });
 
   factory TaskEntity.fromJson(Map<String, dynamic> json) =>
@@ -60,6 +64,7 @@ class TaskEntity {
       start == other.start &&
       end == other.end &&
       categoryId == other.categoryId &&
+      notificationId == other.notificationId &&
       listEquals(documents, other.documents);
 
   DateTime? get dateFromString {

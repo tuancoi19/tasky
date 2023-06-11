@@ -82,6 +82,13 @@ dependencies:
   google_sign_in: ^6.1.2
   image_cropper: ^4.0.1
 
+  #timezone
+  flutter_native_timezone: ^2.0.0
+  timezone: ^0.9.2
+
+  #notifications
+  flutter_local_notifications: ^14.1.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
