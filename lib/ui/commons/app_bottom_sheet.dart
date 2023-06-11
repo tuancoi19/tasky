@@ -3,10 +3,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class AppBottomSheet {
-  static void show(Widget bottomSheet) {
+  static void show({
+    required Widget bottomSheet,
+    bool isDismissible = false,
+  }) {
     Get.bottomSheet(
       bottomSheet,
-      isDismissible: false,
+      isDismissible: isDismissible,
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(

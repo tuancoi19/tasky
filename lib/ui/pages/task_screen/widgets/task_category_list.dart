@@ -65,7 +65,7 @@ class TaskCategoryList extends StatelessWidget {
           AppDialog.showCustomDialog(
             content: AddCategoryPage(
               arguments: AddCategoryArguments(
-                category: selectedCategory,
+                theme: selectedCategory?.color,
                 onDone: onDone,
               ),
             ),

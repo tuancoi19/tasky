@@ -34,15 +34,18 @@ class TaskEntity {
   @JsonKey()
   List<String>? documents;
 
-  TaskEntity({
-    this.title,
-    this.note,
-    this.categoryId,
-    this.documents,
-    this.date,
-    this.start,
-    this.end,
-  });
+  @JsonKey()
+  int? notificationId;
+
+  TaskEntity(
+      {this.title,
+      this.note,
+      this.categoryId,
+      this.documents,
+      this.date,
+      this.start,
+      this.end,
+      this.notificationId});
 
   factory TaskEntity.fromJson(Map<String, dynamic> json) =>
       _$TaskEntityFromJson(json);
@@ -69,6 +72,40 @@ class TaskEntity {
       return dateTime;
     }
     return null;
+  }
+
+  DateTime? get startToDateTime {
+    DateTime dateResult =
+        DateFormat(AppConfigs.dateDisplayFormat).parse(date ?? '');
+    DateTime timeResult =
+        DateFormat(AppConfigs.timeDisplayFormat).parse(start ?? '');
+
+    DateTime result = DateTime(
+      dateResult.year,
+      dateResult.month,
+      dateResult.day,
+      timeResult.hour,
+      timeResult.minute,
+    );
+
+    return result;
+  }
+
+  DateTime? get endToDateTime {
+    DateTime dateResult =
+        DateFormat(AppConfigs.dateDisplayFormat).parse(date ?? '');
+    DateTime timeResult =
+        DateFormat(AppConfigs.timeDisplayFormat).parse(end ?? '');
+
+    DateTime result = DateTime(
+      dateResult.year,
+      dateResult.month,
+      dateResult.day,
+      timeResult.hour,
+      timeResult.minute,
+    );
+
+    return result;
   }
 
   TimeOfDay? get startFromString {

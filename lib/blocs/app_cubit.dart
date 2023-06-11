@@ -119,7 +119,7 @@ class AppCubit extends Cubit<AppState> {
       (DocumentSnapshot doc) {
         if (doc.data() == null) {
           return null;
-        }else{
+        } else {
           final data = doc.data() as Map<String, dynamic>;
           return UserEntity.fromJson(data);
         }

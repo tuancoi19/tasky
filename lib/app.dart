@@ -1,4 +1,3 @@
-import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -59,31 +58,28 @@ class _MyAppState extends State<MyApp> {
                 onTap: () {
                   _hideKeyboard(context);
                 },
-                child: CalendarControllerProvider(
-                  controller: EventController(),
-                  child: GetMaterialApp(
-                    title: AppConfigs.appName,
-                    theme: AppThemes(
-                      isDarkMode: false,
-                      primaryColor: state.primaryColor,
-                    ).theme,
-                    // darkTheme: AppThemes(
-                    //   isDarkMode: true,
-                    //   primaryColor: state.primaryColor,
-                    // ).theme,
-                    themeMode: state.themeMode,
-                    initialRoute: RouteConfig.splash,
-                    getPages: RouteConfig.getPages,
-                    localizationsDelegates: const [
-                      GlobalMaterialLocalizations.delegate,
-                      GlobalWidgetsLocalizations.delegate,
-                      GlobalCupertinoLocalizations.delegate,
-                      S.delegate,
-                    ],
-                    locale: state.locale,
-                    supportedLocales: S.delegate.supportedLocales,
-                    debugShowCheckedModeBanner: false,
-                  ),
+                child: GetMaterialApp(
+                  title: AppConfigs.appName,
+                  theme: AppThemes(
+                    isDarkMode: false,
+                    primaryColor: state.primaryColor,
+                  ).theme,
+                  // darkTheme: AppThemes(
+                  //   isDarkMode: true,
+                  //   primaryColor: state.primaryColor,
+                  // ).theme,
+                  themeMode: state.themeMode,
+                  initialRoute: RouteConfig.splash,
+                  getPages: RouteConfig.getPages,
+                  localizationsDelegates: const [
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                    S.delegate,
+                  ],
+                  locale: state.locale,
+                  supportedLocales: S.delegate.supportedLocales,
+                  debugShowCheckedModeBanner: false,
                 ),
               );
             },

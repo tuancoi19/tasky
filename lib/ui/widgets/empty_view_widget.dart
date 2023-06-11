@@ -5,12 +5,12 @@ import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
 
-class EmptyListWidget extends StatelessWidget {
+class EmptyViewWidget extends StatelessWidget {
   final Function() onRefresh;
   final double? height;
   final Color? theme;
 
-  const EmptyListWidget({
+  const EmptyViewWidget({
     Key? key,
     required this.onRefresh,
     this.height,

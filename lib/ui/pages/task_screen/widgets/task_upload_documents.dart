@@ -49,7 +49,7 @@ class TaskUploadDocuments extends StatelessWidget {
             ? AppTitleWithAddButton(
                 onTap: () {
                   AppBottomSheet.show(
-                    TaskUploadDocumentOptions(
+                    bottomSheet: TaskUploadDocumentOptions(
                       sendImage: sendImage,
                       sendTextFile: sendTextFile,
                     ),

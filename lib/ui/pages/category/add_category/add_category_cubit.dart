@@ -54,6 +54,7 @@ class AddCategoryCubit extends Cubit<AddCategoryState> {
             .collection('categories')
             .add(category.toJson())
             .then((value) async {
+          category?.id = value.id;
           await homeScreenCubit.getCategoriesList();
         });
       } on FirebaseAuthException catch (e) {

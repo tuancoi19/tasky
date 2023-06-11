@@ -6,9 +6,8 @@ class EditUserProfileState extends Equatable {
   final String? userName;
   final String? password;
   final bool isEditProfile;
-  final XFile? image;
   final CroppedFile? imageCrop;
-  final bool isclear;
+  final bool isClear;
 
   const EditUserProfileState({
     this.loadDataStatus = LoadStatus.initial,
@@ -17,8 +16,7 @@ class EditUserProfileState extends Equatable {
     this.password,
     this.isEditProfile = false,
     this.imageCrop,
-    this.image,
-    this.isclear = false,
+    this.isClear = false,
   });
 
   @override
@@ -29,8 +27,7 @@ class EditUserProfileState extends Equatable {
         password,
         isEditProfile,
         imageCrop,
-        image,
-        isclear,
+        isClear,
       ];
 
   EditUserProfileState copyWith({
@@ -46,10 +43,9 @@ class EditUserProfileState extends Equatable {
     return EditUserProfileState(
       loadDataStatus: loadDataStatus ?? this.loadDataStatus,
       autoValidateMode: autoValidateMode ?? this.autoValidateMode,
-      userName:  isClear == true ? null :  userName ?? this.userName,
+      userName: isClear == true ? null : userName ?? this.userName,
       password: password ?? this.password,
       isEditProfile: isEditProfile ?? this.isEditProfile,
-      image: isClear == true ? null : image ?? this.image,
       imageCrop: isClear == true ? null : imageCrop ?? this.imageCrop,
     );
   }

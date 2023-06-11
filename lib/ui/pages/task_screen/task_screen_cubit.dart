@@ -14,6 +14,7 @@ import 'package:tasky/models/entities/task/task_entity.dart';
 import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/ui/commons/app_snackbar.dart';
 import 'package:tasky/ui/pages/home_screen/home_screen_cubit.dart';
+import 'package:tasky/ui/pages/task_screen/task_screen_page.dart';
 import 'package:tasky/utils/date_time_utils.dart';
 import 'package:tasky/utils/file_utils.dart';
 import 'package:tasky/utils/logger.dart';
@@ -27,18 +28,23 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
     required this.homeScreenCubit,
   }) : super(const TaskScreenState());
 
-  void loadInitialData(TaskEntity? task) {
+  void loadInitialData(TaskScreenArguments? arguments) {
     fetchCategoryList();
-    changeDate(date: task?.dateFromString ?? DateTime.now());
-    changeStartTime(startTime: task?.startFromString ?? TimeOfDay.now());
-    changeEndTime(endTime: task?.endFromString ?? TimeOfDay.now());
-    changeNote(note: task?.note ?? '');
-    changeTitle(title: task?.title ?? '');
+    changeDate(date: arguments?.task?.dateFromString ?? DateTime.now());
+    changeStartTime(
+        startTime: arguments?.task?.startFromString ?? TimeOfDay.now());
+    changeEndTime(endTime: arguments?.task?.endFromString ?? TimeOfDay.now());
+    changeNote(note: arguments?.task?.note ?? '');
+    changeTitle(title: arguments?.task?.title ?? '');
 
-    if (task != null) {
-      changeCategory(category: task.category!);
-      changeThemeColor(colorCode: task.category!.color!);
-      changeDocumentList(documentList: task.documents!);
+    if (arguments?.task != null) {
+      changeCategory(category: arguments!.task!.category!);
+      changeThemeColor(colorCode: arguments.task!.category!.color!);
+      changeDocumentList(documentList: arguments.task!.documents!);
+    }
+
+    if (arguments?.category != null) {
+      changeCategory(category: arguments!.category!);
     }
   }
 
@@ -136,25 +142,14 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
         title: S.current.start_time_end_time,
         message: S.current.end_time_cannot_be_chosen_earlier_than_start_time,
       );
-    }
-    /* else if (DateTimeUtils.isOverlap(
-      data: TaskDateUtils.filterItemsByDate(
-        items: GlobalData.instance.tasksList,
-        date: state.date ?? DateTime.now(),
-      ),
-      newStartTime: DateTimeUtils.convertTimeOfDayToString(
-        state.startTime ?? TimeOfDay.now(),
-      ),
-      newEndTime: DateTimeUtils.convertTimeOfDayToString(
-        state.endTime ?? TimeOfDay.now(),
-      ),
-    )) {
+    } else if (DateTimeUtils.checkTimeValidity(
+        state.startTime!, state.endTime!)) {
       AppSnackbar.showError(
-        title: 'Start time - End time',
-        message: 'There is a task scheduled during this time',
+        title: S.current.start_time_end_time,
+        message:
+            S.current.the_minimum_duration_must_be_greater_than_or_equal_to,
       );
-    } */
-    else if (state.category == null) {
+    } else if (state.category == null) {
       AppSnackbar.showError(
         title: S.current.category,
         message: S.current.please_select_a_category_for_this_task,
@@ -192,7 +187,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
             .doc(initialTask.id)
             .update(task.toJson());
       }
-      Get.back(result: true);
+      Get.back(result: true, closeOverlays: true);
       AppSnackbar.showSuccess(
         title: S.current.task,
         message: S.current.updated_successfully,
@@ -226,7 +221,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
           .collection('tasks')
           .add(task.toJson())
           .then((value) async {
-        Get.back(result: true);
+        Get.back(result: true, closeOverlays: true);
       });
       AppSnackbar.showSuccess(
         title: S.current.task,
