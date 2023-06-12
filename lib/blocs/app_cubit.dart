@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
+import 'package:tasky/configs/app_configs.dart';
 import 'package:tasky/database/secure_storage_helper.dart';
 import 'package:tasky/firebase_options.dart';
 import 'package:tasky/generated/l10n.dart';
@@ -69,7 +70,14 @@ class AppCubit extends Cubit<AppState> {
           refreshToken: credential.user?.refreshToken ?? '',
           token: token,
         );
-        emit(state.copyWith(user: newUser));
+        emit(
+          state.copyWith(
+            user: newUser,
+            locale: Locale(
+              newUser.locale ?? AppConfigs.appLanguage,
+            ),
+          ),
+        );
       }
       return newUser;
     } on FirebaseAuthException catch (e) {
@@ -105,6 +113,21 @@ class AppCubit extends Cubit<AppState> {
     return null;
   }
 
+  Future<void> setLocale({required String locale}) async {
+    UserEntity? newUser = state.user;
+    newUser?.locale = locale;
+    emit(
+      state.copyWith(
+        user: newUser,
+        locale: Locale(locale),
+      ),
+    );
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(currentUser?.uid)
+        .update({"locale": locale});
+  }
+
   Future<bool> isSignedIn() async {
     final currentUser = _firebaseAuth.currentUser;
     return currentUser != null;
@@ -128,7 +151,14 @@ class AppCubit extends Cubit<AppState> {
     );
     if (newUser != null) {
       newUser.userId = _firebaseAuth.currentUser?.uid;
-      emit(state.copyWith(user: newUser));
+      emit(
+        state.copyWith(
+          user: newUser,
+          locale: Locale(
+            newUser.locale ?? AppConfigs.appLanguage,
+          ),
+        ),
+      );
       GlobalData.instance.userID = currentUser?.uid;
       return newUser;
     }
@@ -150,8 +180,6 @@ class AppCubit extends Cubit<AppState> {
         return false;
       }
     } on FirebaseAuthException catch (e) {
-      return false;
-    } catch (e) {
       print(e);
       return false;
     }
@@ -178,9 +206,17 @@ class AppCubit extends Cubit<AppState> {
           userId: user.uid,
           email: mail,
           createAt: user.metadata.creationTime,
+          locale: AppConfigs.appLanguage,
         );
         GlobalData.instance.userID = credential.user?.uid;
-        emit(state.copyWith(user: currentUser));
+        emit(
+          state.copyWith(
+            user: currentUser,
+            locale: Locale(
+              currentUser.locale ?? AppConfigs.appLanguage,
+            ),
+          ),
+        );
 
         return user;
       }
@@ -251,6 +287,7 @@ class AppCubit extends Cubit<AppState> {
           email: user.email,
           createAt: user.metadata.creationTime,
           avatarUrl: user.photoURL,
+          locale: checkAlreadyUser?.locale ?? AppConfigs.appLanguage,
         );
         GlobalData.instance.userID = user.uid;
         emit(state.copyWith(user: currentUser));

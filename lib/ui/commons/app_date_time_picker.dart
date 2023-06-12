@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tasky/common/app_colors.dart';
-import 'package:tasky/configs/app_configs.dart';
 import 'package:tasky/generated/l10n.dart';
 
 class AppDateTimePicker {
@@ -11,7 +10,6 @@ class AppDateTimePicker {
   }) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      locale: AppConfigs.defaultLocal,
       initialDate: initialDate ?? DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),

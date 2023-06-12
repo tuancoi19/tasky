@@ -13,7 +13,7 @@ class DateTimeUtils {
   }
 
   static String convertDateTimeToString(DateTime dateTime) {
-    return DateFormat(AppConfigs.dateDisplayFormat).format(dateTime);
+    return DateFormat(AppConfigs.dateAPIFormat).format(dateTime);
   }
 
   static bool isOverlap({

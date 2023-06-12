@@ -127,7 +127,7 @@ class _CategoryDetailChildPageState extends State<CategoryDetailChildPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
-                      flex: 7,
+                      flex: 5,
                       child: Text(
                         state.category?.title ?? '',
                         style: AppTextStyle.whiteS23W500,

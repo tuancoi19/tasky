@@ -147,5 +147,6 @@
   "no_results": "Không có kết quả",
   "success": "Thành công!",
   "cropper": "Cắt ảnh",
-  "the_minimum_duration_must_be_greater_than_or_equal_to": "Khoảng thời gian phải lớn hơn 5 phút"
+  "the_minimum_duration_must_be_greater_than_or_equal_to": "Khoảng thời gian phải lớn hơn 5 phút",
+  "language": "Ngôn ngữ"
 }

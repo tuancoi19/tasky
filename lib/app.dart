@@ -4,11 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/configs/app_configs.dart';
 import 'package:tasky/generated/l10n.dart';
 
 import 'blocs/app_cubit.dart';
-import 'blocs/setting/app_setting_cubit.dart';
 import 'common/app_themes.dart';
 import 'router/route_config.dart';
 
@@ -43,16 +43,11 @@ class _MyAppState extends State<MyApp> {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (BuildContext context, Widget? child) {
-        return MultiBlocProvider(
-          providers: [
-            BlocProvider<AppCubit>(create: (context) {
-              return AppCubit();
-            }),
-            BlocProvider<AppSettingCubit>(create: (context) {
-              return AppSettingCubit();
-            }),
-          ],
-          child: BlocBuilder<AppSettingCubit, AppSettingState>(
+        return BlocProvider(
+          create: (context) {
+            return AppCubit();
+          },
+          child: BlocBuilder<AppCubit, AppState>(
             builder: (context, state) {
               return GestureDetector(
                 onTap: () {
@@ -62,13 +57,9 @@ class _MyAppState extends State<MyApp> {
                   title: AppConfigs.appName,
                   theme: AppThemes(
                     isDarkMode: false,
-                    primaryColor: state.primaryColor,
+                    primaryColor: AppColors.primary,
                   ).theme,
-                  // darkTheme: AppThemes(
-                  //   isDarkMode: true,
-                  //   primaryColor: state.primaryColor,
-                  // ).theme,
-                  themeMode: state.themeMode,
+                  themeMode: ThemeMode.system,
                   initialRoute: RouteConfig.splash,
                   getPages: RouteConfig.getPages,
                   localizationsDelegates: const [

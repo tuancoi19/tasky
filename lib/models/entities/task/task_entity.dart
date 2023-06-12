@@ -69,7 +69,7 @@ class TaskEntity {
 
   DateTime? get dateFromString {
     if (date != null && date!.isNotEmpty) {
-      DateFormat dateFormat = DateFormat(AppConfigs.dateDisplayFormat);
+      DateFormat dateFormat = DateFormat(AppConfigs.dateAPIFormat);
       DateTime dateTime = dateFormat.parse(date!);
       return dateTime;
     }
@@ -78,7 +78,7 @@ class TaskEntity {
 
   DateTime? get startToDateTime {
     DateTime dateResult =
-        DateFormat(AppConfigs.dateDisplayFormat).parse(date ?? '');
+        DateFormat(AppConfigs.dateAPIFormat).parse(date ?? '');
     DateTime timeResult =
         DateFormat(AppConfigs.timeDisplayFormat).parse(start ?? '');
 
@@ -95,7 +95,7 @@ class TaskEntity {
 
   DateTime? get endToDateTime {
     DateTime dateResult =
-        DateFormat(AppConfigs.dateDisplayFormat).parse(date ?? '');
+        DateFormat(AppConfigs.dateAPIFormat).parse(date ?? '');
     DateTime timeResult =
         DateFormat(AppConfigs.timeDisplayFormat).parse(end ?? '');
 
