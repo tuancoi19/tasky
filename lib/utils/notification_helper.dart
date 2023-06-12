@@ -44,6 +44,7 @@ class NotificationHelper {
         AndroidNotificationDetails(
       "ScheduleNotification001",
       "Notify Me",
+      tag: 'notification',
       importance: Importance.high,
     );
 
@@ -79,7 +80,7 @@ class NotificationHelper {
   }
 
   Future<void> cancelNotification(int id) async {
-    await flutterLocalNotificationsPlugin.cancel(id);
+    await flutterLocalNotificationsPlugin.cancel(id, tag: 'notification');
     log('cancel noti scucces');
   }
 }

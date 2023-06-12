@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -186,6 +187,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
       end: DateTimeUtils.convertTimeOfDayToString(
           state.endTime ?? TimeOfDay.now()),
       categoryId: state.category?.id,
+      notificationId: initialTask.notificationId,
     );
 
     try {
@@ -199,7 +201,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
       }
 
       final NotificationHelper notification = NotificationHelper();
-      await notification.cancelNotification(task.notificationId ?? 1);
+      await notification.cancelNotification(initialTask.notificationId ?? 1);
       final DateTime notiDateTime = AppDateUtils.combineTimeOfDayWithDateTime(
         task.dateFromString ?? DateTime.now(),
         task.startFromString ?? TimeOfDay.now(),
@@ -237,7 +239,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
         end: DateTimeUtils.convertTimeOfDayToString(
             state.endTime ?? TimeOfDay.now()),
         categoryId: state.category?.id,
-        notificationId: GlobalData.instance.tasksList.length,
+        notificationId: generateUniqueNumber(),
       );
 
       await FirebaseFirestore.instance
@@ -284,9 +286,16 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
         title: S.current.task,
         message: S.current.deleted_successfully,
       );
+      final idNoti = GlobalData.instance.tasksList
+              .firstWhereOrNull((element) => element.id == id)
+              ?.notificationId ??
+          1;
+      final NotificationHelper notification = NotificationHelper();
+      await notification.cancelNotification(idNoti);
     } on FirebaseAuthException catch (e) {
       AppSnackbar.showError(title: 'Firebase', message: e.message);
     }
+
     emit(state.copyWith(isLoading: false));
   }
 
@@ -317,5 +326,20 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
       }
     }
     return result;
+  }
+
+  int generateUniqueNumber() {
+    Random random = Random();
+    int min = 1000;
+    int max = 9999;
+    int randomNumber = min + random.nextInt(max - min);
+    final listIdNotification =
+        GlobalData.instance.tasksList.map((e) => e.notificationId).toList();
+    while (listIdNotification.contains(randomNumber)) {
+      randomNumber = min + random.nextInt(max - min);
+    }
+    print(listIdNotification);
+
+    return randomNumber;
   }
 }
