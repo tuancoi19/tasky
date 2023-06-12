@@ -8,10 +8,12 @@ import 'package:tasky/ui/pages/home_screen/widgets/home_search_bar.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function() onTap;
+  final Function() onDone;
 
   const HomeAppBar({
     Key? key,
     required this.onTap,
+    required this.onDone,
   }) : super(key: key);
 
   @override
@@ -24,17 +26,25 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            buildIconButton(
-              icon: SvgPicture.asset(
-                AppVectors.icMenu,
-                width: 24.h,
-                height: 24.h,
+            Hero(
+              tag: 'button',
+              child: Material(
+                borderRadius: BorderRadius.circular(10).r,
+                child: buildIconButton(
+                  icon: SvgPicture.asset(
+                    AppVectors.icMenu,
+                    width: 24.h,
+                    height: 24.h,
+                  ),
+                  onTap: onTap,
+                ),
               ),
-              onTap: onTap,
             ),
             SizedBox(width: 16.w),
-            const Expanded(
-              child: HomeSearchBar(),
+            Expanded(
+              child: HomeSearchBar(
+                onDone: onDone,
+              ),
             ),
             SizedBox(width: 16.w),
             buildAccountRow(),

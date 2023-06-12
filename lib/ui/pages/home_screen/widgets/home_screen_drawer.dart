@@ -168,7 +168,6 @@ class HomeScreenDrawer extends StatelessWidget {
 
   List<Tuple3<String, String, Function()>> listOptions() {
     return [
-      Tuple3(S.current.search_tasks, AppVectors.icSearch, () {}),
       Tuple3(S.current.activity, AppVectors.icCalendar, () {}),
       Tuple3(S.current.app_settings, AppVectors.icSettings, () {}),
       Tuple3(S.current.logout, AppVectors.icLogout, logout),

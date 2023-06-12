@@ -4,6 +4,7 @@ import 'package:tasky/ui/pages/category/category_detail/category_detail_page.dar
 import 'package:tasky/ui/pages/home_screen/home_screen_page.dart';
 import 'package:tasky/ui/pages/edit_user_profile/edit_user_profile_page.dart';
 import 'package:tasky/ui/pages/onboarding/onboarding_page.dart';
+import 'package:tasky/ui/pages/search/search_page.dart';
 import 'package:tasky/ui/pages/splash/splash_page.dart';
 import 'package:tasky/ui/pages/task_screen/task_screen_page.dart';
 import 'package:tasky/ui/pages/welcome/welcome_page.dart';
@@ -20,6 +21,7 @@ class RouteConfig {
   static const String homeScreen = '/home_screen';
   static const String taskScreen = '/task_screen';
   static const String categoryDetail = '/category_detail';
+  static const String search = '/search';
 
   ///Alias ​​mapping page
   static final List<GetPage> getPages = [
@@ -61,6 +63,10 @@ class RouteConfig {
       page: () => CategoryDetailPage(
         arguments: Get.arguments,
       ),
+    ),
+    GetPage(
+      name: search,
+      page: () => const SearchPage(),
     ),
   ];
 }

@@ -99,6 +99,9 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
           onTap: () {
             _zoomDrawerController.open?.call();
           },
+          onDone: () async {
+            await _cubit.loadInitialData();
+          },
         ),
         body: SafeArea(
           bottom: false,
