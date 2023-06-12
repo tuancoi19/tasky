@@ -1,15 +1,15 @@
-import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/configs/app_configs.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/global/global_data.dart';
 
 import 'blocs/app_cubit.dart';
-import 'blocs/setting/app_setting_cubit.dart';
 import 'common/app_themes.dart';
 import 'router/route_config.dart';
 
@@ -22,16 +22,32 @@ class MyApp extends StatefulWidget {
   }
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // user returned to our app
+      // here will use to fix changing device language make app locale change
+      final currentLanguage = GlobalData.instance.locale;
+      S.load(Locale(currentLanguage));
+    } else if (state == AppLifecycleState.inactive) {
+    } else if (state == AppLifecycleState.paused) {}
+  }
+
+  @override
+  void didChangeLocales(List<Locale>? locales) {}
 
   @override
   Widget build(BuildContext context) {
@@ -44,46 +60,34 @@ class _MyAppState extends State<MyApp> {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (BuildContext context, Widget? child) {
-        return MultiBlocProvider(
-          providers: [
-            BlocProvider<AppCubit>(create: (context) {
-              return AppCubit();
-            }),
-            BlocProvider<AppSettingCubit>(create: (context) {
-              return AppSettingCubit();
-            }),
-          ],
-          child: BlocBuilder<AppSettingCubit, AppSettingState>(
+        return BlocProvider(
+          create: (context) {
+            return AppCubit();
+          },
+          child: BlocBuilder<AppCubit, AppState>(
             builder: (context, state) {
               return GestureDetector(
                 onTap: () {
                   _hideKeyboard(context);
                 },
-                child: CalendarControllerProvider(
-                  controller: EventController(),
-                  child: GetMaterialApp(
-                    title: AppConfigs.appName,
-                    theme: AppThemes(
-                      isDarkMode: false,
-                      primaryColor: state.primaryColor,
-                    ).theme,
-                    // darkTheme: AppThemes(
-                    //   isDarkMode: true,
-                    //   primaryColor: state.primaryColor,
-                    // ).theme,
-                    themeMode: state.themeMode,
-                    initialRoute: RouteConfig.splash,
-                    getPages: RouteConfig.getPages,
-                    localizationsDelegates: const [
-                      GlobalMaterialLocalizations.delegate,
-                      GlobalWidgetsLocalizations.delegate,
-                      GlobalCupertinoLocalizations.delegate,
-                      S.delegate,
-                    ],
-                    locale: state.locale,
-                    supportedLocales: S.delegate.supportedLocales,
-                    debugShowCheckedModeBanner: false,
-                  ),
+                child: GetMaterialApp(
+                  title: AppConfigs.appName,
+                  theme: AppThemes(
+                    isDarkMode: false,
+                    primaryColor: AppColors.primary,
+                  ).theme,
+                  themeMode: ThemeMode.system,
+                  initialRoute: RouteConfig.splash,
+                  getPages: RouteConfig.getPages,
+                  localizationsDelegates: const [
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                    S.delegate,
+                  ],
+                  locale: Locale(GlobalData.instance.locale),
+                  supportedLocales: S.delegate.supportedLocales,
+                  debugShowCheckedModeBanner: false,
                 ),
               );
             },

@@ -13,7 +13,7 @@ class DateTimeUtils {
   }
 
   static String convertDateTimeToString(DateTime dateTime) {
-    return DateFormat(AppConfigs.dateDisplayFormat).format(dateTime);
+    return DateFormat(AppConfigs.dateAPIFormat).format(dateTime);
   }
 
   static bool isOverlap({
@@ -59,5 +59,15 @@ class DateTimeUtils {
     DateTime now = DateTime.now();
 
     return date.day < now.day && date.month < now.month && date.year < now.year;
+  }
+
+  static bool checkTimeValidity(TimeOfDay startTime, TimeOfDay endTime) {
+    DateTime now = DateTime.now();
+    DateTime startDateTime = DateTime(
+        now.year, now.month, now.day, startTime.hour, startTime.minute);
+    DateTime endDateTime =
+        DateTime(now.year, now.month, now.day, endTime.hour, endTime.minute);
+
+    return endDateTime.difference(startDateTime).inMinutes < 5;
   }
 }

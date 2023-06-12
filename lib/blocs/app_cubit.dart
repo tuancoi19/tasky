@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
+import 'package:tasky/configs/app_configs.dart';
 import 'package:tasky/database/secure_storage_helper.dart';
 import 'package:tasky/firebase_options.dart';
 import 'package:tasky/generated/l10n.dart';
@@ -65,11 +66,16 @@ class AppCubit extends Cubit<AppState> {
         newUser.fcmToken = token;
         newUser.userId = credential.user?.uid ?? '';
         GlobalData.instance.userID = credential.user?.uid ?? '';
+        GlobalData.instance.locale = newUser.locale ?? AppConfigs.appLanguage;
+        Get.updateLocale(Locale(GlobalData.instance.locale));
+        S.load(Locale(GlobalData.instance.locale));
         await saveSession(
           refreshToken: credential.user?.refreshToken ?? '',
           token: token,
         );
-        emit(state.copyWith(user: newUser));
+        emit(
+          state.copyWith(user: newUser),
+        );
       }
       return newUser;
     } on FirebaseAuthException catch (e) {
@@ -105,6 +111,16 @@ class AppCubit extends Cubit<AppState> {
     return null;
   }
 
+  Future<void> setLocale({required String locale}) async {
+    GlobalData.instance.locale = locale;
+    Get.updateLocale(Locale(GlobalData.instance.locale));
+    S.load(Locale(GlobalData.instance.locale));
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(currentUser?.uid)
+        .update({"locale": locale});
+  }
+
   Future<bool> isSignedIn() async {
     final currentUser = _firebaseAuth.currentUser;
     return currentUser != null;
@@ -119,7 +135,7 @@ class AppCubit extends Cubit<AppState> {
       (DocumentSnapshot doc) {
         if (doc.data() == null) {
           return null;
-        }else{
+        } else {
           final data = doc.data() as Map<String, dynamic>;
           return UserEntity.fromJson(data);
         }
@@ -128,7 +144,12 @@ class AppCubit extends Cubit<AppState> {
     );
     if (newUser != null) {
       newUser.userId = _firebaseAuth.currentUser?.uid;
-      emit(state.copyWith(user: newUser));
+      GlobalData.instance.locale = newUser.locale ?? AppConfigs.appLanguage;
+      Get.updateLocale(Locale(GlobalData.instance.locale));
+      S.load(Locale(GlobalData.instance.locale));
+      emit(
+        state.copyWith(user: newUser),
+      );
       GlobalData.instance.userID = currentUser?.uid;
       return newUser;
     }
@@ -150,8 +171,6 @@ class AppCubit extends Cubit<AppState> {
         return false;
       }
     } on FirebaseAuthException catch (e) {
-      return false;
-    } catch (e) {
       print(e);
       return false;
     }
@@ -178,9 +197,16 @@ class AppCubit extends Cubit<AppState> {
           userId: user.uid,
           email: mail,
           createAt: user.metadata.creationTime,
+          locale: AppConfigs.appLanguage,
         );
         GlobalData.instance.userID = credential.user?.uid;
-        emit(state.copyWith(user: currentUser));
+        GlobalData.instance.locale =
+            currentUser.locale ?? AppConfigs.appLanguage;
+        Get.updateLocale(Locale(GlobalData.instance.locale));
+        S.load(Locale(GlobalData.instance.locale));
+        emit(
+          state.copyWith(user: currentUser),
+        );
 
         return user;
       }
@@ -251,7 +277,10 @@ class AppCubit extends Cubit<AppState> {
           email: user.email,
           createAt: user.metadata.creationTime,
           avatarUrl: user.photoURL,
+          locale: checkAlreadyUser?.locale ?? AppConfigs.appLanguage,
         );
+        GlobalData.instance.locale =
+            checkAlreadyUser?.locale ?? AppConfigs.appLanguage;
         GlobalData.instance.userID = user.uid;
         emit(state.copyWith(user: currentUser));
         return currentUser;
@@ -298,11 +327,14 @@ class AppCubit extends Cubit<AppState> {
       userName: userName,
       email: user.email,
       createAt: user.metadata.creationTime,
+      locale: AppConfigs.appLanguage,
     );
     try {
       await userCollection.doc(user.uid).set(newUser.toJson()).catchError((e) {
         logger.e('❌❌ ERROR : Save new user to firebase - $e');
       });
+      Get.updateLocale(Locale(GlobalData.instance.locale));
+      S.load(Locale(GlobalData.instance.locale));
       emit(state.copyWith(user: newUser));
     } catch (e) {
       logger.e('❌❌ ERROR : Save new user to firebase - $e');

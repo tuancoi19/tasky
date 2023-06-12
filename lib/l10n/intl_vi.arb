@@ -145,5 +145,8 @@
   "delete_category": "Xóa Danh mục",
   "delete_category_message": "Tất cả dữ liệu sẽ mất (bao gồm cả các Tác vụ liên quan đến Danh mục này) khi thực hiện việc xóa. Bạn vẫn muốn tiếp tục?",
   "no_results": "Không có kết quả",
-  "success": "Thành công!"
+  "success": "Thành công!",
+  "cropper": "Cắt ảnh",
+  "the_minimum_duration_must_be_greater_than_or_equal_to": "Khoảng thời gian phải lớn hơn 5 phút",
+  "language": "Ngôn ngữ"
 }

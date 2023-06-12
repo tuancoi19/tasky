@@ -1,3 +1,4 @@
+import 'package:tasky/configs/app_configs.dart';
 import 'package:tasky/models/entities/category/category_entity.dart';
 import 'package:tasky/models/entities/task/task_entity.dart';
 
@@ -11,4 +12,6 @@ class GlobalData {
   List<TaskEntity> tasksList = [];
 
   List<CategoryEntity> categoriesList = [];
+
+  String locale = AppConfigs.appLanguage;
 }

@@ -43,6 +43,9 @@ class UserEntity {
   @TimestampConverter()
   DateTime? createAt;
 
+  @JsonKey()
+  String? locale;
+
   UserEntity({
     this.userId,
     this.fcmToken,
@@ -52,6 +55,7 @@ class UserEntity {
     this.isLoggedIn = false,
     this.email,
     this.createAt,
+    this.locale,
   });
 
   factory UserEntity.fromJson(Map<String, dynamic> json) =>

@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tasky/blocs/app_cubit.dart';
@@ -21,7 +20,6 @@ part 'edit_user_profile_state.dart';
 class EditUserProfileCubit extends Cubit<EditUserProfileState> {
   EditUserProfileCubit(this.appCubit) : super(const EditUserProfileState());
   final AppCubit appCubit;
-
 
   void onValidateForm() {
     emit(
@@ -50,46 +48,22 @@ class EditUserProfileCubit extends Cubit<EditUserProfileState> {
     ));
   }
 
-  void getPhotoGallery() async {
+  Future<void> cropImage({required File image}) async {
     emit(state.copyWith(loadDataStatus: LoadStatus.loading));
-
-    final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      emit(state.copyWith(image: image));
-      await cropImage();
-    } else {
-      emit(state.copyWith(loadDataStatus: LoadStatus.failure));
-    }
-  }
-
-  void takePhotoCamera() async {
-    emit(state.copyWith(loadDataStatus: LoadStatus.loading));
-
-    final ImagePicker picker = ImagePicker();
-    final XFile? photo = await picker.pickImage(source: ImageSource.camera);
-
-    if (photo != null) {
-      emit(state.copyWith(image: photo));
-      await cropImage();
-    }
-  }
-
-  Future<void> cropImage() async {
-    if (state.image != null) {
+    try {
       final croppedFile = await ImageCropper().cropImage(
-        sourcePath: state.image!.path,
-        compressFormat: ImageCompressFormat.jpg,
+        sourcePath: image.path,
         compressQuality: 100,
         uiSettings: [
           AndroidUiSettings(
-              toolbarTitle: 'Cropper',
-              toolbarColor: AppColors.primary,
-              toolbarWidgetColor: Colors.white,
-              initAspectRatio: CropAspectRatioPreset.original,
-              lockAspectRatio: false),
+            toolbarTitle: S.current.cropper,
+            toolbarColor: AppColors.primary,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false,
+          ),
           IOSUiSettings(
-            title: 'Cropper',
+            title: S.current.cropper,
           ),
         ],
       );
@@ -100,8 +74,10 @@ class EditUserProfileCubit extends Cubit<EditUserProfileState> {
           ),
         );
       }
+      emit(state.copyWith(loadDataStatus: LoadStatus.success));
+    } catch (e) {
+      emit(state.copyWith(loadDataStatus: LoadStatus.failure));
     }
-    emit(state.copyWith(loadDataStatus: LoadStatus.success));
   }
 
   Future<void> saveInfo() async {

@@ -10,7 +10,7 @@ import 'package:tasky/ui/commons/app_snackbar.dart';
 import 'package:tasky/ui/pages/search/widgets/search_app_bar.dart';
 import 'package:tasky/ui/widgets/app_circular_progress_indicator.dart';
 import 'package:tasky/ui/widgets/app_tasks_list_view.dart';
-import 'package:tasky/ui/widgets/empty_list_widget.dart';
+import 'package:tasky/ui/widgets/empty_view_widget.dart';
 
 import 'search_cubit.dart';
 
@@ -51,6 +51,7 @@ class _SearchChildPageState extends State<SearchChildPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: SearchAppBar(
         controller: controller,
         onChanged: (value) {
@@ -71,7 +72,7 @@ class _SearchChildPageState extends State<SearchChildPage> {
       child: BlocBuilder<SearchCubit, SearchState>(
         builder: (context, state) {
           if (GlobalData.instance.tasksList.isEmpty) {
-            return EmptyListWidget(
+            return EmptyViewWidget(
               onRefresh: () async {
                 final needReload = await Get.toNamed(RouteConfig.taskScreen);
                 if ((needReload ?? false)) {

@@ -168,7 +168,7 @@ class AppTextStyle {
       whiteS14.copyWith(fontWeight: FontWeight.w800);
 
   static final whiteS15 = white.copyWith(fontSize: 15.sp);
-  static final whiteS15W500 = whiteS14.copyWith(fontWeight: FontWeight.w500);
+  static final whiteS15W500 = whiteS15.copyWith(fontWeight: FontWeight.w500);
 
   //s16
   static final whiteS16 = white.copyWith(fontSize: 16.sp);
@@ -231,6 +231,14 @@ class AppTextStyle {
   static final whiteO50S10 = whiteO50.copyWith(fontSize: 10.sp);
   static final whiteO50S10W500 =
       whiteO50S10.copyWith(fontWeight: FontWeight.w500);
+
+  ///White O35
+  static final whiteO35 = TextStyle(color: Colors.white.withOpacity(0.35));
+
+  //s14
+  static final whiteO35S14 = whiteO35.copyWith(fontSize: 14.sp);
+  static final whiteO35S14W500 =
+      whiteO35S14.copyWith(fontWeight: FontWeight.w500);
 
   ///Gray
   static const grey = TextStyle(color: Colors.grey);

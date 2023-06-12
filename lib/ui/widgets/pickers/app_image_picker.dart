@@ -17,11 +17,13 @@ import 'package:tasky/utils/utils.dart';
 class AppImagePicker extends StatefulWidget {
   final Function(File)? onSubmitImage;
   final Function? onErrorImage;
+  final bool onlyImagePicker;
 
   const AppImagePicker({
     Key? key,
     this.onSubmitImage,
     this.onErrorImage,
+    this.onlyImagePicker = false,
   }) : super(key: key);
 
   @override
@@ -87,7 +89,7 @@ class _AppImagePickerState extends State<AppImagePicker> {
     }
     _image = temp ?? File(path);
     widget.onSubmitImage?.call(_image);
-    Get.back();
+    if (!widget.onlyImagePicker) Get.back();
     Get.back();
   }
 
@@ -104,7 +106,7 @@ class _AppImagePickerState extends State<AppImagePicker> {
                 bottom: 16,
               ).r,
               child: Text(
-                S.current.choose_from_gallery,
+                S.current.upload_image,
                 style: AppTextStyle.blackS18Bold,
               ),
             ),
@@ -116,7 +118,7 @@ class _AppImagePickerState extends State<AppImagePicker> {
               onPressed: () async {
                 if (permissionCamera != PermissionStatus.denied) {
                   if (permissionCamera == PermissionStatus.permanentlyDenied) {
-                    openAppSettings();
+                    await openAppSettings();
                   } else {
                     await getImageFromCamera();
                   }
@@ -152,7 +154,7 @@ class _AppImagePickerState extends State<AppImagePicker> {
                     final result = await Permission.photos.request();
                     if (result != PermissionStatus.denied) {
                       if (result == PermissionStatus.permanentlyDenied) {
-                        openAppSettings();
+                        await openAppSettings();
                       } else {
                         Get.back();
                         await getImageFromGallery();

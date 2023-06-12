@@ -11,18 +11,24 @@ import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/router/route_config.dart';
-import 'package:tasky/ui/pages/edit_user_profile/edit_user_profile_page.dart';
 import 'package:tuple/tuple.dart';
 
-class HomeScreenDrawer extends StatelessWidget {
+class HomeScreenDrawer extends StatefulWidget {
   final Function() logout;
-  final Function() onTap;
+  final Function(bool) onTap;
 
   const HomeScreenDrawer({
     Key? key,
     required this.onTap,
     required this.logout,
   }) : super(key: key);
+
+  @override
+  State<HomeScreenDrawer> createState() => _HomeScreenDrawerState();
+}
+
+class _HomeScreenDrawerState extends State<HomeScreenDrawer> {
+  bool needReload = false;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +48,9 @@ class HomeScreenDrawer extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 28).r,
             child: InkWell(
-              onTap: onTap,
+              onTap: () {
+                widget.onTap.call(needReload);
+              },
               child: SvgPicture.asset(
                 AppVectors.icBackCircle,
                 width: 36.h,
@@ -168,9 +176,16 @@ class HomeScreenDrawer extends StatelessWidget {
 
   List<Tuple3<String, String, Function()>> listOptions() {
     return [
-      Tuple3(S.current.activity, AppVectors.icCalendar, () {}),
-      Tuple3(S.current.app_settings, AppVectors.icSettings, () {}),
-      Tuple3(S.current.logout, AppVectors.icLogout, logout),
+      Tuple3(S.current.activity, AppVectors.icCalendar, () async {
+        final data = await Get.toNamed(RouteConfig.activity);
+        if (data ?? false) {
+          needReload = data;
+        }
+      }),
+      Tuple3(S.current.app_settings, AppVectors.icSettings, () {
+        Get.toNamed(RouteConfig.settingScreen);
+      }),
+      Tuple3(S.current.logout, AppVectors.icLogout, widget.logout),
     ];
   }
 }

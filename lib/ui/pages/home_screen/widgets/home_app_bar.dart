@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tasky/common/app_colors.dart';
-import 'package:tasky/common/app_images.dart';
 import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/home_search_bar.dart';
 
@@ -26,19 +25,13 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Hero(
-              tag: 'button',
-              child: Material(
-                borderRadius: BorderRadius.circular(10).r,
-                child: buildIconButton(
-                  icon: SvgPicture.asset(
-                    AppVectors.icMenu,
-                    width: 24.h,
-                    height: 24.h,
-                  ),
-                  onTap: onTap,
-                ),
+            buildIconButton(
+              icon: SvgPicture.asset(
+                AppVectors.icMenu,
+                width: 24.h,
+                height: 24.h,
               ),
+              onTap: onTap,
             ),
             SizedBox(width: 16.w),
             Expanded(
@@ -46,8 +39,6 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 onDone: onDone,
               ),
             ),
-            SizedBox(width: 16.w),
-            buildAccountRow(),
           ],
         ),
       ),
@@ -69,35 +60,6 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         child: Center(child: icon),
       ),
-    );
-  }
-
-  Widget buildAccountRow() {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        buildIconButton(
-          icon: SvgPicture.asset(
-            AppVectors.icNotification,
-            width: 20.w,
-            height: 24.h,
-          ),
-          onTap: () {},
-        ),
-        SizedBox(width: 16.w),
-        buildIconButton(
-          icon: ClipRRect(
-            borderRadius: BorderRadius.circular(10).r,
-            child: Image.asset(
-              AppImages.avatarTest,
-              width: 48.h,
-              height: 48.h,
-              fit: BoxFit.cover,
-            ),
-          ),
-          onTap: () {},
-        ),
-      ],
     );
   }
 

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/models/entities/category/category_entity.dart';
 import 'package:tasky/models/entities/task/task_entity.dart';
 import 'package:tasky/ui/pages/home_screen/home_screen_cubit.dart';
 import 'package:tasky/ui/pages/task_screen/widgets/task_category_list.dart';
@@ -18,10 +19,12 @@ import 'package:tasky/ui/widgets/buttons/app_button.dart';
 import 'task_screen_cubit.dart';
 
 class TaskScreenArguments {
-  final TaskEntity task;
+  final TaskEntity? task;
+  final CategoryEntity? category;
 
   TaskScreenArguments({
-    required this.task,
+    this.task,
+    this.category,
   });
 }
 
@@ -76,9 +79,10 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
   void initState() {
     super.initState();
     _cubit = BlocProvider.of(context);
-    _cubit.loadInitialData(widget.arguments?.task);
-    titleController = TextEditingController(text: widget.arguments?.task.title);
-    noteController = TextEditingController(text: widget.arguments?.task.note);
+    _cubit.loadInitialData(widget.arguments);
+    titleController =
+        TextEditingController(text: widget.arguments?.task?.title);
+    noteController = TextEditingController(text: widget.arguments?.task?.note);
   }
 
   @override
@@ -150,19 +154,19 @@ class _TaskScreenChildPageState extends State<TaskScreenChildPage> {
                 isEdit: state.isEdit,
                 onChangeIsEdit: () {
                   if (state.isEdit) {
-                    _cubit.loadInitialData(widget.arguments?.task);
+                    _cubit.loadInitialData(widget.arguments);
                     titleController = TextEditingController(
-                      text: widget.arguments?.task.title,
+                      text: widget.arguments?.task?.title,
                     );
                     noteController = TextEditingController(
-                      text: widget.arguments?.task.note,
+                      text: widget.arguments?.task?.note,
                     );
                   }
                   _cubit.setIsEdit();
                 },
                 onDelete: () async {
                   await _cubit
-                      .deleteTaskOnFirebase(widget.arguments?.task.id ?? '');
+                      .deleteTaskOnFirebase(widget.arguments?.task?.id ?? '');
                 },
                 isShowOptions: widget.arguments?.task != null && !state.isEdit,
                 isLoading: state.isLoading,

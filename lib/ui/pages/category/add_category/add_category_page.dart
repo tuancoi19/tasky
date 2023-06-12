@@ -18,10 +18,12 @@ import 'add_category_cubit.dart';
 class AddCategoryArguments {
   final CategoryEntity? category;
   final Function(CategoryEntity?)? onDone;
+  final int? theme;
 
   AddCategoryArguments({
     this.category,
     this.onDone,
+    this.theme,
   });
 }
 
@@ -83,8 +85,9 @@ class _AddCategoryChildPageState extends State<AddCategoryChildPage> {
   Widget _buildBodyWidget() {
     return BlocBuilder<AddCategoryCubit, AddCategoryState>(
       builder: (context, state) {
-        return Padding(
+        return SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(20, 32, 20, 20).r,
+          physics: const ClampingScrollPhysics(),
           child: Form(
             key: _formKey,
             autovalidateMode: state.autoValidateMode,
@@ -103,9 +106,11 @@ class _AddCategoryChildPageState extends State<AddCategoryChildPage> {
                   textEditingController: _controller,
                   borderRadius: 10,
                   color: AppColors.backgroundTextFieldColor,
-                  textFieldFocusedBorder: widget.arguments.category != null
-                      ? Color(widget.arguments.category?.color ?? 0)
-                      : null,
+                  textFieldFocusedBorder: widget.arguments.theme != null
+                      ? Color(widget.arguments.theme!)
+                      : (widget.arguments.category != null
+                          ? Color(widget.arguments.category?.color ?? 0)
+                          : null),
                   hintText: S.current.enter_your_category_name,
                   labelText: S.current.category_name,
                   validator: (value) {
@@ -129,15 +134,19 @@ class _AddCategoryChildPageState extends State<AddCategoryChildPage> {
                     _cubit.changeSelectedColor(selectedColor: value);
                   },
                   selectedColor: state.selectedColor,
-                  theme: widget.arguments.category != null
-                      ? Color(widget.arguments.category?.color ?? 0)
-                      : null,
+                  theme: widget.arguments.theme != null
+                      ? Color(widget.arguments.theme!)
+                      : (widget.arguments.category != null
+                          ? Color(widget.arguments.category?.color ?? 0)
+                          : null),
                 ),
                 SizedBox(height: 24.h),
                 NavigatorRow(
-                  theme: widget.arguments.category != null
-                      ? Color(widget.arguments.category?.color ?? 0)
-                      : null,
+                  theme: widget.arguments.theme != null
+                      ? Color(widget.arguments.theme!)
+                      : (widget.arguments.category != null
+                          ? Color(widget.arguments.category?.color ?? 0)
+                          : null),
                   onPressed: () async {
                     if (state.selectedColor == null) {
                       AppSnackbar.showError(
@@ -156,6 +165,10 @@ class _AddCategoryChildPageState extends State<AddCategoryChildPage> {
                         result = await _cubit.addCategoryToFirebase();
                       }
                       Get.back();
+                      AppSnackbar.showSuccess(
+                        title: S.current.category,
+                        message: S.current.success,
+                      );
                       widget.arguments.onDone!(result);
                     }
                   },

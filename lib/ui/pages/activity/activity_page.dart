@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:tasky/models/enums/load_status.dart';
+import 'package:tasky/router/route_config.dart';
+import 'package:tasky/ui/pages/activity/widgets/activity_app_bar.dart';
+import 'package:tasky/ui/pages/activity/widgets/activity_calendar_view.dart';
+import 'package:tasky/ui/widgets/app_circular_progress_indicator.dart';
+import 'package:tasky/ui/widgets/empty_view_widget.dart';
+import 'package:tasky/ui/widgets/error_view_widget.dart';
 
 import 'activity_cubit.dart';
 
-class ActivityArguments {
-  String param;
-
-  ActivityArguments({
-    required this.param,
-  });
-}
-
 class ActivityPage extends StatelessWidget {
-  final ActivityArguments arguments;
-
   const ActivityPage({
     Key? key,
-    required this.arguments,
   }) : super(key: key);
 
   @override
@@ -49,16 +46,68 @@ class _ActivityChildPageState extends State<ActivityChildPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: SafeArea(
-        child: _buildBodyWidget(),
-      ),
+    return BlocBuilder<ActivityCubit, ActivityState>(
+      builder: (context, state) {
+        return WillPopScope(
+          onWillPop: () async {
+            Get.back(result: state.needReload);
+            return false;
+          },
+          child: Scaffold(
+            appBar: ActivityAppBar(
+              onTap: (value) {
+                _cubit.changeType(type: value);
+              },
+              onDone: () async {
+                _cubit.setNeedReload(needReload: true);
+                await _cubit.getTasksList();
+              },
+              needReload: state.needReload,
+            ),
+            body: SafeArea(
+              child: _buildBodyWidget(),
+            ),
+          ),
+        );
+      },
     );
   }
 
   Widget _buildBodyWidget() {
-    return Container();
+    return BlocBuilder<ActivityCubit, ActivityState>(
+      builder: (context, state) {
+        if (state.loadDataStatus == LoadStatus.loading) {
+          return const Center(
+            child: AppCircularProgressIndicator(),
+          );
+        } else if (state.loadDataStatus == LoadStatus.failure) {
+          return ErrorViewWidget(
+            onRefresh: () async {
+              await _cubit.getTasksList();
+            },
+          );
+        } else if ({state.tasksData ?? []}.isEmpty) {
+          return EmptyViewWidget(
+            onRefresh: () async {
+              final needReload = await Get.toNamed(RouteConfig.taskScreen);
+              if (needReload ?? false) {
+                _cubit.setNeedReload(needReload: needReload);
+                await _cubit.getTasksList();
+              }
+            },
+          );
+        } else {
+          return ActivityCalendarView(
+            type: state.type,
+            tasksData: state.tasksData ?? [],
+            onDone: () async {
+              _cubit.setNeedReload(needReload: true);
+              await _cubit.getTasksList();
+            },
+          );
+        }
+      },
+    );
   }
 
   @override

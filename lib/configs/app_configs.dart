@@ -15,8 +15,9 @@ class AppConfigs {
 
   ///Local
   static const appLocal = 'vi_VN';
-  static const appLanguage = 'en';
+  static const appLanguage = 'vi';
   static const defaultLocal = Locale.fromSubtags(languageCode: appLanguage);
+  static const List<String> localList = ['vi', 'en'];
 
   ///DateFormat
 

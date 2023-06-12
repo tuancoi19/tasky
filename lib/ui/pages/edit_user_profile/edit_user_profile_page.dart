@@ -10,10 +10,12 @@ import 'package:tasky/common/app_images.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/models/enums/load_status.dart';
+import 'package:tasky/ui/commons/app_bottom_sheet.dart';
 import 'package:tasky/ui/widgets/appbar/app_bar_with_back_icon_widget.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
 import 'package:tasky/ui/widgets/input/app_input.dart';
 import 'package:tasky/ui/widgets/input/app_password_input.dart';
+import 'package:tasky/ui/widgets/pickers/app_image_picker.dart';
 import 'package:tasky/utils/utils.dart';
 
 import 'edit_user_profile_cubit.dart';
@@ -69,65 +71,57 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const AppBarWithBackIconWidget(),
-      body: BlocBuilder<EditUserProfileCubit, EditUserProfileState>(
-        builder: (context, state) {
-          return Stack(
-            children: [
-              SafeArea(
-                bottom: false,
+    return BlocBuilder<EditUserProfileCubit, EditUserProfileState>(
+      builder: (context, state) {
+        return Stack(
+          children: [
+            Scaffold(
+              appBar: const AppBarWithBackIconWidget(),
+              body: SafeArea(
                 child: _buildBodyWidget(),
               ),
-              state.loadDataStatus == LoadStatus.loading
-                  ? Container(
-                      height: double.infinity,
-                      width: double.infinity,
-                      color: Colors.black.withOpacity(0.5),
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.primary,
-                        ),
+              floatingActionButton: !state.isEditProfile
+                  ? FloatingActionButton(
+                      onPressed: () {
+                        _cubit.setIsEdit(true);
+                      },
+                      backgroundColor: AppColors.backgroundLight,
+                      child: Icon(
+                        Icons.mode_edit_outline_outlined,
+                        size: 30.r,
+                        color: AppColors.primary,
                       ),
                     )
                   : const SizedBox(),
-            ],
-          );
-        },
-      ),
-      floatingActionButton:
-          BlocBuilder<EditUserProfileCubit, EditUserProfileState>(
-        builder: (context, state) {
-          return !state.isEditProfile
-              ? FloatingActionButton(
-                  onPressed: () {
-                    _cubit.setIsEdit(true);
-                  },
-                  backgroundColor: AppColors.backgroundLight,
-                  child: const Icon(
-                    Icons.mode_edit_outline_outlined,
-                    size: 30,
+            ),
+            if (state.loadDataStatus == LoadStatus.loading)
+              Container(
+                height: double.infinity,
+                width: double.infinity,
+                color: Colors.black.withOpacity(0.5),
+                child: const Center(
+                  child: CircularProgressIndicator(
                     color: AppColors.primary,
                   ),
-                )
-              : const SizedBox();
-        },
-      ),
+                ),
+              )
+          ],
+        );
+      },
     );
   }
 
   Widget _buildBodyWidget() {
     return BlocBuilder<EditUserProfileCubit, EditUserProfileState>(
       builder: (context, state) {
-        return SizedBox(
-          width: double.infinity,
-          height: double.infinity,
+        return SingleChildScrollView(
+          padding: const EdgeInsets.only(top: 8).r,
+          physics: const ClampingScrollPhysics(),
           child: Form(
             key: _formKey,
             autovalidateMode: state.autoValidateMode,
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.only(top: 8).r,
-              physics: const ClampingScrollPhysics(),
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -142,7 +136,9 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
                     },
                   ),
                   SizedBox(height: 40.h),
-                  buildInfoColumn(state.autoValidateMode),
+                  Flexible(
+                    child: buildInfoColumn(state.autoValidateMode),
+                  ),
                 ],
               ),
             ),
@@ -156,11 +152,11 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
     return Stack(
       children: [
         CircleAvatar(
-          radius: 55.h,
+          radius: 55.r,
           backgroundColor: Colors.transparent,
           child: (_cubit.state.imageCrop != null) && _cubit.state.isEditProfile
               ? ClipRRect(
-                  borderRadius: BorderRadius.circular(55),
+                  borderRadius: BorderRadius.circular(55).r,
                   child: Image.file(
                     File(_cubit.state.imageCrop?.path ?? ''),
                     width: 110.h,
@@ -170,7 +166,7 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
                 )
               : appCubit.state.user?.avatarUrl != null
                   ? ClipRRect(
-                      borderRadius: BorderRadius.circular(55),
+                      borderRadius: BorderRadius.circular(55).r,
                       child: Image(
                         width: 110.h,
                         height: 110.h,
@@ -194,40 +190,13 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
                 alignment: Alignment.bottomRight,
                 child: InkWell(
                   onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(25.0),
-                        ),
+                    AppBottomSheet.show(
+                      bottomSheet: AppImagePicker(
+                        onSubmitImage: (value) {
+                          _cubit.cropImage(image: value);
+                        },
+                        onlyImagePicker: true,
                       ),
-                      builder: (BuildContext context) {
-                        return SizedBox(
-                          height: 200,
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                ElevatedButton(
-                                  child: const Text('Take photo'),
-                                  onPressed: () async {
-                                    _cubit.takePhotoCamera();
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                                ElevatedButton(
-                                  child: const Text('Get photo from gallery'),
-                                  onPressed: () {
-                                    _cubit.getPhotoGallery();
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
                     );
                   },
                   child: CircleAvatar(
@@ -340,7 +309,6 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
                   }
                 },
               ),
-              SizedBox(height: 8.h),
             ],
           ),
         );

@@ -69,11 +69,45 @@ class TaskEntity {
 
   DateTime? get dateFromString {
     if (date != null && date!.isNotEmpty) {
-      DateFormat dateFormat = DateFormat(AppConfigs.dateDisplayFormat);
+      DateFormat dateFormat = DateFormat(AppConfigs.dateAPIFormat);
       DateTime dateTime = dateFormat.parse(date!);
       return dateTime;
     }
     return null;
+  }
+
+  DateTime? get startToDateTime {
+    DateTime dateResult =
+        DateFormat(AppConfigs.dateAPIFormat).parse(date ?? '');
+    DateTime timeResult =
+        DateFormat(AppConfigs.timeDisplayFormat).parse(start ?? '');
+
+    DateTime result = DateTime(
+      dateResult.year,
+      dateResult.month,
+      dateResult.day,
+      timeResult.hour,
+      timeResult.minute,
+    );
+
+    return result;
+  }
+
+  DateTime? get endToDateTime {
+    DateTime dateResult =
+        DateFormat(AppConfigs.dateAPIFormat).parse(date ?? '');
+    DateTime timeResult =
+        DateFormat(AppConfigs.timeDisplayFormat).parse(end ?? '');
+
+    DateTime result = DateTime(
+      dateResult.year,
+      dateResult.month,
+      dateResult.day,
+      timeResult.hour,
+      timeResult.minute,
+    );
+
+    return result;
   }
 
   TimeOfDay? get startFromString {

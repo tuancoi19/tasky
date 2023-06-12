@@ -145,5 +145,8 @@
   "delete_category": "Delete Category",
   "delete_category_message": "All data will be lost (including Tasks related to this Category) if you proceed with the deletion. Do you want to continue?",
   "no_results": "No results",
-  "success": "Success!"
+  "success": "Success!",
+  "cropper": "Cropper",
+  "the_minimum_duration_must_be_greater_than_or_equal_to": "The minimum duration must be greater than or equal to 5 minutes",
+  "language": "Language"
 }
