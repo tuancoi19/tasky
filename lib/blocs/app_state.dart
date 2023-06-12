@@ -4,26 +4,22 @@ class AppState extends Equatable {
   final UserEntity? user;
   final LoadStatus fetchProfileStatus;
   final LoadStatus signOutStatus;
-  final Locale locale;
 
   const AppState({
     this.user,
     this.fetchProfileStatus = LoadStatus.initial,
     this.signOutStatus = LoadStatus.initial,
-    this.locale = AppConfigs.defaultLocal,
   });
 
   AppState copyWith({
     UserEntity? user,
     LoadStatus? fetchProfileStatus,
     LoadStatus? signOutStatus,
-    Locale? locale,
   }) {
     return AppState(
       user: user ?? this.user,
       fetchProfileStatus: fetchProfileStatus ?? this.fetchProfileStatus,
       signOutStatus: signOutStatus ?? this.signOutStatus,
-      locale: locale ?? this.locale,
     );
   }
 
@@ -32,7 +28,6 @@ class AppState extends Equatable {
       user: user,
       fetchProfileStatus: fetchProfileStatus,
       signOutStatus: signOutStatus,
-      locale: locale,
     );
   }
 
@@ -41,6 +36,5 @@ class AppState extends Equatable {
         user,
         fetchProfileStatus,
         signOutStatus,
-        locale,
       ];
 }

@@ -66,17 +66,15 @@ class AppCubit extends Cubit<AppState> {
         newUser.fcmToken = token;
         newUser.userId = credential.user?.uid ?? '';
         GlobalData.instance.userID = credential.user?.uid ?? '';
+        GlobalData.instance.locale = newUser.locale ?? AppConfigs.appLanguage;
+        Get.updateLocale(Locale(GlobalData.instance.locale));
+        S.load(Locale(GlobalData.instance.locale));
         await saveSession(
           refreshToken: credential.user?.refreshToken ?? '',
           token: token,
         );
         emit(
-          state.copyWith(
-            user: newUser,
-            locale: Locale(
-              newUser.locale ?? AppConfigs.appLanguage,
-            ),
-          ),
+          state.copyWith(user: newUser),
         );
       }
       return newUser;
@@ -114,14 +112,9 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<void> setLocale({required String locale}) async {
-    UserEntity? newUser = state.user;
-    newUser?.locale = locale;
-    emit(
-      state.copyWith(
-        user: newUser,
-        locale: Locale(locale),
-      ),
-    );
+    GlobalData.instance.locale = locale;
+    Get.updateLocale(Locale(GlobalData.instance.locale));
+    S.load(Locale(GlobalData.instance.locale));
     await FirebaseFirestore.instance
         .collection("users")
         .doc(currentUser?.uid)
@@ -151,13 +144,11 @@ class AppCubit extends Cubit<AppState> {
     );
     if (newUser != null) {
       newUser.userId = _firebaseAuth.currentUser?.uid;
+      GlobalData.instance.locale = newUser.locale ?? AppConfigs.appLanguage;
+      Get.updateLocale(Locale(GlobalData.instance.locale));
+      S.load(Locale(GlobalData.instance.locale));
       emit(
-        state.copyWith(
-          user: newUser,
-          locale: Locale(
-            newUser.locale ?? AppConfigs.appLanguage,
-          ),
-        ),
+        state.copyWith(user: newUser),
       );
       GlobalData.instance.userID = currentUser?.uid;
       return newUser;
@@ -209,13 +200,12 @@ class AppCubit extends Cubit<AppState> {
           locale: AppConfigs.appLanguage,
         );
         GlobalData.instance.userID = credential.user?.uid;
+        GlobalData.instance.locale =
+            currentUser.locale ?? AppConfigs.appLanguage;
+        Get.updateLocale(Locale(GlobalData.instance.locale));
+        S.load(Locale(GlobalData.instance.locale));
         emit(
-          state.copyWith(
-            user: currentUser,
-            locale: Locale(
-              currentUser.locale ?? AppConfigs.appLanguage,
-            ),
-          ),
+          state.copyWith(user: currentUser),
         );
 
         return user;
@@ -289,6 +279,8 @@ class AppCubit extends Cubit<AppState> {
           avatarUrl: user.photoURL,
           locale: checkAlreadyUser?.locale ?? AppConfigs.appLanguage,
         );
+        GlobalData.instance.locale =
+            checkAlreadyUser?.locale ?? AppConfigs.appLanguage;
         GlobalData.instance.userID = user.uid;
         emit(state.copyWith(user: currentUser));
         return currentUser;
@@ -335,11 +327,14 @@ class AppCubit extends Cubit<AppState> {
       userName: userName,
       email: user.email,
       createAt: user.metadata.creationTime,
+      locale: AppConfigs.appLanguage,
     );
     try {
       await userCollection.doc(user.uid).set(newUser.toJson()).catchError((e) {
         logger.e('❌❌ ERROR : Save new user to firebase - $e');
       });
+      Get.updateLocale(Locale(GlobalData.instance.locale));
+      S.load(Locale(GlobalData.instance.locale));
       emit(state.copyWith(user: newUser));
     } catch (e) {
       logger.e('❌❌ ERROR : Save new user to firebase - $e');

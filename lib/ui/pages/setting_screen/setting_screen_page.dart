@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/configs/app_configs.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/global/global_data.dart';
 import 'package:tasky/ui/widgets/appbar/app_bar_with_back_icon_widget.dart';
 
 class SettingScreenPage extends StatelessWidget {
@@ -44,20 +44,10 @@ class _SettingScreenChildPageState extends State<SettingScreenChildPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        Get.back(result: needReload);
-        return false;
-      },
-      child: Scaffold(
-        appBar: AppBarWithBackIconWidget(
-          onTap: () {
-            Get.back(result: needReload);
-          },
-        ),
-        body: SafeArea(
-          child: _buildBodyWidget(),
-        ),
+    return Scaffold(
+      appBar: const AppBarWithBackIconWidget(),
+      body: SafeArea(
+        child: _buildBodyWidget(),
       ),
     );
   }
@@ -87,29 +77,25 @@ class _SettingScreenChildPageState extends State<SettingScreenChildPage> {
   }
 
   Widget buildDropDownButton() {
-    return BlocBuilder<AppCubit, AppState>(
-      builder: (context, state) {
-        return DropdownButton<String>(
-          value: state.locale.languageCode,
-          underline: Container(
-            height: 1.h,
-            color: AppColors.primary,
-          ),
-          onChanged: (value) async {
-            needReload = true;
-            await _cubit.setLocale(locale: value ?? '');
-          },
-          items: AppConfigs.localList.map<DropdownMenuItem<String>>((value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value,
-                style: AppTextStyle.blackO40S14W400,
-              ),
-            );
-          }).toList(),
-        );
+    return DropdownButton<String>(
+      value: GlobalData.instance.locale,
+      underline: Container(
+        height: 1.h,
+        color: AppColors.primary,
+      ),
+      onChanged: (value) async {
+        needReload = true;
+        await _cubit.setLocale(locale: value ?? '');
       },
+      items: AppConfigs.localList.map<DropdownMenuItem<String>>((value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(
+            value,
+            style: AppTextStyle.blackO40S14W400,
+          ),
+        );
+      }).toList(),
     );
   }
 

@@ -182,11 +182,8 @@ class _HomeScreenDrawerState extends State<HomeScreenDrawer> {
           needReload = data;
         }
       }),
-      Tuple3(S.current.app_settings, AppVectors.icSettings, () async {
-        final data = await Get.toNamed(RouteConfig.settingScreen);
-        if (data ?? false) {
-          needReload = data;
-        }
+      Tuple3(S.current.app_settings, AppVectors.icSettings, () {
+        Get.toNamed(RouteConfig.settingScreen);
       }),
       Tuple3(S.current.logout, AppVectors.icLogout, widget.logout),
     ];

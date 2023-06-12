@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/configs/app_configs.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/global/global_data.dart';
 
 import 'blocs/app_cubit.dart';
 import 'common/app_themes.dart';
@@ -21,16 +22,32 @@ class MyApp extends StatefulWidget {
   }
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // user returned to our app
+      // here will use to fix changing device language make app locale change
+      final currentLanguage = GlobalData.instance.locale;
+      S.load(Locale(currentLanguage));
+    } else if (state == AppLifecycleState.inactive) {
+    } else if (state == AppLifecycleState.paused) {}
+  }
+
+  @override
+  void didChangeLocales(List<Locale>? locales) {}
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +85,7 @@ class _MyAppState extends State<MyApp> {
                     GlobalCupertinoLocalizations.delegate,
                     S.delegate,
                   ],
-                  locale: state.locale,
+                  locale: Locale(GlobalData.instance.locale),
                   supportedLocales: S.delegate.supportedLocales,
                   debugShowCheckedModeBanner: false,
                 ),
