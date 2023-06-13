@@ -196,7 +196,8 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
       }
 
       final NotificationHelper notification = NotificationHelper();
-      await notification.cancelNotification(initialTask.notificationId ?? 1);
+      await notification
+          .cancelNotificationsById(initialTask.notificationId ?? 1);
       final DateTime notiDateTime = AppDateUtils.combineTimeOfDayWithDateTime(
         task.dateFromString ?? DateTime.now(),
         task.startFromString ?? TimeOfDay.now(),
@@ -286,7 +287,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
               ?.notificationId ??
           1;
       final NotificationHelper notification = NotificationHelper();
-      await notification.cancelNotification(idNoti);
+      await notification.cancelNotificationsById(idNoti);
     } on FirebaseAuthException catch (e) {
       AppSnackbar.showError(title: 'Firebase', message: e.message);
     }
@@ -333,7 +334,6 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
     while (listIdNotification.contains(randomNumber)) {
       randomNumber = min + random.nextInt(max - min);
     }
-    print(listIdNotification);
 
     return randomNumber;
   }

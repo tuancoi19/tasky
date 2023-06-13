@@ -83,4 +83,15 @@ class NotificationHelper {
     await flutterLocalNotificationsPlugin.cancel(id, tag: 'notification');
     log('cancel noti scucces');
   }
+
+  Future<void> cancelNotificationsById(int id) async {
+    var appNotifications =
+        await flutterLocalNotificationsPlugin.pendingNotificationRequests();
+
+    for (var notification in appNotifications) {
+      if (notification.id == id) {
+        await flutterLocalNotificationsPlugin.cancel(notification.id);
+      }
+    }
+  }
 }
