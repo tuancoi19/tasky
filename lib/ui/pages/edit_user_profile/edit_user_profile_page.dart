@@ -136,7 +136,7 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
                     },
                   ),
                   SizedBox(height: 40.h),
-                  Flexible(
+                  Expanded(
                     child: buildInfoColumn(state.autoValidateMode),
                   ),
                 ],
@@ -235,13 +235,13 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
           ),
           child: Column(
             children: [
-              SizedBox(height: 32.h),
               AppInput(
                 textEditingController: usernameTextController,
                 color: AppColors.backgroundTextFieldColor,
                 borderRadius: 10,
-                labelText: S.current.username,
+                labelText: S.current.display_name,
                 readOnly: !_cubit.state.isEditProfile,
+                hintText: S.current.enter_your_display_name,
                 textFieldFocusedBorder: Colors.transparent,
                 onChanged: (value) {
                   _cubit.changeUserName(userName: value);
@@ -257,28 +257,30 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
                 textFieldFocusedBorder: Colors.transparent,
               ),
               SizedBox(height: 32.h),
-              AppPasswordInput(
-                obscureTextController: obscurePasswordController,
-                textEditingController: passwordTextController,
-                color: AppColors.backgroundTextFieldColor,
-                borderRadius: 10,
-                autoTrim: true,
-                autoValidateMode: autoValidateMode,
-                labelText: S.current.password,
-                hintText: S.current.enter_your_password,
-                onChanged: (value) {
-                  _cubit.changePassword(password: value);
-                },
-                validator: (password) {
-                  return Utils.currentPasswordValidator(password ?? '');
-                },
-              ),
-              SizedBox(height: 32.h),
               BlocBuilder<EditUserProfileCubit, EditUserProfileState>(
                 builder: (context, state) {
                   if (state.isEditProfile) {
                     return Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
+                        AppPasswordInput(
+                          obscureTextController: obscurePasswordController,
+                          textEditingController: passwordTextController,
+                          color: AppColors.backgroundTextFieldColor,
+                          borderRadius: 10,
+                          autoTrim: true,
+                          autoValidateMode: autoValidateMode,
+                          labelText: S.current.password,
+                          hintText: S.current.enter_your_password,
+                          onChanged: (value) {
+                            _cubit.changePassword(password: value);
+                          },
+                          validator: (password) {
+                            return Utils.currentPasswordValidator(
+                                password ?? '');
+                          },
+                        ),
+                        SizedBox(height: 20.h),
                         AppButton(
                           height: 56.h,
                           cornerRadius: 10,
@@ -289,7 +291,7 @@ class _EditUserProfileChildPageState extends State<EditUserProfileChildPage> {
                             _save();
                           },
                         ),
-                        const SizedBox(height: 20),
+                         SizedBox(height: 20.h),
                         AppButton(
                           height: 56.h,
                           cornerRadius: 10,

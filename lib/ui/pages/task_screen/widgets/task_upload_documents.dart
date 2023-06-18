@@ -137,7 +137,9 @@ class TaskUploadDocuments extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    '${splitDocumentName(document).last.toUpperCase()} file',
+                    S.current.type_file(
+                      splitDocumentName(document).last.toUpperCase(),
+                    ),
                     style: AppTextStyle.blackO50S13W400,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

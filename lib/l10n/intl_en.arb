@@ -148,5 +148,15 @@
   "success": "Success!",
   "cropper": "Cropper",
   "the_minimum_duration_must_be_greater_than_or_equal_to": "The minimum duration must be greater than or equal to 5 minutes",
-  "language": "Language"
+  "language": "Language",
+  "day_view": "Day View",
+  "week_view": "Week View",
+  "month_view": "Month View",
+  "schedule": "Schedule",
+  "work_week": "Work Week",
+  "timeline_day": "Timeline Day",
+  "timeline_week": "Timeline Week",
+  "timeline_work_week": "Timeline Work Week",
+  "timeline_month": "Timeline Month",
+  "type_file": "{type} file"
 }

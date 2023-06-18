@@ -116,8 +116,8 @@ class _SignInChildPageState extends State<SignInChildPage> {
               children: [
                 AppInput(
                   textEditingController: userNameTextController,
-                  labelText: S.current.username,
-                  hintText: S.current.enter_your_username,
+                  labelText: S.current.display_name,
+                  hintText: S.current.enter_your_display_name,
                   borderRadius: 10,
                   autoTrim: true,
                   autoValidateMode: state.autoValidateMode,

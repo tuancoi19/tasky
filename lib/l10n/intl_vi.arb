@@ -148,5 +148,15 @@
   "success": "Thành công!",
   "cropper": "Cắt ảnh",
   "the_minimum_duration_must_be_greater_than_or_equal_to": "Khoảng thời gian phải lớn hơn 5 phút",
-  "language": "Ngôn ngữ"
+  "language": "Ngôn ngữ",
+  "day_view": "Xem theo ngày",
+  "week_view": "Xem theo tuần",
+  "month_view": "Xem theo tháng",
+  "schedule": "Lịch trình",
+  "work_week": "Tuần làm việc",
+  "timeline_day": "Bảng thời gian ngày",
+  "timeline_week": "Bảng thời gian tuần",
+  "timeline_work_week": "Bảng thời gian tuần làm việc",
+  "timeline_month": "Bảng thời gian tháng",
+  "type_file": "Tệp {type}"
 }
