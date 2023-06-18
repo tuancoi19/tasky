@@ -204,8 +204,8 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
       );
 
       notification.showNotification(
-        task.title ?? ' ',
-        task.note ?? ' ',
+        getTitleOfNotification(),
+        state.title ?? ' ',
         notiDateTime,
         task.notificationId ?? 1,
       );
@@ -254,8 +254,8 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
       );
 
       createNotification.showNotification(
+        getTitleOfNotification(),
         state.title ?? ' ',
-        state.note ?? ' ',
         notiDateTime,
         notificationId,
       );
@@ -269,16 +269,21 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
     emit(state.copyWith(isLoading: false));
   }
 
+  String getTitleOfNotification() {
+    final titleOfNotification =
+        '${DateTimeUtils.convertTimeOfDayToString(state.startTime ?? TimeOfDay.now())} - ${DateTimeUtils.convertTimeOfDayToString(state.endTime ?? TimeOfDay.now())}';
+    return titleOfNotification;
+  }
+
   Future<void> deleteTaskOnFirebase(String id) async {
     emit(state.copyWith(isLoading: true));
     try {
-      print(GlobalData.instance.tasksList);
       final idNoti = GlobalData.instance.tasksList
               .firstWhereOrNull((element) => element.id == id)
               ?.notificationId ??
           1;
       final NotificationHelper notification = NotificationHelper();
-      print('id cancle:  $idNoti');
+
       await notification.cancelNotificationsById(idNoti);
       await FirebaseFirestore.instance
           .collection('users')
