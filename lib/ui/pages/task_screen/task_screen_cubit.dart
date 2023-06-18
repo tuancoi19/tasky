@@ -222,6 +222,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
 
   Future<void> addTaskToFirebase() async {
     emit(state.copyWith(isLoading: true));
+    final notificationId = generateUniqueNumber();
     try {
       final TaskEntity task = TaskEntity(
         title: state.title?.trim() ?? '',
@@ -235,7 +236,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
         end: DateTimeUtils.convertTimeOfDayToString(
             state.endTime ?? TimeOfDay.now()),
         categoryId: state.category?.id,
-        notificationId: generateUniqueNumber(),
+        notificationId: notificationId,
       );
 
       await FirebaseFirestore.instance
@@ -256,7 +257,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
         state.title ?? ' ',
         state.note ?? ' ',
         notiDateTime,
-        GlobalData.instance.tasksList.length,
+        notificationId,
       );
       AppSnackbar.showSuccess(
         title: S.current.task,
@@ -271,6 +272,14 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
   Future<void> deleteTaskOnFirebase(String id) async {
     emit(state.copyWith(isLoading: true));
     try {
+      print(GlobalData.instance.tasksList);
+      final idNoti = GlobalData.instance.tasksList
+              .firstWhereOrNull((element) => element.id == id)
+              ?.notificationId ??
+          1;
+      final NotificationHelper notification = NotificationHelper();
+      print('id cancle:  $idNoti');
+      await notification.cancelNotificationsById(idNoti);
       await FirebaseFirestore.instance
           .collection('users')
           .doc(GlobalData.instance.userID)
@@ -282,12 +291,6 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
         title: S.current.task,
         message: S.current.deleted_successfully,
       );
-      final idNoti = GlobalData.instance.tasksList
-              .firstWhereOrNull((element) => element.id == id)
-              ?.notificationId ??
-          1;
-      final NotificationHelper notification = NotificationHelper();
-      await notification.cancelNotificationsById(idNoti);
     } on FirebaseAuthException catch (e) {
       AppSnackbar.showError(title: 'Firebase', message: e.message);
     }
@@ -326,8 +329,8 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
 
   int generateUniqueNumber() {
     Random random = Random();
-    int min = 1000;
-    int max = 9999;
+    int min = 0;
+    int max = 100;
     int randomNumber = min + random.nextInt(max - min);
     final listIdNotification =
         GlobalData.instance.tasksList.map((e) => e.notificationId).toList();
