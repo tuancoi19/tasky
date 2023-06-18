@@ -351,9 +351,15 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<void> signOut() async {
-    await _firebaseAuth.signOut().then(
-          (value) => Get.offAllNamed(RouteConfig.splash),
-        );
+    AppDialog.showConfirmDialog(
+      onConfirm: () async {
+        await _firebaseAuth.signOut().then(
+              (value) => Get.offAllNamed(RouteConfig.splash),
+            );
+      },
+      title: S.current.logout,
+      message: S.current.logout_confirm_message,
+    );
   }
 
   void fetchProfile() {

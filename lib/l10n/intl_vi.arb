@@ -158,5 +158,6 @@
   "timeline_week": "Bảng thời gian tuần",
   "timeline_work_week": "Bảng thời gian tuần làm việc",
   "timeline_month": "Bảng thời gian tháng",
-  "type_file": "Tệp {type}"
+  "type_file": "Tệp {type}",
+  "logout_confirm_message": "Bạn có chắc chắn muốn đăng xuất?"
 }

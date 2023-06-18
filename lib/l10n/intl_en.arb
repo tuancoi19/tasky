@@ -158,5 +158,6 @@
   "timeline_week": "Timeline Week",
   "timeline_work_week": "Timeline Work Week",
   "timeline_month": "Timeline Month",
-  "type_file": "{type} file"
+  "type_file": "{type} file",
+  "logout_confirm_message": "Are you sure you want to log out?"
 }
