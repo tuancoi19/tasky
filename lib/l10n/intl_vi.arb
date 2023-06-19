@@ -46,7 +46,7 @@
   "message_please_enter_password_confirmation": "Nhập lại mật khẩu của bạn.",
   "passwords_are_not_the_same": "Mật khẩu mới và mật khẩu xác nhận không trùng nhau.",
   "forgot_password_title": "Quên Mật khẩu",
-  "forgot_password_description_1": "Nhập tên đăng nhâp hoặc email của bạn chúng tôi sẽ gửi mã xác nhận 5 chữ số",
+  "forgot_password_description_1": "Nhập email của bạn chúng tôi sẽ gửi Thư Đặt lại mật khẩu",
   "forgot_password_description_2": "Nhập mã xác nhận để xác thực tài khoản của bạn",
   "enter_your_code": "Nhập mã của bạn",
   "verification": "Xác thực",
