@@ -46,7 +46,7 @@
   "message_please_enter_password_confirmation": "Please enter the password confirmation.",
   "passwords_are_not_the_same": "Password confirmation and password input do not match.",
   "forgot_password_title": "Forgot Password",
-  "forgot_password_description_1": "Enter your username or email we will send 5 digits verification code",
+  "forgot_password_description_1": "Enter your email we will send you a Reset email",
   "forgot_password_description_2": "Enter your verification code for authenticate your account",
   "enter_your_code": "Enter your code",
   "verification": "Verification",

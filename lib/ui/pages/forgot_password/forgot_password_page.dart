@@ -104,8 +104,8 @@ class _ForgotPasswordChildPageState extends State<ForgotPasswordChildPage> {
         borderRadius: 10,
         autoTrim: true,
         autoValidateMode: autoValidateMode,
-        labelText: S.current.username_or_email,
-        hintText: S.current.enter_your_username_or_email,
+        labelText: S.current.email,
+        hintText: S.current.enter_your_email,
         onChanged: (value) {
           _cubit.changEmail(email: value);
         },
