@@ -96,15 +96,23 @@ dev_dependencies:
   retrofit_generator: ^6.0.0+1
   json_serializable:
   flutter_lints: ^2.0.1
-  flutter_launcher_icons: ^0.12.0
+  flutter_launcher_icons: ^0.13.1
   coverage: ^1.6.3
   mocktail: ^0.3.0
 
-#flutter_icons:
-#  android: "ic_launcher"
-#  ios: true
-#  image_path: "assets/images/launcher_icon.png"
-#  remove_alpha_ios: true
+flutter_launcher_icons:
+  android: "ic_launcher"
+  ios: true
+  image_path: "assets/images/ic_launcher.png"
+  web:
+    generate: true
+    image_path: "assets/images/ic_launcher.png"
+  windows:
+    generate: true
+    image_path: "assets/images/ic_launcher.png"
+  macos:
+    generate: true
+    image_path: "assets/images/ic_launcher.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
