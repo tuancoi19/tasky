@@ -43,7 +43,7 @@ dependencies:
   tuple: ^2.0.1
   device_info_plus: ^8.2.0
   path: ^1.8.2
-  open_file: ^3.3.1
+  open_file: ^3.3.2
 
   #Store
   flutter_secure_storage: ^8.0.0
@@ -57,7 +57,6 @@ dependencies:
   url_launcher: ^6.1.11
 
   #Custom UI
-  flutter_datetime_picker: ^1.5.1
   shimmer: ^2.0.0
   smooth_page_indicator: ^1.0.1
   flutter_screenutil: ^5.7.0
@@ -78,7 +77,6 @@ dependencies:
   firebase_storage: ^11.2.2
 
   #freezed
-  cloud_firestore_platform_interface: ^5.14.1
   google_sign_in: ^6.1.2
   image_cropper: ^4.0.1
 

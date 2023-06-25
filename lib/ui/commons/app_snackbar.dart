@@ -38,12 +38,11 @@ class AppSnackbar {
 
   static void showSuccess({String? title, String? message}) {
     Get.snackbar(
-      title ?? "Info",
+      title ?? "Success",
       message ?? "Empty message",
       backgroundColor: Colors.green,
       colorText: Colors.white,
       margin: const EdgeInsets.only(top: 32, left: 12, right: 12).r,
-      duration: const Duration(seconds: 5),
     );
   }
 }

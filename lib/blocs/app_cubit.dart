@@ -59,7 +59,7 @@ class AppCubit extends Cubit<AppState> {
           final data = doc.data() as Map<String, dynamic>;
           return UserEntity.fromJson(data);
         },
-        onError: (e) => print("Error getting document: $e"),
+        onError: (e) => logger.log("Error getting document: $e"),
       );
       if (newUser != null) {
         final token = await credential.user?.getIdToken();
@@ -106,7 +106,7 @@ class AppCubit extends Cubit<AppState> {
         ),
       );
     } catch (e) {
-      print(e);
+      logger.log(e);
     }
     return null;
   }
@@ -140,7 +140,7 @@ class AppCubit extends Cubit<AppState> {
           return UserEntity.fromJson(data);
         }
       },
-      onError: (e) => print("Error getting document: $e"),
+      onError: (e) => logger.log("Error getting document: $e"),
     );
     if (newUser != null) {
       newUser.userId = _firebaseAuth.currentUser?.uid;
@@ -164,14 +164,14 @@ class AppCubit extends Cubit<AppState> {
         password: password,
       );
       if (credential.user != null) {
-        print('❤️❤️❤️ - TRUE');
+        logger.log('❤️❤️❤️ - TRUE');
         return true;
       } else {
-        print('❤️❤️❤️ - FALSE');
+        logger.log('❤️❤️❤️ - FALSE');
         return false;
       }
     } on FirebaseAuthException catch (e) {
-      print(e);
+      logger.log(e);
       return false;
     }
   }
@@ -266,7 +266,7 @@ class AppCubit extends Cubit<AppState> {
           final data = doc.data() as Map<String, dynamic>;
           return UserEntity.fromJson(data);
         },
-        onError: (e) => print("Error getting document: $e"),
+        onError: (e) => logger.log("Error getting document: $e"),
       );
 
       if (user != null) {
@@ -396,7 +396,7 @@ class AppCubit extends Cubit<AppState> {
     try {
       String urlImg = await FileUtils.uploadFile(
           file: file, userID: state.user?.userId ?? '', type: 'image');
-      print('🗳️🗳️🗳️🗳️ $urlImg');
+      logger.log('🗳️🗳️🗳️🗳️ $urlImg');
       await _firebaseAuth.currentUser?.updatePhotoURL(urlImg);
       return urlImg;
     } on FirebaseException catch (e) {
@@ -408,13 +408,13 @@ class AppCubit extends Cubit<AppState> {
   Future<String?> updateUserToFirebase(
       {String? userName, String? pathAvatar}) async {
     try {
-      print('--- ${state.user?.userId}');
+      logger.log('--- ${state.user?.userId}');
       final userRef = userCollection.doc(state.user?.userId ?? '');
       userRef.update({
         "user_name": userName ?? state.user?.userName,
         "avatar_url": pathAvatar ?? state.user?.avatarUrl
-      }).then((value) => print("User successfully updated!"),
-          onError: (e) => print("Error updating user $e"));
+      }).then((value) => logger.log("User successfully updated!"),
+          onError: (e) => logger.log("Error updating user $e"));
 
       UserEntity newUser = UserEntity(
         userName: userName ?? state.user?.userName,

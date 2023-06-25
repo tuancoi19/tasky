@@ -14,6 +14,7 @@ import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/ui/commons/app_dialog.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
+import 'package:tasky/utils/logger.dart';
 
 part 'edit_user_profile_state.dart';
 
@@ -88,13 +89,13 @@ class EditUserProfileCubit extends Cubit<EditUserProfileState> {
       urlImg =
           await appCubit.uploadImgToFirebase(File(state.imageCrop?.path ?? ''));
       if (urlImg == null) {
-        print('ERROR UPLOAD FILE URL : $urlImg');
+        logger.log('ERROR UPLOAD FILE URL : $urlImg');
         return;
       }
     }
     bool checkPass = await appCubit.checkPassword(state.password ?? '');
     if (checkPass) {
-      print('❤️❤️❤️ - CHECK TRUE');
+      logger.log('❤️❤️❤️ - CHECK TRUE');
 
       await appCubit.updateUserToFirebase(
         userName: state.userName,

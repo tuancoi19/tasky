@@ -70,4 +70,12 @@ class DateTimeUtils {
 
     return endDateTime.difference(startDateTime).inMinutes < 5;
   }
+
+  static TimeOfDay placeHolderTime(int minuteAhead) {
+    final time = TimeOfDay.now();
+    return TimeOfDay(
+      hour: time.hour,
+      minute: time.minute + minuteAhead,
+    );
+  }
 }

@@ -35,8 +35,11 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
     fetchCategoryList();
     changeDate(date: arguments?.task?.dateFromString ?? DateTime.now());
     changeStartTime(
-        startTime: arguments?.task?.startFromString ?? TimeOfDay.now());
-    changeEndTime(endTime: arguments?.task?.endFromString ?? TimeOfDay.now());
+        startTime: arguments?.task?.startFromString ??
+            DateTimeUtils.placeHolderTime(1));
+    changeEndTime(
+        endTime:
+            arguments?.task?.endFromString ?? DateTimeUtils.placeHolderTime(6));
     changeNote(note: arguments?.task?.note ?? '');
     changeTitle(title: arguments?.task?.title ?? '');
 

@@ -156,7 +156,6 @@ class _AppImagePickerState extends State<AppImagePicker> {
                       if (result == PermissionStatus.permanentlyDenied) {
                         await openAppSettings();
                       } else {
-                        Get.back();
                         await getImageFromGallery();
                       }
                     }
