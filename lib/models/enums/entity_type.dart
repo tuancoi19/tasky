@@ -1,0 +1,1 @@
+enum EntityType {tasks, categories}

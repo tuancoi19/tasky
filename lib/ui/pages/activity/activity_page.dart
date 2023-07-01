@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:tasky/models/enums/entity_type.dart';
 import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/pages/activity/widgets/activity_app_bar.dart';
@@ -8,6 +9,7 @@ import 'package:tasky/ui/pages/activity/widgets/activity_calendar_view.dart';
 import 'package:tasky/ui/widgets/app_circular_progress_indicator.dart';
 import 'package:tasky/ui/widgets/empty_view_widget.dart';
 import 'package:tasky/ui/widgets/error_view_widget.dart';
+import 'package:tasky/utils/firebase_utils.dart';
 
 import 'activity_cubit.dart';
 
@@ -42,6 +44,14 @@ class _ActivityChildPageState extends State<ActivityChildPage> {
     super.initState();
     _cubit = BlocProvider.of(context);
     _cubit.loadInitialData();
+    FirebaseUtils.listenToFirestoreChanges(
+      onChanged: () async => await _cubit.loadInitialData(),
+      type: EntityType.tasks,
+    );
+    FirebaseUtils.listenToFirestoreChanges(
+      onChanged: () async => await _cubit.loadInitialData(),
+      type: EntityType.categories,
+    );
   }
 
   @override

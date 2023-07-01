@@ -8,6 +8,7 @@ import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/models/enums/entity_type.dart';
 import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/commons/app_dialog.dart';
@@ -22,6 +23,7 @@ import 'package:tasky/ui/pages/home_screen/widgets/today_tasks_title.dart';
 import 'package:tasky/ui/widgets/app_circular_progress_indicator.dart';
 import 'package:tasky/ui/widgets/empty_view_widget.dart';
 import 'package:tasky/ui/widgets/error_view_widget.dart';
+import 'package:tasky/utils/firebase_utils.dart';
 
 import 'home_screen_cubit.dart';
 
@@ -69,6 +71,14 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
     _appCubit = BlocProvider.of(context);
     _cubit.loadInitialData();
     _zoomDrawerController = ZoomDrawerController();
+    FirebaseUtils.listenToFirestoreChanges(
+      onChanged: () async => await _cubit.loadInitialData(),
+      type: EntityType.tasks,
+    );
+    FirebaseUtils.listenToFirestoreChanges(
+      onChanged: () async => await _cubit.loadInitialData(),
+      type: EntityType.categories,
+    );
   }
 
   @override

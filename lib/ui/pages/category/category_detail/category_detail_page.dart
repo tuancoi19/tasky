@@ -15,6 +15,7 @@ import 'package:tasky/ui/widgets/app_tasks_list_view.dart';
 import 'package:tasky/ui/widgets/buttons/home_add_button.dart';
 import 'package:tasky/ui/widgets/empty_view_widget.dart';
 import 'package:tasky/ui/widgets/error_view_widget.dart';
+import 'package:tasky/utils/firebase_utils.dart';
 
 import 'category_detail_cubit.dart';
 
@@ -68,6 +69,19 @@ class _CategoryDetailChildPageState extends State<CategoryDetailChildPage> {
     super.initState();
     _cubit = BlocProvider.of(context);
     _cubit.loadInitialData(widget.arguments.category);
+    FirebaseUtils.listenToDetailCategoryChanges(
+      onChanged: (value) async {
+        await _cubit.loadInitialData(value);
+        _cubit.setNeedReload(needReload: value != widget.arguments.category);
+      },
+      categoryID: widget.arguments.category.id ?? '',
+    );
+    FirebaseUtils.listenToTasksOfCategoryChanges(
+      onChanged: () async {
+          await _cubit.loadInitialData(_cubit.state.category);
+      },
+      categoryID: widget.arguments.category.id ?? '',
+    );
   }
 
   @override
@@ -138,7 +152,7 @@ class _CategoryDetailChildPageState extends State<CategoryDetailChildPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          (state.category?.numberOfTasks ?? 0).toString(),
+                          (state.taskList?.length ?? 0).toString(),
                           style: AppTextStyle.whiteS26Bold,
                         ),
                         SizedBox(height: 20.h),
