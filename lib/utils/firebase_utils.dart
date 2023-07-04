@@ -29,7 +29,7 @@ class FirebaseUtils {
         .where('categoryId', isEqualTo: categoryID)
         .snapshots()
         .listen((snapshot) {
-            onChanged();
+      onChanged();
     });
   }
 

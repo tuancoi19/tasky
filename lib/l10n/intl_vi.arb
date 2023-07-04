@@ -159,5 +159,6 @@
   "timeline_work_week": "Bảng thời gian tuần làm việc",
   "timeline_month": "Bảng thời gian tháng",
   "type_file": "Tệp {type}",
-  "logout_confirm_message": "Bạn có chắc chắn muốn đăng xuất?"
+  "logout_confirm_message": "Bạn có chắc chắn muốn đăng xuất?",
+  "my_categories": "Danh mục của tôi"
 }

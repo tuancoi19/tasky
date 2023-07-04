@@ -13,13 +13,12 @@ import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/commons/app_dialog.dart';
 import 'package:tasky/ui/pages/category/add_category/add_category_page.dart';
-import 'package:tasky/ui/pages/home_screen/widgets/category_title.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/hello_text.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/home_app_bar.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/category_list_view.dart';
 import 'package:tasky/ui/widgets/app_tasks_list_view.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/home_screen_drawer.dart';
-import 'package:tasky/ui/pages/home_screen/widgets/today_tasks_title.dart';
+import 'package:tasky/ui/pages/home_screen/widgets/home_screen_title.dart';
 import 'package:tasky/ui/widgets/app_circular_progress_indicator.dart';
 import 'package:tasky/ui/widgets/empty_view_widget.dart';
 import 'package:tasky/ui/widgets/error_view_widget.dart';
@@ -150,7 +149,7 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24).r,
                   child: (state.categoriesList ?? []).length < 6
-                      ? CategoryTitle(
+                      ? HomeScreenTitle(
                           onTap: () async {
                             await AppDialog.showCustomDialog(
                               content: AddCategoryPage(
@@ -162,6 +161,7 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
                               ),
                             );
                           },
+                          title: S.current.my_categories,
                         )
                       : Text(
                           S.current.categories,
@@ -216,15 +216,17 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
                 },
               ),
             ),
+            SizedBox(height: 24.h),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24).r,
-              child: TodayTasksTitle(
+              child: HomeScreenTitle(
                 onTap: () async {
                   final needReload = await Get.toNamed(RouteConfig.taskScreen);
                   if (needReload ?? false) {
                     _cubit.loadInitialData();
                   }
                 },
+                title: S.current.today_tasks,
               ),
             ),
             SizedBox(height: 12.h),

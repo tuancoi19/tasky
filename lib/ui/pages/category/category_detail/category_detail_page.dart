@@ -78,7 +78,7 @@ class _CategoryDetailChildPageState extends State<CategoryDetailChildPage> {
     );
     FirebaseUtils.listenToTasksOfCategoryChanges(
       onChanged: () async {
-          await _cubit.loadInitialData(_cubit.state.category);
+        await _cubit.loadInitialData(_cubit.state.category);
       },
       categoryID: widget.arguments.category.id ?? '',
     );

@@ -1,1 +1,1 @@
-enum EntityType {tasks, categories}
+enum EntityType { tasks, categories }

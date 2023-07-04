@@ -20,7 +20,10 @@ class AddCategoryCubit extends Cubit<AddCategoryState> {
 
   Future<void> loadInitialData(CategoryEntity? category) async {
     if (category != null) {
-      emit(state.copyWith(name: category.title));
+      emit(state.copyWith(
+        name: category.title,
+        selectedColor: category.color,
+      ));
     }
   }
 
