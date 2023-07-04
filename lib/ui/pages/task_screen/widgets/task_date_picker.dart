@@ -27,7 +27,10 @@ class TaskDatePicker extends StatelessWidget {
           : () async {
               final result = await AppDateTimePicker.selectDate(
                 context,
-                initialDate: hintDate,
+                initialDate:
+                    (hintDate ?? DateTime.now()).isBefore(DateTime.now())
+                        ? DateTime.now()
+                        : hintDate,
                 themeColor: themeColor,
               );
               if (result != null) {

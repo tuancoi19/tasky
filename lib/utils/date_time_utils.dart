@@ -56,9 +56,13 @@ class DateTimeUtils {
   }
 
   static bool isOlderDate(DateTime date) {
-    DateTime now = DateTime.now();
+    DateTime now = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+    );
 
-    return date.day < now.day && date.month < now.month && date.year < now.year;
+    return date.isBefore(now);
   }
 
   static bool checkTimeValidity(TimeOfDay startTime, TimeOfDay endTime) {

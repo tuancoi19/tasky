@@ -138,7 +138,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
       );
       return;
     } else if (DateTimeUtils.isSameDate(state.date ?? DateTime.now()) &&
-        !(DateTimeUtils.isTimeOfDayValid(state.startTime ?? TimeOfDay.now()) ||
+        !(DateTimeUtils.isTimeOfDayValid(state.startTime ?? TimeOfDay.now()) &&
             DateTimeUtils.isTimeOfDayValid(state.endTime ?? TimeOfDay.now()))) {
       AppSnackbar.showError(
         title: S.current.start_time_end_time,
