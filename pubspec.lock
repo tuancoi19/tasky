@@ -173,10 +173,10 @@ packages:
     dependency: transitive
     description:
       name: cli_util
-      sha256: "66f86e916d285c1a93d3b79587d94bd71984a66aac4ff74e524cfa7877f1395c"
+      sha256: b8db3080e59b2503ca9e7922c3df2072cf13992354d5e944074ffa836fba43b7
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.5"
+    version: "0.4.0"
   clock:
     dependency: transitive
     description:
@@ -194,7 +194,7 @@ packages:
     source: hosted
     version: "4.7.1"
   cloud_firestore_platform_interface:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: cloud_firestore_platform_interface
       sha256: f6900ac874e326eede700483cc33e034f64bfb98b0cbcdc6c1a5133146de52f9
@@ -454,14 +454,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.0"
-  flutter_datetime_picker:
-    dependency: "direct main"
-    description:
-      name: flutter_datetime_picker
-      sha256: "8e695c63c769350e541951227c2775190ec73ceda774a315b1dc9a99d5facfe5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.5.1"
   flutter_image_compress:
     dependency: "direct main"
     description:
@@ -474,10 +466,10 @@ packages:
     dependency: "direct dev"
     description:
       name: flutter_launcher_icons
-      sha256: "02dcaf49d405f652b7160e882bacfc02cb497041bb2eab2a49b1c393cf9aac12"
+      sha256: "526faf84284b86a4cb36d20a5e45147747b7563d921373d4ee0559c54fcdbcea"
       url: "https://pub.dev"
     source: hosted
-    version: "0.12.0"
+    version: "0.13.1"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -937,10 +929,10 @@ packages:
     dependency: "direct main"
     description:
       name: open_file
-      sha256: c85fbdc6ea2f44adcd999a74821a1436e620f9dfc167cda1ad0c9fb243616257
+      sha256: a5a32d44acb7c899987d0999e1e3cbb0a0f1adebbf41ac813ec6d2d8faa0af20
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.1"
+    version: "3.3.2"
   package_config:
     dependency: transitive
     description:
