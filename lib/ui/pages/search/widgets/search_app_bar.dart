@@ -26,68 +26,55 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16).r,
         child: Row(
           children: [
-            Hero(
-              tag: 'button',
-              child: Material(
-                borderRadius: BorderRadius.circular(10).r,
-                child: InkWell(
-                  onTap: () {
-                    Get.back();
-                  },
-                  child: Container(
-                    width: 48.h,
-                    height: 48.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10).r,
-                      color: AppColors.backgroundBackButtonColor,
-                    ),
-                    child: Center(
-                      child: SvgPicture.asset(
-                        AppVectors.icArrowLeft,
-                        width: 20.w,
-                        height: 16.h,
-                      ),
-                    ),
+            InkWell(
+              onTap: () {
+                Get.back();
+              },
+              child: Container(
+                width: 48.h,
+                height: 48.h,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10).r,
+                  color: AppColors.backgroundBackButtonColor,
+                ),
+                child: Center(
+                  child: SvgPicture.asset(
+                    AppVectors.icArrowLeft,
+                    width: 20.w,
+                    height: 16.h,
                   ),
                 ),
               ),
             ),
             SizedBox(width: 16.w),
             Expanded(
-              child: Hero(
-                tag: 'searchBar',
-                child: Material(
+              child: Container(
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10).r,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10).r,
-                      color: AppColors.backgroundBackButtonColor,
-                    ),
-                    child: TextField(
-                      autofocus: true,
-                      controller: controller,
-                      onChanged: onChanged,
-                      maxLines: 1,
-                      style: AppTextStyle.blackO40S13W400,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding:
-                            const EdgeInsets.symmetric(vertical: 16).r,
-                        hintText: S.current.search_your_task,
-                        hintStyle: AppTextStyle.blackO40S13W400,
-                        prefixIconColor: AppColors.textBlack.withOpacity(0.4),
-                        prefixIcon: Padding(
-                          padding: const EdgeInsets.symmetric(
-                                  vertical: 16, horizontal: 24)
-                              .r,
-                          child: Opacity(
-                            opacity: 0.4,
-                            child: SvgPicture.asset(
-                              AppVectors.icSearch,
-                              width: 20.w,
-                              height: 20.h,
-                            ),
-                          ),
+                  color: AppColors.backgroundBackButtonColor,
+                ),
+                child: TextField(
+                  autofocus: true,
+                  controller: controller,
+                  onChanged: onChanged,
+                  maxLines: 1,
+                  style: AppTextStyle.blackO40S13W400,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 16).r,
+                    hintText: S.current.search_your_task,
+                    hintStyle: AppTextStyle.blackO40S13W400,
+                    prefixIconColor: AppColors.textBlack.withOpacity(0.4),
+                    prefixIcon: Padding(
+                      padding: const EdgeInsets.symmetric(
+                              vertical: 16, horizontal: 24)
+                          .r,
+                      child: Opacity(
+                        opacity: 0.4,
+                        child: SvgPicture.asset(
+                          AppVectors.icSearch,
+                          width: 20.w,
+                          height: 20.h,
                         ),
                       ),
                     ),

@@ -18,42 +18,35 @@ class HomeSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: 'searchBar',
-      child: Material(
+    return Container(
+      decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10).r,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10).r,
-            color: AppColors.backgroundBackButtonColor,
-          ),
-          child: TextField(
-            maxLines: 1,
-            readOnly: true,
-            onTap: () async {
-              final needReload = await Get.toNamed(RouteConfig.search);
-              if (needReload ?? false) {
-                onDone.call();
-              }
-            },
-            style: AppTextStyle.blackO40S13W400,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(vertical: 16).r,
-              hintText: S.current.search_your_task,
-              hintStyle: AppTextStyle.blackO40S13W400,
-              prefixIconColor: AppColors.textBlack.withOpacity(0.4),
-              prefixIcon: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 16, horizontal: 24).r,
-                child: Opacity(
-                  opacity: 0.4,
-                  child: SvgPicture.asset(
-                    AppVectors.icSearch,
-                    width: 20.w,
-                    height: 20.h,
-                  ),
-                ),
+        color: AppColors.backgroundBackButtonColor,
+      ),
+      child: TextField(
+        maxLines: 1,
+        readOnly: true,
+        onTap: () async {
+          final needReload = await Get.toNamed(RouteConfig.search);
+          if (needReload ?? false) {
+            onDone.call();
+          }
+        },
+        style: AppTextStyle.blackO40S13W400,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(vertical: 16).r,
+          hintText: S.current.search_your_task,
+          hintStyle: AppTextStyle.blackO40S13W400,
+          prefixIconColor: AppColors.textBlack.withOpacity(0.4),
+          prefixIcon: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24).r,
+            child: Opacity(
+              opacity: 0.4,
+              child: SvgPicture.asset(
+                AppVectors.icSearch,
+                width: 20.w,
+                height: 20.h,
               ),
             ),
           ),

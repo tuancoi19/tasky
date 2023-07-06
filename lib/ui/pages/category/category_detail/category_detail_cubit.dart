@@ -37,19 +37,19 @@ class CategoryDetailCubit extends Cubit<CategoryDetailState> {
           return result;
         }).toList();
       });
-      if (result.isNotEmpty) {
-        result.sort(
-          (a, b) {
-            int dateComparison = (a.date ?? '').compareTo((b.date ?? ''));
-            if (dateComparison != 0) {
-              return dateComparison;
-            }
-            return (a.start ?? '').compareTo((b.start ?? ''));
-          },
-        );
-        emit(state.copyWith(taskList: result));
-      }
-      emit(state.copyWith(loadDataStatus: LoadStatus.success));
+      result.sort(
+        (a, b) {
+          int dateComparison = (a.date ?? '').compareTo((b.date ?? ''));
+          if (dateComparison != 0) {
+            return dateComparison;
+          }
+          return (a.start ?? '').compareTo((b.start ?? ''));
+        },
+      );
+      emit(state.copyWith(
+        taskList: result,
+        loadDataStatus: LoadStatus.success,
+      ));
     } on FirebaseAuthException catch (e) {
       emit(state.copyWith(loadDataStatus: LoadStatus.failure));
       AppSnackbar.showError(
@@ -89,5 +89,9 @@ class CategoryDetailCubit extends Cubit<CategoryDetailState> {
       AppSnackbar.showError(title: 'Firebase', message: e.message);
     }
     emit(state.copyWith(isLoading: false));
+  }
+
+  void setNeedReload({required bool needReload}) {
+    emit(state.copyWith(needReload: needReload));
   }
 }

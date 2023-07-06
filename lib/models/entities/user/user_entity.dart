@@ -3,30 +3,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'user_entity.g.dart';
 
-//
-// @freezed
-// abstract class AppUser with _$AppUser {
-//   const factory AppUser({
-//     @Default(false) bool isUserLoggedIn,
-//     String? userId,
-//     String? fcmToken,
-//     String? fullName,
-//     String? avatarUrl,
-//     DateTime? loggedInAt,
-//   }) = _AppUser;
-//
-//   factory AppUser.fromJson(Map<String, dynamic> json) =>
-//       _$AppUserFromJson(json);
-//
-//   factory AppUser.mockData() {
-//     return const AppUser(
-//       userId: '12345678',
-//       fullName: "Newwave",
-//       avatarUrl: "https://i.imgur.com/geqAiJG.jpg",
-//     );
-//   }
-// }
-
 class TimestampConverter implements JsonConverter<DateTime, Timestamp> {
   const TimestampConverter();
 
@@ -67,6 +43,9 @@ class UserEntity {
   @TimestampConverter()
   DateTime? createAt;
 
+  @JsonKey()
+  String? locale;
+
   UserEntity({
     this.userId,
     this.fcmToken,
@@ -76,6 +55,7 @@ class UserEntity {
     this.isLoggedIn = false,
     this.email,
     this.createAt,
+    this.locale,
   });
 
   factory UserEntity.fromJson(Map<String, dynamic> json) =>

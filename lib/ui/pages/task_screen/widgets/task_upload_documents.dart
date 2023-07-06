@@ -3,12 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/common/app_vectors.dart';
 import 'package:tasky/configs/app_configs.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/ui/commons/app_bottom_sheet.dart';
+import 'package:tasky/ui/commons/app_dialog.dart';
 import 'package:tasky/ui/pages/task_screen/widgets/task_upload_document_options.dart';
 import 'package:tasky/ui/widgets/app_title_with_add_button.dart';
 import 'package:tasky/utils/file_utils.dart';
@@ -49,7 +51,7 @@ class TaskUploadDocuments extends StatelessWidget {
             ? AppTitleWithAddButton(
                 onTap: () {
                   AppBottomSheet.show(
-                    TaskUploadDocumentOptions(
+                    bottomSheet: TaskUploadDocumentOptions(
                       sendImage: sendImage,
                       sendTextFile: sendTextFile,
                     ),
@@ -135,7 +137,9 @@ class TaskUploadDocuments extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    '${splitDocumentName(document).last.toUpperCase()} file',
+                    S.current.type_file(
+                      splitDocumentName(document).last.toUpperCase(),
+                    ),
                     style: AppTextStyle.blackO50S13W400,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -146,16 +150,24 @@ class TaskUploadDocuments extends StatelessWidget {
             SizedBox(width: 24.w),
             if (allowToEdit)
               InkWell(
-                onTap: () {
-                  final List<String> removedList = [...documentList];
-                  removedList.removeWhere((element) {
-                    final name =
-                        element.startsWith(AppConfigs.firebaseStoragePrefix)
-                            ? FileUtils.getFileNameFromUrl(element)
-                            : FileUtils.getDocumentName(element);
-                    return document == name;
-                  });
-                  onDelete(removedList);
+                onTap: () async {
+                  await AppDialog.showConfirmDialog(
+                    onConfirm: () {
+                      final List<String> removedList = [...documentList];
+                      removedList.removeWhere((element) {
+                        final name =
+                            element.startsWith(AppConfigs.firebaseStoragePrefix)
+                                ? FileUtils.getFileNameFromUrl(element)
+                                : FileUtils.getDocumentName(element);
+                        return document == name;
+                      });
+                      onDelete(removedList);
+                      Get.back();
+                    },
+                    title: S.current.delete_task,
+                    message: S.current.delete_message,
+                    color: buttonColor,
+                  );
                 },
                 child: Icon(
                   Icons.close,

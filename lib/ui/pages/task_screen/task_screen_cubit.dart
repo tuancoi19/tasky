@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -14,9 +15,12 @@ import 'package:tasky/models/entities/task/task_entity.dart';
 import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/ui/commons/app_snackbar.dart';
 import 'package:tasky/ui/pages/home_screen/home_screen_cubit.dart';
+import 'package:tasky/ui/pages/task_screen/task_screen_page.dart';
+import 'package:tasky/utils/app_date_utils.dart';
 import 'package:tasky/utils/date_time_utils.dart';
 import 'package:tasky/utils/file_utils.dart';
 import 'package:tasky/utils/logger.dart';
+import 'package:tasky/utils/notification_helper.dart';
 
 part 'task_screen_state.dart';
 
@@ -27,18 +31,26 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
     required this.homeScreenCubit,
   }) : super(const TaskScreenState());
 
-  void loadInitialData(TaskEntity? task) {
+  void loadInitialData(TaskScreenArguments? arguments) {
     fetchCategoryList();
-    changeDate(date: task?.dateFromString ?? DateTime.now());
-    changeStartTime(startTime: task?.startFromString ?? TimeOfDay.now());
-    changeEndTime(endTime: task?.endFromString ?? TimeOfDay.now());
-    changeNote(note: task?.note ?? '');
-    changeTitle(title: task?.title ?? '');
+    changeDate(date: arguments?.task?.dateFromString ?? DateTime.now());
+    changeStartTime(
+        startTime: arguments?.task?.startFromString ??
+            DateTimeUtils.placeHolderTime(1));
+    changeEndTime(
+        endTime:
+            arguments?.task?.endFromString ?? DateTimeUtils.placeHolderTime(6));
+    changeNote(note: arguments?.task?.note ?? '');
+    changeTitle(title: arguments?.task?.title ?? '');
 
-    if (task != null) {
-      changeCategory(category: task.category!);
-      changeThemeColor(colorCode: task.category!.color!);
-      changeDocumentList(documentList: task.documents!);
+    if (arguments?.task != null) {
+      changeCategory(category: arguments!.task!.category!);
+      changeThemeColor(colorCode: arguments.task!.category!.color!);
+      changeDocumentList(documentList: arguments.task!.documents!);
+    }
+
+    if (arguments?.category != null) {
+      changeCategory(category: arguments!.category!);
     }
   }
 
@@ -124,37 +136,29 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
         title: S.current.date,
         message: S.current.date_has_passed,
       );
+      return;
     } else if (DateTimeUtils.isSameDate(state.date ?? DateTime.now()) &&
-        !(DateTimeUtils.isTimeOfDayValid(state.startTime ?? TimeOfDay.now()) ||
+        !(DateTimeUtils.isTimeOfDayValid(state.startTime ?? TimeOfDay.now()) &&
             DateTimeUtils.isTimeOfDayValid(state.endTime ?? TimeOfDay.now()))) {
       AppSnackbar.showError(
         title: S.current.start_time_end_time,
         message: S.current.this_time_range_has_passed,
       );
+      return;
     } else if (!checkDuration) {
       AppSnackbar.showError(
         title: S.current.start_time_end_time,
         message: S.current.end_time_cannot_be_chosen_earlier_than_start_time,
       );
-    }
-    /* else if (DateTimeUtils.isOverlap(
-      data: TaskDateUtils.filterItemsByDate(
-        items: GlobalData.instance.tasksList,
-        date: state.date ?? DateTime.now(),
-      ),
-      newStartTime: DateTimeUtils.convertTimeOfDayToString(
-        state.startTime ?? TimeOfDay.now(),
-      ),
-      newEndTime: DateTimeUtils.convertTimeOfDayToString(
-        state.endTime ?? TimeOfDay.now(),
-      ),
-    )) {
+      return;
+    } else if (DateTimeUtils.checkTimeValidity(
+        state.startTime!, state.endTime!)) {
       AppSnackbar.showError(
-        title: 'Start time - End time',
-        message: 'There is a task scheduled during this time',
+        title: S.current.start_time_end_time,
+        message:
+            S.current.the_minimum_duration_must_be_greater_than_or_equal_to,
       );
-    } */
-    else if (state.category == null) {
+    } else if (state.category == null) {
       AppSnackbar.showError(
         title: S.current.category,
         message: S.current.please_select_a_category_for_this_task,
@@ -181,6 +185,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
       end: DateTimeUtils.convertTimeOfDayToString(
           state.endTime ?? TimeOfDay.now()),
       categoryId: state.category?.id,
+      notificationId: initialTask.notificationId,
     );
 
     try {
@@ -192,7 +197,22 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
             .doc(initialTask.id)
             .update(task.toJson());
       }
-      Get.back(result: true);
+
+      final NotificationHelper notification = NotificationHelper();
+      await notification
+          .cancelNotificationsById(initialTask.notificationId ?? 1);
+      final DateTime notiDateTime = AppDateUtils.combineTimeOfDayWithDateTime(
+        task.dateFromString ?? DateTime.now(),
+        task.startFromString ?? TimeOfDay.now(),
+      );
+
+      notification.showNotification(
+        getTitleOfNotification(),
+        state.title ?? ' ',
+        notiDateTime,
+        task.notificationId ?? 1,
+      );
+      Get.back(result: true, closeOverlays: true);
       AppSnackbar.showSuccess(
         title: S.current.task,
         message: S.current.updated_successfully,
@@ -205,6 +225,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
 
   Future<void> addTaskToFirebase() async {
     emit(state.copyWith(isLoading: true));
+    final notificationId = generateUniqueNumber();
     try {
       final TaskEntity task = TaskEntity(
         title: state.title?.trim() ?? '',
@@ -218,6 +239,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
         end: DateTimeUtils.convertTimeOfDayToString(
             state.endTime ?? TimeOfDay.now()),
         categoryId: state.category?.id,
+        notificationId: notificationId,
       );
 
       await FirebaseFirestore.instance
@@ -226,8 +248,20 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
           .collection('tasks')
           .add(task.toJson())
           .then((value) async {
-        Get.back(result: true);
+        Get.back(result: true, closeOverlays: true);
       });
+      final NotificationHelper createNotification = NotificationHelper();
+      final DateTime notiDateTime = AppDateUtils.combineTimeOfDayWithDateTime(
+        state.date ?? DateTime.now(),
+        state.startTime ?? TimeOfDay.now(),
+      );
+
+      createNotification.showNotification(
+        getTitleOfNotification(),
+        state.title ?? ' ',
+        notiDateTime,
+        notificationId,
+      );
       AppSnackbar.showSuccess(
         title: S.current.task,
         message: S.current.added_successfully,
@@ -238,9 +272,22 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
     emit(state.copyWith(isLoading: false));
   }
 
+  String getTitleOfNotification() {
+    final titleOfNotification =
+        '${DateTimeUtils.convertTimeOfDayToString(state.startTime ?? TimeOfDay.now())} - ${DateTimeUtils.convertTimeOfDayToString(state.endTime ?? TimeOfDay.now())}';
+    return titleOfNotification;
+  }
+
   Future<void> deleteTaskOnFirebase(String id) async {
     emit(state.copyWith(isLoading: true));
     try {
+      final idNoti = GlobalData.instance.tasksList
+              .firstWhereOrNull((element) => element.id == id)
+              ?.notificationId ??
+          1;
+      final NotificationHelper notification = NotificationHelper();
+
+      await notification.cancelNotificationsById(idNoti);
       await FirebaseFirestore.instance
           .collection('users')
           .doc(GlobalData.instance.userID)
@@ -255,6 +302,7 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
     } on FirebaseAuthException catch (e) {
       AppSnackbar.showError(title: 'Firebase', message: e.message);
     }
+
     emit(state.copyWith(isLoading: false));
   }
 
@@ -285,5 +333,19 @@ class TaskScreenCubit extends Cubit<TaskScreenState> {
       }
     }
     return result;
+  }
+
+  int generateUniqueNumber() {
+    Random random = Random();
+    int min = 0;
+    int max = 100;
+    int randomNumber = min + random.nextInt(max - min);
+    final listIdNotification =
+        GlobalData.instance.tasksList.map((e) => e.notificationId).toList();
+    while (listIdNotification.contains(randomNumber)) {
+      randomNumber = min + random.nextInt(max - min);
+    }
+
+    return randomNumber;
   }
 }

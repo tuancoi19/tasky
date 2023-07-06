@@ -1,10 +1,12 @@
 import 'package:get/get.dart';
+import 'package:tasky/ui/pages/activity/activity_page.dart';
 import 'package:tasky/ui/pages/authentication/authentication_page.dart';
 import 'package:tasky/ui/pages/category/category_detail/category_detail_page.dart';
 import 'package:tasky/ui/pages/home_screen/home_screen_page.dart';
 import 'package:tasky/ui/pages/edit_user_profile/edit_user_profile_page.dart';
 import 'package:tasky/ui/pages/onboarding/onboarding_page.dart';
 import 'package:tasky/ui/pages/search/search_page.dart';
+import 'package:tasky/ui/pages/setting_screen/setting_screen_page.dart';
 import 'package:tasky/ui/pages/splash/splash_page.dart';
 import 'package:tasky/ui/pages/task_screen/task_screen_page.dart';
 import 'package:tasky/ui/pages/welcome/welcome_page.dart';
@@ -22,6 +24,8 @@ class RouteConfig {
   static const String taskScreen = '/task_screen';
   static const String categoryDetail = '/category_detail';
   static const String search = '/search';
+  static const String activity = '/activity';
+  static const String settingScreen = '/setting_screen';
 
   ///Alias ​​mapping page
   static final List<GetPage> getPages = [
@@ -43,9 +47,7 @@ class RouteConfig {
     ),
     GetPage(
       name: editUserProfile,
-      page: () => EditUserProfilePage(
-        arguments: Get.arguments,
-      ),
+      page: () => const EditUserProfilePage(),
     ),
     GetPage(
       name: homeScreen,
@@ -68,6 +70,14 @@ class RouteConfig {
     GetPage(
       name: search,
       page: () => const SearchPage(),
+    ),
+    GetPage(
+      name: activity,
+      page: () => const ActivityPage(),
+    ),
+    GetPage(
+      name: settingScreen,
+      page: () => const SettingScreenPage(),
     ),
   ];
 }

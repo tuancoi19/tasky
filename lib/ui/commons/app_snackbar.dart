@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class AppSnackbar {
@@ -8,6 +9,8 @@ class AppSnackbar {
       message ?? "Empty message",
       backgroundColor: Colors.white,
       colorText: Colors.black,
+      margin: const EdgeInsets.only(top: 32, left: 12, right: 12).r,
+      duration: const Duration(seconds: 5),
     );
   }
 
@@ -17,6 +20,8 @@ class AppSnackbar {
       message ?? "Empty message",
       backgroundColor: Colors.amber,
       colorText: Colors.white,
+      margin: const EdgeInsets.only(top: 32, left: 12, right: 12).r,
+      duration: const Duration(seconds: 5),
     );
   }
 
@@ -26,15 +31,18 @@ class AppSnackbar {
       message ?? "Empty message",
       backgroundColor: Colors.red,
       colorText: Colors.white,
+      margin: const EdgeInsets.only(top: 32, left: 12, right: 12).r,
+      duration: const Duration(seconds: 5),
     );
   }
 
   static void showSuccess({String? title, String? message}) {
     Get.snackbar(
-      title ?? "Info",
+      title ?? "Success",
       message ?? "Empty message",
       backgroundColor: Colors.green,
       colorText: Colors.white,
+      margin: const EdgeInsets.only(top: 32, left: 12, right: 12).r,
     );
   }
 }

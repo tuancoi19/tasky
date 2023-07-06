@@ -5,12 +5,12 @@ import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
 
-class ErrorListWidget extends StatelessWidget {
+class ErrorViewWidget extends StatelessWidget {
   final double? height;
   final Function() onRefresh;
   final Color? theme;
 
-  const ErrorListWidget({
+  const ErrorViewWidget({
     Key? key,
     required this.onRefresh,
     this.height,

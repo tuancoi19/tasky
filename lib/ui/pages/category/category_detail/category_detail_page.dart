@@ -8,11 +8,14 @@ import 'package:tasky/models/entities/category/category_entity.dart';
 import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/pages/category/category_detail/widgets/category_navigator_header.dart';
+import 'package:tasky/ui/pages/task_screen/task_screen_page.dart';
 import 'package:tasky/ui/widgets/app_circular_progress_indicator.dart';
 import 'package:tasky/ui/widgets/app_detail_page.dart';
 import 'package:tasky/ui/widgets/app_tasks_list_view.dart';
-import 'package:tasky/ui/widgets/empty_list_widget.dart';
-import 'package:tasky/ui/widgets/error_list_widget.dart';
+import 'package:tasky/ui/widgets/buttons/home_add_button.dart';
+import 'package:tasky/ui/widgets/empty_view_widget.dart';
+import 'package:tasky/ui/widgets/error_view_widget.dart';
+import 'package:tasky/utils/firebase_utils.dart';
 
 import 'category_detail_cubit.dart';
 
@@ -66,6 +69,19 @@ class _CategoryDetailChildPageState extends State<CategoryDetailChildPage> {
     super.initState();
     _cubit = BlocProvider.of(context);
     _cubit.loadInitialData(widget.arguments.category);
+    FirebaseUtils.listenToDetailCategoryChanges(
+      onChanged: (value) async {
+        await _cubit.loadInitialData(value);
+        _cubit.setNeedReload(needReload: value != widget.arguments.category);
+      },
+      categoryID: widget.arguments.category.id ?? '',
+    );
+    FirebaseUtils.listenToTasksOfCategoryChanges(
+      onChanged: () async {
+        await _cubit.loadInitialData(_cubit.state.category);
+      },
+      categoryID: widget.arguments.category.id ?? '',
+    );
   }
 
   @override
@@ -82,7 +98,7 @@ class _CategoryDetailChildPageState extends State<CategoryDetailChildPage> {
       builder: (context, state) {
         return WillPopScope(
           onWillPop: () async {
-            Get.back(result: state.category != widget.arguments.category);
+            Get.back(result: state.needReload);
             return false;
           },
           child: AppDetailPage(
@@ -106,15 +122,17 @@ class _CategoryDetailChildPageState extends State<CategoryDetailChildPage> {
             children: [
               CategoryNavigatorHeader(
                 onDelete: () async {
+                  _cubit.setNeedReload(needReload: true);
                   await _cubit.deleteCategoryOnFirebase();
                 },
                 isLoading: false,
                 category: state.category ?? CategoryEntity(),
                 onEdit: (value) async {
+                  _cubit.setNeedReload(needReload: true);
                   await _cubit.loadInitialData(value);
                 },
                 onBack: () {
-                  Get.back(result: state.category != widget.arguments.category);
+                  Get.back(result: state.needReload);
                 },
               ),
               SizedBox(height: 32.h),
@@ -123,7 +141,7 @@ class _CategoryDetailChildPageState extends State<CategoryDetailChildPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
-                      flex: 7,
+                      flex: 5,
                       child: Text(
                         state.category?.title ?? '',
                         style: AppTextStyle.whiteS23W500,
@@ -134,7 +152,7 @@ class _CategoryDetailChildPageState extends State<CategoryDetailChildPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          (state.category?.numberOfTasks ?? 0).toString(),
+                          (state.taskList?.length ?? 0).toString(),
                           style: AppTextStyle.whiteS26Bold,
                         ),
                         SizedBox(height: 20.h),
@@ -166,9 +184,28 @@ class _CategoryDetailChildPageState extends State<CategoryDetailChildPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24).r,
-                child: Text(
-                  S.current.tasks,
-                  style: AppTextStyle.blackS15W500,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      S.current.tasks,
+                      style: AppTextStyle.blackS15W500,
+                    ),
+                    HomeAddButton(
+                      onTap: () async {
+                        final needReload = await Get.toNamed(
+                          RouteConfig.taskScreen,
+                          arguments:
+                              TaskScreenArguments(category: state.category),
+                        );
+                        if (needReload ?? false) {
+                          _cubit.setNeedReload(needReload: needReload);
+                          await _cubit.getTaskList();
+                        }
+                      },
+                      color: Color(state.category!.color!),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 20.h),
@@ -180,19 +217,25 @@ class _CategoryDetailChildPageState extends State<CategoryDetailChildPage> {
                         ),
                       )
                     : state.loadDataStatus == LoadStatus.failure
-                        ? ErrorListWidget(
+                        ? ErrorViewWidget(
                             theme: Color(state.category?.color ?? 0),
                             onRefresh: () async {
                               await _cubit.getTaskList();
                             },
                           )
                         : (state.taskList ?? []).isEmpty
-                            ? EmptyListWidget(
+                            ? EmptyViewWidget(
                                 theme: Color(state.category?.color ?? 0),
                                 onRefresh: () async {
-                                  final needReload =
-                                      await Get.toNamed(RouteConfig.taskScreen);
+                                  final needReload = await Get.toNamed(
+                                    RouteConfig.taskScreen,
+                                    arguments: TaskScreenArguments(
+                                      category: state.category,
+                                    ),
+                                  );
                                   if (needReload ?? false) {
+                                    _cubit.setNeedReload(
+                                        needReload: needReload);
                                     await _cubit.getTaskList();
                                   }
                                 },
@@ -200,6 +243,7 @@ class _CategoryDetailChildPageState extends State<CategoryDetailChildPage> {
                             : AppTasksListView(
                                 taskList: state.taskList ?? [],
                                 onDone: () async {
+                                  _cubit.setNeedReload(needReload: true);
                                   await _cubit.getTaskList();
                                 },
                                 showDate: true,

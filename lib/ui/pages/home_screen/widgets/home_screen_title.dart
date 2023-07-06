@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
-import 'package:tasky/generated/l10n.dart';
 import 'package:tasky/ui/widgets/app_title_with_add_button.dart';
 
-class TodayTasksTitle extends StatelessWidget {
+class HomeScreenTitle extends StatelessWidget {
   final Function() onTap;
+  final String title;
 
-  const TodayTasksTitle({
+  const HomeScreenTitle({
     Key? key,
     required this.onTap,
+    required this.title,
   }) : super(key: key);
 
   @override
@@ -22,7 +23,7 @@ class TodayTasksTitle extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            S.current.today_tasks,
+            title,
             style: AppTextStyle.blackS15W500,
             maxLines: 1,
           ),

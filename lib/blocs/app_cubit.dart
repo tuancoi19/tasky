@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
+import 'package:tasky/configs/app_configs.dart';
 import 'package:tasky/database/secure_storage_helper.dart';
 import 'package:tasky/firebase_options.dart';
 import 'package:tasky/generated/l10n.dart';
@@ -18,6 +21,7 @@ import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/commons/app_dialog.dart';
 import 'package:tasky/ui/widgets/buttons/app_button.dart';
+import 'package:tasky/utils/file_utils.dart';
 import 'package:tasky/utils/logger.dart';
 
 part 'app_state.dart';
@@ -30,6 +34,7 @@ class AppCubit extends Cubit<AppState> {
       clientId: DefaultFirebaseOptions.currentPlatform.iosClientId);
 
   final userCollection = FirebaseFirestore.instance.collection("users");
+  final storageRef = FirebaseStorage.instance.ref('images/');
 
   User? get currentUser => _firebaseAuth.currentUser;
 
@@ -54,19 +59,23 @@ class AppCubit extends Cubit<AppState> {
           final data = doc.data() as Map<String, dynamic>;
           return UserEntity.fromJson(data);
         },
-        onError: (e) => print("Error getting document: $e"),
+        onError: (e) => logger.log("Error getting document: $e"),
       );
       if (newUser != null) {
         final token = await credential.user?.getIdToken();
         newUser.fcmToken = token;
         newUser.userId = credential.user?.uid ?? '';
         GlobalData.instance.userID = credential.user?.uid ?? '';
-
+        GlobalData.instance.locale = newUser.locale ?? AppConfigs.appLanguage;
+        Get.updateLocale(Locale(GlobalData.instance.locale));
+        S.load(Locale(GlobalData.instance.locale));
         await saveSession(
           refreshToken: credential.user?.refreshToken ?? '',
           token: token,
         );
-        emit(state.copyWith(user: newUser));
+        emit(
+          state.copyWith(user: newUser),
+        );
       }
       return newUser;
     } on FirebaseAuthException catch (e) {
@@ -97,9 +106,19 @@ class AppCubit extends Cubit<AppState> {
         ),
       );
     } catch (e) {
-      print(e);
+      logger.log(e);
     }
     return null;
+  }
+
+  Future<void> setLocale({required String locale}) async {
+    GlobalData.instance.locale = locale;
+    Get.updateLocale(Locale(GlobalData.instance.locale));
+    S.load(Locale(GlobalData.instance.locale));
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(currentUser?.uid)
+        .update({"locale": locale});
   }
 
   Future<bool> isSignedIn() async {
@@ -114,20 +133,47 @@ class AppCubit extends Cubit<AppState> {
         .get()
         .then(
       (DocumentSnapshot doc) {
-        if (doc.data() != null) {
+        if (doc.data() == null) {
+          return null;
+        } else {
           final data = doc.data() as Map<String, dynamic>;
           return UserEntity.fromJson(data);
         }
-        return null;
       },
-      onError: (e) => print("Error getting document: $e"),
+      onError: (e) => logger.log("Error getting document: $e"),
     );
     if (newUser != null) {
-      emit(state.copyWith(user: newUser));
+      newUser.userId = _firebaseAuth.currentUser?.uid;
+      GlobalData.instance.locale = newUser.locale ?? AppConfigs.appLanguage;
+      Get.updateLocale(Locale(GlobalData.instance.locale));
+      S.load(Locale(GlobalData.instance.locale));
+      emit(
+        state.copyWith(user: newUser),
+      );
       GlobalData.instance.userID = currentUser?.uid;
       return newUser;
     }
     return null;
+  }
+
+  Future<bool> checkPassword(String password) async {
+    try {
+      UserCredential credential =
+          await _firebaseAuth.signInWithEmailAndPassword(
+        email: state.user?.email ?? '',
+        password: password,
+      );
+      if (credential.user != null) {
+        logger.log('❤️❤️❤️ - TRUE');
+        return true;
+      } else {
+        logger.log('❤️❤️❤️ - FALSE');
+        return false;
+      }
+    } on FirebaseAuthException catch (e) {
+      logger.log(e);
+      return false;
+    }
   }
 
   Future<User?> createUserWithEmailAndPassword({
@@ -151,9 +197,16 @@ class AppCubit extends Cubit<AppState> {
           userId: user.uid,
           email: mail,
           createAt: user.metadata.creationTime,
+          locale: AppConfigs.appLanguage,
         );
         GlobalData.instance.userID = credential.user?.uid;
-        emit(state.copyWith(user: currentUser));
+        GlobalData.instance.locale =
+            currentUser.locale ?? AppConfigs.appLanguage;
+        Get.updateLocale(Locale(GlobalData.instance.locale));
+        S.load(Locale(GlobalData.instance.locale));
+        emit(
+          state.copyWith(user: currentUser),
+        );
 
         return user;
       }
@@ -213,7 +266,7 @@ class AppCubit extends Cubit<AppState> {
           final data = doc.data() as Map<String, dynamic>;
           return UserEntity.fromJson(data);
         },
-        onError: (e) => print("Error getting document: $e"),
+        onError: (e) => logger.log("Error getting document: $e"),
       );
 
       if (user != null) {
@@ -224,7 +277,10 @@ class AppCubit extends Cubit<AppState> {
           email: user.email,
           createAt: user.metadata.creationTime,
           avatarUrl: user.photoURL,
+          locale: checkAlreadyUser?.locale ?? AppConfigs.appLanguage,
         );
+        GlobalData.instance.locale =
+            checkAlreadyUser?.locale ?? AppConfigs.appLanguage;
         GlobalData.instance.userID = user.uid;
         emit(state.copyWith(user: currentUser));
         return currentUser;
@@ -271,12 +327,14 @@ class AppCubit extends Cubit<AppState> {
       userName: userName,
       email: user.email,
       createAt: user.metadata.creationTime,
-      userId: user.uid,
+      locale: AppConfigs.appLanguage,
     );
     try {
       await userCollection.doc(user.uid).set(newUser.toJson()).catchError((e) {
         logger.e('❌❌ ERROR : Save new user to firebase - $e');
       });
+      Get.updateLocale(Locale(GlobalData.instance.locale));
+      S.load(Locale(GlobalData.instance.locale));
       emit(state.copyWith(user: newUser));
     } catch (e) {
       logger.e('❌❌ ERROR : Save new user to firebase - $e');
@@ -293,9 +351,15 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<void> signOut() async {
-    await _firebaseAuth.signOut().then(
-          (value) => Get.offAllNamed(RouteConfig.splash),
-        );
+    AppDialog.showConfirmDialog(
+      onConfirm: () async {
+        await _firebaseAuth.signOut().then(
+              (value) => Get.offAllNamed(RouteConfig.splash),
+            );
+      },
+      title: S.current.logout,
+      message: S.current.logout_confirm_message,
+    );
   }
 
   void fetchProfile() {
@@ -309,11 +373,8 @@ class AppCubit extends Cubit<AppState> {
   Future<bool> saveSession({
     String? token,
     String refreshToken = '',
-    // UserEntity? currentUserEntity,
   }) async {
     await _saveToSecureStorage(token: token ?? '', refreshToken: refreshToken);
-    // await _saveToSharedPreferences(currentUserEntity);
-
     return true;
   }
 
@@ -331,28 +392,42 @@ class AppCubit extends Cubit<AppState> {
     secureStorageHelper.saveToken(tokenEntity);
   }
 
-// Future<void> _saveToSharedPreferences(
-//   UserEntity? currentUserEntity,
-// ) async {
-//   final sharedPreferencesHelper = SharedPreferencesHelper();
-//   await sharedPreferencesHelper.setUserEntity(
-//     currentUserEntity: currentUserEntity,
-//   );
-// }
+  Future<String?> uploadImgToFirebase(File file) async {
+    try {
+      String urlImg = await FileUtils.uploadFile(
+          file: file, userID: state.user?.userId ?? '', type: 'image');
+      logger.log('🗳️🗳️🗳️🗳️ $urlImg');
+      await _firebaseAuth.currentUser?.updatePhotoURL(urlImg);
+      return urlImg;
+    } on FirebaseException catch (e) {
+      logger.e(e);
+    }
+    return null;
+  }
 
-  ///Sign Out
-// void signOut() async {
-//   emit(state.copyWith(signOutStatus: LoadStatus.loading));
-//   try {
-//     await Future.delayed(const Duration(seconds: 2));
-//     final sharedPreferencesHelper = SharedPreferencesHelper();
-//     final secureStorageHelper = SecureStorageHelper.instance;
-//
-//     secureStorageHelper.removeToken();
-//     await sharedPreferencesHelper.logout();
-//   } catch (e) {
-//     logger.e(e);
-//     emit(state.copyWith(signOutStatus: LoadStatus.failure));
-//   }
-// }
+  Future<String?> updateUserToFirebase(
+      {String? userName, String? pathAvatar}) async {
+    try {
+      logger.log('--- ${state.user?.userId}');
+      final userRef = userCollection.doc(state.user?.userId ?? '');
+      userRef.update({
+        "user_name": userName ?? state.user?.userName,
+        "avatar_url": pathAvatar ?? state.user?.avatarUrl
+      }).then((value) => logger.log("User successfully updated!"),
+          onError: (e) => logger.log("Error updating user $e"));
+
+      UserEntity newUser = UserEntity(
+        userName: userName ?? state.user?.userName,
+        email: state.user?.email,
+        userId: state.user?.userId,
+        createAt: state.user?.createAt,
+        avatarUrl: pathAvatar ?? state.user?.avatarUrl,
+      );
+
+      emit(state.copyWith(user: newUser));
+    } on FirebaseException catch (e) {
+      logger.e(e);
+    }
+    return null;
+  }
 }

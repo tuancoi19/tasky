@@ -8,20 +8,21 @@ import 'package:tasky/blocs/app_cubit.dart';
 import 'package:tasky/common/app_colors.dart';
 import 'package:tasky/common/app_text_styles.dart';
 import 'package:tasky/generated/l10n.dart';
+import 'package:tasky/models/enums/entity_type.dart';
 import 'package:tasky/models/enums/load_status.dart';
 import 'package:tasky/router/route_config.dart';
 import 'package:tasky/ui/commons/app_dialog.dart';
 import 'package:tasky/ui/pages/category/add_category/add_category_page.dart';
-import 'package:tasky/ui/pages/home_screen/widgets/category_title.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/hello_text.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/home_app_bar.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/category_list_view.dart';
 import 'package:tasky/ui/widgets/app_tasks_list_view.dart';
 import 'package:tasky/ui/pages/home_screen/widgets/home_screen_drawer.dart';
-import 'package:tasky/ui/pages/home_screen/widgets/today_tasks_title.dart';
+import 'package:tasky/ui/pages/home_screen/widgets/home_screen_title.dart';
 import 'package:tasky/ui/widgets/app_circular_progress_indicator.dart';
-import 'package:tasky/ui/widgets/empty_list_widget.dart';
-import 'package:tasky/ui/widgets/error_list_widget.dart';
+import 'package:tasky/ui/widgets/empty_view_widget.dart';
+import 'package:tasky/ui/widgets/error_view_widget.dart';
+import 'package:tasky/utils/firebase_utils.dart';
 
 import 'home_screen_cubit.dart';
 
@@ -69,6 +70,14 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
     _appCubit = BlocProvider.of(context);
     _cubit.loadInitialData();
     _zoomDrawerController = ZoomDrawerController();
+    FirebaseUtils.listenToFirestoreChanges(
+      onChanged: () async => await _cubit.loadInitialData(),
+      type: EntityType.tasks,
+    );
+    FirebaseUtils.listenToFirestoreChanges(
+      onChanged: () async => await _cubit.loadInitialData(),
+      type: EntityType.categories,
+    );
   }
 
   @override
@@ -86,8 +95,12 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
       shadowLayer2Color: Colors.transparent,
       mainScreenScale: 0.15,
       menuScreen: HomeScreenDrawer(
-        onTap: () {
-          _zoomDrawerController.close?.call();
+        onTap: (needReload) {
+          _zoomDrawerController.close?.call()?.then((value) async {
+            if (needReload) {
+              await _cubit.loadInitialData();
+            }
+          });
         },
         logout: () {
           _appCubit.signOut();
@@ -136,7 +149,7 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24).r,
                   child: (state.categoriesList ?? []).length < 6
-                      ? CategoryTitle(
+                      ? HomeScreenTitle(
                           onTap: () async {
                             await AppDialog.showCustomDialog(
                               content: AddCategoryPage(
@@ -148,6 +161,7 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
                               ),
                             );
                           },
+                          title: S.current.my_categories,
                         )
                       : Text(
                           S.current.categories,
@@ -165,33 +179,19 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
                     previous.categoriesList != current.categoriesList,
                 builder: (context, state) {
                   if (state.loadCategoriesListStatus == LoadStatus.loading) {
-                    // return ListView.separated(
-                    //   itemBuilder: (context, index) => AppShimmer(
-                    //     width: 152.w,
-                    //     height: 192.h,
-                    //     cornerRadius: 10.r,
-                    //   ),
-                    //   separatorBuilder: (context, index) =>
-                    //       SizedBox(width: 16.w),
-                    //   itemCount: 3,
-                    //   padding:
-                    //       const EdgeInsets.only(left: 24, top: 12, right: 24).r,
-                    //   physics: const NeverScrollableScrollPhysics(),
-                    //   scrollDirection: Axis.horizontal,
-                    // );
                     return const Center(
                       child: AppCircularProgressIndicator(),
                     );
                   } else if (state.loadCategoriesListStatus ==
                       LoadStatus.failure) {
-                    return ErrorListWidget(
+                    return ErrorViewWidget(
                       height: 236.h,
                       onRefresh: () async {
                         await _cubit.getCategoriesList();
                       },
                     );
                   } else if ((state.categoriesList ?? []).isEmpty) {
-                    return EmptyListWidget(
+                    return EmptyViewWidget(
                       height: 236.h,
                       onRefresh: () async {
                         await AppDialog.showCustomDialog(
@@ -216,15 +216,17 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
                 },
               ),
             ),
+            SizedBox(height: 24.h),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24).r,
-              child: TodayTasksTitle(
+              child: HomeScreenTitle(
                 onTap: () async {
                   final needReload = await Get.toNamed(RouteConfig.taskScreen);
                   if (needReload ?? false) {
                     _cubit.loadInitialData();
                   }
                 },
+                title: S.current.today_tasks,
               ),
             ),
             SizedBox(height: 12.h),
@@ -240,13 +242,13 @@ class _HomeScreenChildPageState extends State<HomeScreenChildPage> {
                       child: AppCircularProgressIndicator(),
                     );
                   } else if (state.loadTasksListStatus == LoadStatus.failure) {
-                    return ErrorListWidget(
+                    return ErrorViewWidget(
                       onRefresh: () async {
                         await _cubit.getTasksList();
                       },
                     );
                   } else if ((state.tasksList ?? []).isEmpty) {
-                    return EmptyListWidget(
+                    return EmptyViewWidget(
                       onRefresh: () async {
                         final needReload =
                             await Get.toNamed(RouteConfig.taskScreen);

@@ -20,7 +20,10 @@ class AddCategoryCubit extends Cubit<AddCategoryState> {
 
   Future<void> loadInitialData(CategoryEntity? category) async {
     if (category != null) {
-      emit(state.copyWith(name: category.title));
+      emit(state.copyWith(
+        name: category.title,
+        selectedColor: category.color,
+      ));
     }
   }
 
@@ -54,6 +57,7 @@ class AddCategoryCubit extends Cubit<AddCategoryState> {
             .collection('categories')
             .add(category.toJson())
             .then((value) async {
+          category?.id = value.id;
           await homeScreenCubit.getCategoriesList();
         });
       } on FirebaseAuthException catch (e) {
