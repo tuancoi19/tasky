@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -49,6 +46,17 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyD8zMDiBTlaaBun3Uj8ihvcEql0UKNvnBY',
+    appId: '1:49143107546:web:1f8ffc389681964b52fae3',
+    messagingSenderId: '49143107546',
+    projectId: 'tasky-a5cb4',
+    authDomain: 'tasky-a5cb4.firebaseapp.com',
+    databaseURL: 'https://tasky-a5cb4-default-rtdb.firebaseio.com',
+    storageBucket: 'tasky-a5cb4.appspot.com',
+    measurementId: 'G-XYFM0BYM47',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAPZuVd-QXB0YmK8C7KsC_Xvrr91FkoRoA',
     appId: '1:49143107546:android:e33a561a5a87ba2552fae3',
@@ -65,10 +73,8 @@ class DefaultFirebaseOptions {
     projectId: 'tasky-a5cb4',
     databaseURL: 'https://tasky-a5cb4-default-rtdb.firebaseio.com',
     storageBucket: 'tasky-a5cb4.appspot.com',
-    androidClientId:
-        '49143107546-v6nbnoo3pklb2v0b475ot7lk0tcakn9n.apps.googleusercontent.com',
-    iosClientId:
-        '49143107546-bafehiphfb3jqi98j15k4thght9601dq.apps.googleusercontent.com',
+    androidClientId: '49143107546-v6nbnoo3pklb2v0b475ot7lk0tcakn9n.apps.googleusercontent.com',
+    iosClientId: '49143107546-bafehiphfb3jqi98j15k4thght9601dq.apps.googleusercontent.com',
     iosBundleId: 'it.thoson.flutterBase',
   );
 }
